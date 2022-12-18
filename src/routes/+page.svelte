@@ -4,7 +4,9 @@
 
 <main>
     <div class="matrix-container">
-
+        <div style="width: 600px; height: 600px">
+            <Matrix></Matrix>
+        </div>
     </div>
 
     <div class="sidebar-container">
@@ -23,6 +25,10 @@
     .matrix-container {
         width: calc(100% - 300px);
         height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .sidebar-container {
