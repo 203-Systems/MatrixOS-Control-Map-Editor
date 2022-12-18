@@ -1,4 +1,8 @@
 <script lang="ts">
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
     function getCornerRadius (x: number, y: number) {
         switch (x + y * 10) {
             case 43:
@@ -13,22 +17,20 @@
                 return "unset";
         }
     }
+
+    function selectKey(key) {
+        dispatch('selectKey', {
+            key: key
+        });
+    }
 </script>
 
 <div class="lp-border">
-    <div class="lp-controls">
-        {#each Array(8) as _, y}
-            <div class="lp-controls-row">
-                {#each Array(8) as _2, x}
-                    <div class="lp-btn-parent">
-                        {#if (x >= 0 && x < 9) && (y >= 0 && y < 9)}
-                            <div class="lp-normal-btn" style="clip-path: {getCornerRadius(x, y)};"/>
-                        {/if}
-                    </div>
-                {/each}
-            </div>
+    {#each Array(8) as _, y}
+        {#each Array(8) as _, x}
+            <div class="matrix-button" on:click={() => selectKey((x + 1) + (8 - y) * 10)} style="clip-path: {getCornerRadius(x, y)}"></div>
         {/each}
-    </div>
+    {/each}
 </div>
 
 <style lang="scss">
@@ -36,36 +38,21 @@
         background: rgb(20, 20, 20);
         border: 2px solid rgb(120, 120, 120);
         border-radius: 3%;
-        position: relative;
-        width: 100%;
-        aspect-ratio: 1/1;
-    }
-    .lp-controls {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        gap: 1.5%;
-        flex-direction: column;
         padding: 3%;
-        .lp-controls-row {
-            height: 100%;
-            display: flex;
-            gap: 1.5%;
-        }
-        .lp-btn-parent {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            :global(.lp-normal-btn) {
-                padding: 0;
-                border: none;
-                height: 92%;
-                width: 92%;
-                border-radius: 10%;
-                background-color: rgb(80, 80, 80);
-            }
-        }
+
+        aspect-ratio: 1 / 1;
+
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 1.5%;
+    }
+
+    .matrix-button {
+        width: 92%;
+        height: 92%;
+        margin: 4%;
+        border-radius: 10%;
+        background-color: rgb(80, 80, 80);
     }
 </style>
