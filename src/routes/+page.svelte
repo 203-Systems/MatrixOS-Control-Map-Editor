@@ -6,7 +6,7 @@
 <main>
     <div class="matrix-container">
         <div style="width: 600px; height: 600px">
-            <Matrix></Matrix>
+            <Matrix/>
         </div>
     </div>
 

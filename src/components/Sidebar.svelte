@@ -33,8 +33,8 @@
             width: 300px;
             height: 50px;
 
-            border: 1px solid mediumaquamarine;
-            background-color: #aff6d8;
+            border: 1px solid cornflowerblue;
+            background-color: #c7d7f8;
             border-radius: 4px;
             color: #2c2c2c;
 

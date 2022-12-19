@@ -3,6 +3,8 @@
 
     const dispatch = createEventDispatcher();
 
+    export let selectedKey: number = 11;
+
     function getCornerRadius (x: number, y: number) {
         switch (x + y * 10) {
             case 43:
@@ -19,6 +21,8 @@
     }
 
     function selectKey(key) {
+        selectedKey = key
+
         dispatch('selectKey', {
             key: key
         });
@@ -28,7 +32,9 @@
 <div class="lp-border">
     {#each Array(8) as _, y}
         {#each Array(8) as _, x}
-            <div class="matrix-button" on:click={() => selectKey((x + 1) + (8 - y) * 10)} style="clip-path: {getCornerRadius(x, y)}"></div>
+            <div class="matrix-button-container" class:selected={selectedKey === ((x + 1) + (8 - y) * 10)}>
+                <div class="matrix-button" on:click={() => selectKey((x + 1) + (8 - y) * 10)} style="clip-path: {getCornerRadius(x, y)}"></div>
+            </div>
         {/each}
     {/each}
 </div>
@@ -48,11 +54,23 @@
         gap: 1.5%;
     }
 
-    .matrix-button {
+    .matrix-button-container {
         width: 92%;
         height: 92%;
         margin: 4%;
         border-radius: 10%;
+
+        &.selected {
+            box-shadow: 0 0 0 6px cornflowerblue;
+        }
+    }
+
+    .matrix-button {
+        width: 100%;
+        height: 100%;
+        border-radius: 10%;
         background-color: rgb(80, 80, 80);
+
+        cursor: pointer;
     }
 </style>
