@@ -1,5 +1,6 @@
 <script lang="ts">
     import Matrix from "../components/Matrix.svelte";
+    import Sidebar from "../components/Sidebar.svelte";
 </script>
 
 <main>
@@ -10,7 +11,7 @@
     </div>
 
     <div class="sidebar-container">
-
+        <Sidebar/>
     </div>
 </main>
 
@@ -23,7 +24,7 @@
     }
 
     .matrix-container {
-        width: calc(100% - 300px);
+        width: calc(100% - 325px);
         height: 100vh;
 
         display: flex;
@@ -32,8 +33,7 @@
     }
 
     .sidebar-container {
-        width: 300px;
+        width: 325px;
         height: 100vh;
-        background-color: green;
     }
 </style>
