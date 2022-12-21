@@ -63,6 +63,12 @@
         &.selected {
             box-shadow: 0 0 0 6px cornflowerblue;
         }
+
+        &:hover {
+            margin: 2%;
+            width: 96%;
+            height: 96%;
+        }
     }
 
     .matrix-button {
