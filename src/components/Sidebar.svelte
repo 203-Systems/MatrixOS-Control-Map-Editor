@@ -1,27 +1,38 @@
 <script lang="ts">
     import Add from "carbon-icons-svelte/lib/Add.svelte";
+    import AddActionMenu from "./AddActionMenu.svelte";
 
     export let selectedKey: number = 11;
+
+    let showAddActionMenu: boolean = false;
 </script>
 
 <div class="sidebar-body">
-    <button class="add-button">
+    <button class="add-button" on:click={() => showAddActionMenu = true}>
         <Add size={28}></Add>
 
         <span>Add a Action</span>
     </button>
+
+    <AddActionMenu
+        bind:show={showAddActionMenu}
+        actions={[
+
+        ]}
+    />
 </div>
 
 <style lang="scss">
     .sidebar-body {
         display: flex;
-        justify-content: center;
+        align-items: center;
+        flex-direction: column;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         width: 325px;
         height: 100%;
-        padding-top: 12.5px;
+        padding: 12.5px 0;
 
         background-color: #eff0f3;
 
