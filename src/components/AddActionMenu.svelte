@@ -1,5 +1,6 @@
 <script lang="ts">
     export let show: boolean = false;
+    export let actions: { actionName: string, actionFunction: void }[] = [];
 
     let onEffectTab: boolean = false;
 
