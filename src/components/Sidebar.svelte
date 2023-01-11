@@ -8,7 +8,7 @@
 </script>
 
 <div class="sidebar-body">
-    <button class="add-button" on:click={() => showAddActionMenu = true}>
+    <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
         <Add size={28}></Add>
 
         <span>Add a Action</span>
@@ -16,9 +16,7 @@
 
     <AddActionMenu
         bind:show={showAddActionMenu}
-        actions={[
-
-        ]}
+        on:addAction={e => console.log(`Action ${e.detail.actionIdentifier} added`)}
     />
 </div>
 
