@@ -1,13 +1,32 @@
 <script lang="ts">
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     export let selectedKey: number = 11;
+    export let showingActions: object[];
 
     let showAddActionMenu: boolean = false;
 </script>
 
 <div class="sidebar-body">
+    {#each showingActions as showingAction}
+        <div
+            style="
+                height: 100px;
+                width: calc(100% - 25px);
+                border: 1px solid gray;
+                display: flex;
+                justify-content: center;
+                align-items: center
+            "
+        >
+            <span>{showingAction.actionIdentifier}</span>
+        </div>
+    {/each}
+
     <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
         <Add size={28}></Add>
 
@@ -16,7 +35,7 @@
 
     <AddActionMenu
         bind:show={showAddActionMenu}
-        on:addAction={e => console.log(`Action ${e.detail.actionIdentifier} added`)}
+        on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
     />
 </div>
 
@@ -25,6 +44,7 @@
         display: flex;
         align-items: center;
         flex-direction: column;
+        gap: 12px;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;

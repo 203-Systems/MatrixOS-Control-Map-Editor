@@ -45,6 +45,7 @@
         border: 2px solid rgb(120, 120, 120);
         border-radius: 3%;
         padding: 3%;
+        filter: drop-shadow(2px 2px 8px black);
 
         aspect-ratio: 1 / 1;
 
