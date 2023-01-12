@@ -78,6 +78,10 @@
         border-radius: 10%;
         background-color: rgb(80, 80, 80);
 
+        &:hover {
+            background-color: rgb(60, 60, 60);
+        }
+
         cursor: pointer;
     }
 </style>
