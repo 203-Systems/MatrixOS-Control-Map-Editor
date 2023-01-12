@@ -9,8 +9,14 @@
 
     let editorBackend = new MatrixEditor()
 
-    $: {
+    function refreshActionDisplay(): void {
         actionsOnSelectedKey = editorBackend.getActions(selectedKey)
+    }
+
+    $: {
+        selectedKey; // Mentioning selectedKey in here makes this reactive function run on every change of it
+
+        refreshActionDisplay()
     }
 
     function addAction(actionIdentifier: string): void {
@@ -19,17 +25,23 @@
                 const noteActionData: NoteActionData = {
                     key: 36,
                     velocity: 127,
-                    channel: 0
+                    channel: 1
                 }
 
                 editorBackend.addAction(selectedKey, actionIdentifier, noteActionData)
-                actionsOnSelectedKey = editorBackend.getActions(selectedKey)
+                refreshActionDisplay()
                 break;
 
             default:
                 console.error("Could not add Action due to lack of implementation for: " + actionIdentifier)
                 break;
         }
+    }
+
+    function removeAction(actionIndex: number): void {
+        editorBackend.removeAction(selectedKey, actionIndex)
+
+        refreshActionDisplay()
     }
 </script>
 
@@ -41,7 +53,12 @@
     </div>
 
     <div class="sidebar-container">
-        <Sidebar bind:selectedKey={selectedKey} bind:showingActions={actionsOnSelectedKey} on:addAction={e => addAction(e.detail.actionIdentifier)}/>
+        <Sidebar
+                bind:selectedKey={selectedKey}
+                bind:showingActions={actionsOnSelectedKey}
+                on:addAction={e => addAction(e.detail.actionIdentifier)}
+                on:removeAction={e => removeAction(e.detail.index)}
+        />
     </div>
 </main>
 

@@ -26,8 +26,12 @@ export class MatrixEditor {
         })
     }
 
+    removeAction(keyIndex: number, actionIndex: number): void {
+        this.editorKeys[this.getNormalIndex(keyIndex)].actions.splice(actionIndex, 1)
+    }
+
     getActions(keyIndex: number): object[] {
-        console.log(this.editorKeys[this.getNormalIndex(keyIndex)].actions)
+        // console.log(this.editorKeys[this.getNormalIndex(keyIndex)].actions)
 
         return this.editorKeys[this.getNormalIndex(keyIndex)].actions
     }

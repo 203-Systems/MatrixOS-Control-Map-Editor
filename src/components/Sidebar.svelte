@@ -1,7 +1,8 @@
 <script lang="ts">
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
-    import { createEventDispatcher } from 'svelte';
+    import {createEventDispatcher, SvelteComponent} from 'svelte';
+    import MidiNoteAction from "./actionbodies/MidiNoteAction.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -9,22 +10,19 @@
     export let showingActions: object[];
 
     let showAddActionMenu: boolean = false;
+
+    let actionBodies: { [id: string]: SvelteComponent } = {
+        "action.note": MidiNoteAction,
+    };
 </script>
 
 <div class="sidebar-body">
     {#each showingActions as showingAction}
-        <div
-            style="
-                height: 100px;
-                width: calc(100% - 25px);
-                border: 1px solid gray;
-                display: flex;
-                justify-content: center;
-                align-items: center
-            "
-        >
-            <span>{showingAction.actionIdentifier}</span>
-        </div>
+        <svelte:component
+                this={actionBodies[showingAction.actionIdentifier]}
+                bind:data={showingAction.actionData}
+                on:removeAction={() => dispatch('removeAction', { index: showingActions.indexOf(showingAction) })}
+        />
     {/each}
 
     <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
