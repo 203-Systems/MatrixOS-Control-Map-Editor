@@ -30,7 +30,7 @@
         };
     }
 
-    function selectAction(action: Action): void {
+    function addAction(action: Action): void {
         dispatch('addAction', {
             actionIdentifier: action.actionIdentifier
         });
@@ -59,7 +59,7 @@
         <div class="menu-action-list">
             {#if !onEffectTab}
                 {#each actions as action}
-                    <div class="menu-action-item" on:click={() => selectAction(action)}>
+                    <div class="menu-action-item" on:click={() => addAction(action)}>
                         <div class="icon-section">
                             <svelte:component this={action.carbonIcon} size={24}/>
                         </div>
