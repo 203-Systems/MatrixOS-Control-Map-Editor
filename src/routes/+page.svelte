@@ -2,7 +2,7 @@
     import Matrix from "../components/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import { MatrixEditor } from "../lib/editors/MatrixEditor";
-    import type {NoteActionData} from "../lib/types/NoteActionData";
+    import type {MidiActionData} from "$lib/types/MidiActionData";
 
     let selectedKey = 11;
     let actionsOnSelectedKey: object[] = []
@@ -22,20 +22,22 @@
     function addAction(actionIdentifier: string): void {
         switch (actionIdentifier) {
             case "action.note":
-                const noteActionData: NoteActionData = {
+                const noteActionData: MidiActionData = {
+                    type: "NOTE",
                     key: 36,
                     velocity: 127,
                     channel: 1
                 }
 
                 editorBackend.addAction(selectedKey, actionIdentifier, noteActionData)
-                refreshActionDisplay()
                 break;
 
             default:
                 console.error("Could not add Action due to lack of implementation for: " + actionIdentifier)
                 break;
         }
+
+        refreshActionDisplay()
     }
 
     function removeAction(actionIndex: number): void {
@@ -64,14 +66,14 @@
 
 <style lang="scss">
     main {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 325px;
 
         width: 100vw;
         height: 100vh;
     }
 
     .matrix-container {
-        width: calc(100% - 325px);
         height: 100vh;
 
         display: flex;
@@ -80,7 +82,6 @@
     }
 
     .sidebar-container {
-        width: 325px;
         height: 100vh;
     }
 </style>
