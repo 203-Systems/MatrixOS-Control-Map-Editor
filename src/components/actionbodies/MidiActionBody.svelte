@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type {NoteActionData} from "../../lib/types/NoteActionData";
+    import type {MidiActionData} from "$lib/types/MidiActionData";
     import {TrashCan, ChevronDown, ChevronRight} from "carbon-icons-svelte";
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
 
-    export let data: NoteActionData;
+    export let data: MidiActionData;
 
     let expanded: boolean = true;
 </script>
@@ -52,7 +52,7 @@
 
 <style lang="scss">
     .action-body {
-        height: 35px;
+        min-height: 35px;
         width: calc(100% - 25px);
 
         border: 1px solid gray;
@@ -62,10 +62,10 @@
         flex-direction: column;
         overflow: hidden;
 
-        transition: height 0.2s ease;
+        transition: min-height 0.2s ease;
 
         &.is-expanded {
-            height: 120px;
+            min-height: 120px;
         }
 
         .action-header {

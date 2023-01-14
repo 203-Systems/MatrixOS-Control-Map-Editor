@@ -2,7 +2,7 @@
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
     import {createEventDispatcher, SvelteComponent} from 'svelte';
-    import MidiNoteAction from "./actionbodies/MidiNoteAction.svelte";
+    import MidiNoteAction from "./actionbodies/MidiActionBody.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -46,11 +46,33 @@
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
-        width: 325px;
+        width: 335px;
         height: 100%;
         padding: 12.5px 0;
 
+        overflow-y: scroll;
+
         background-color: #eff0f3;
+
+        /* width */
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #bebebe;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #8a8a8a;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #797979;
+        }
 
         .add-button {
             display: flex;
@@ -58,7 +80,7 @@
             align-items: center;
             gap: 6px;
             width: 300px;
-            height: 50px;
+            min-height: 50px;
 
             border: 1px solid cornflowerblue;
             background-color: #c7d7f8;

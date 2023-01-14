@@ -1,4 +1,5 @@
 <script lang="ts">
+    import OverflowMenuHorizontal from "carbon-icons-svelte/lib/OverflowMenuHorizontal.svelte";
     import Matrix from "../components/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import { MatrixEditor } from "../lib/editors/MatrixEditor";
@@ -48,9 +49,27 @@
 </script>
 
 <main>
-    <div class="matrix-container">
-        <div style="width: 600px; height: 600px">
-            <Matrix bind:selectedKey={selectedKey}/>
+    <div class="main-content">
+        <div class="header">
+            <div class="logo">
+                <img src="Logo.png" class="logo">
+            </div>
+
+            <div class="title">
+                <span>Keypad Editor</span>
+            </div>
+
+            <div class="controls">
+                <div class="control">
+                    <OverflowMenuHorizontal size={32}/>
+                </div>
+            </div>
+        </div>
+
+        <div class="matrix-container">
+            <div style="width: 600px; height: 600px">
+                <Matrix bind:selectedKey={selectedKey}/>
+            </div>
         </div>
     </div>
 
@@ -67,18 +86,72 @@
 <style lang="scss">
     main {
         display: grid;
-        grid-template-columns: 1fr 325px;
+        grid-template-columns: 1fr 335px;
 
         width: 100vw;
         height: 100vh;
     }
 
-    .matrix-container {
-        height: 100vh;
+    .main-content {
+        display: grid;
+        grid-template-rows: 75px 1fr;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        .header {
+            display: grid;
+            grid-template-columns: 1fr max-content 1fr;
+            grid-template-rows: 75px;
+
+            .logo {
+                img {
+                    height: 100%;
+                    padding: 18px;
+                    box-sizing: border-box;
+
+                    filter: invert(1);
+                }
+            }
+
+            .title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                font-family: Inter, sans-serif;
+                font-weight: 200;
+                letter-spacing: 0.1rem;
+                font-size: 1.4rem;
+            }
+
+            .controls {
+                display: flex;
+                justify-content: end;
+                align-items: center;
+                padding-right: 18px;
+
+                .control {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+
+                    background-color: black;
+                    color: white;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .matrix-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: calc(100vw - 335px);
+        }
     }
 
     .sidebar-container {
