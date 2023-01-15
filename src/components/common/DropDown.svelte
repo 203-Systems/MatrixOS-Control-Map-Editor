@@ -48,7 +48,7 @@
     </div>
 
     {#if expanded}
-        <div class="option-selector" style="width: {dropdownMain.clientWidth}px" use:clickOutside on:outclick={() => expanded = false}>
+        <div class="option-selector" style="width: {dropdownMain.clientWidth + 20}px" use:clickOutside on:outclick={() => expanded = false}>
             {#each options as option}
                 <div class="selectable-option" on:click={() => selectOption(option)}>
                     <span>{option}</span>
@@ -60,7 +60,7 @@
 
 <style lang="scss">
     .dropdown-body {
-        min-width: 100px;
+        min-width: 120px;
         height: 32px;
 
         background: white;
@@ -100,7 +100,10 @@
         .option-selector {
             position: fixed;
             margin-top: 6px;
+            margin-left: -10px;
             padding: 6px 0;
+            max-height: 200px;
+            overflow-y: auto;
 
             background: white;
             border: 1px solid gray;
@@ -113,7 +116,7 @@
             filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
             .selectable-option {
-                height: 28px;
+                min-height: 28px;
                 display: flex;
                 align-items: center;
                 text-indent: 8px;
@@ -130,6 +133,29 @@
                 &:hover {
                     background-color: #dde5ff;
                 }
+            }
+
+            /* width */
+            &::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            /* Track */
+            &::-webkit-scrollbar-track {
+                background: #ffffff;
+            }
+
+            /* Handle */
+            &::-webkit-scrollbar-thumb {
+                padding: 2px;
+                background: #b9b9b9;
+                border: 2px solid #ffffff;
+                border-radius: 8px;
+            }
+
+            /* Handle on hover */
+            &::-webkit-scrollbar-thumb:hover {
+                background: #8c8c8c;
             }
         }
     }
