@@ -52,7 +52,7 @@
 
         overflow-y: scroll;
 
-        background-color: #eff0f3;
+        background-color: white;
 
         /* width */
         &::-webkit-scrollbar {
@@ -61,17 +61,20 @@
 
         /* Track */
         &::-webkit-scrollbar-track {
-            background: #bebebe;
+            background: #e8e8e8;
         }
 
         /* Handle */
         &::-webkit-scrollbar-thumb {
-            background: #8a8a8a;
+            padding: 2px;
+            background: #656565;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
         }
 
         /* Handle on hover */
         &::-webkit-scrollbar-thumb:hover {
-            background: #797979;
+            background: #3a3a3a;
         }
 
         .add-button {
