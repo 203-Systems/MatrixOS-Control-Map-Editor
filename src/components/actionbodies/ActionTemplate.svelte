@@ -46,7 +46,7 @@
         flex-direction: column;
         overflow: hidden;
 
-        transition: max-height 0.2s ease;
+        flex-shrink: 0;
 
         .action-header {
             min-height: 35px;
