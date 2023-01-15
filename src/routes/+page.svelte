@@ -24,7 +24,7 @@
         switch (actionIdentifier) {
             case "action.note":
                 const noteActionData: MidiActionData = {
-                    type: "NOTE",
+                    type: "Note",
                     key: 36,
                     velocity: 127,
                     channel: 1
@@ -47,6 +47,10 @@
         refreshActionDisplay()
     }
 </script>
+
+<svelte:head>
+    <title>Keypad Editor</title>
+</svelte:head>
 
 <main>
     <div class="main-content">
