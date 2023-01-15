@@ -7,7 +7,7 @@
             if (!node.contains(event.target)) {
                 node.dispatchEvent(new CustomEvent("outclick"));
 
-                setTimeout(() => show = false, 0) // This way, the UI even hides if the Enabling Button was clicked to hide it again
+                setTimeout(() => show = false, 0)
             }
         };
 

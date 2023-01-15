@@ -1,5 +1,5 @@
 export type MidiActionData = {
-    type: "NOTE" | "CC",
+    type: "Note" | "CC",
     key: number,
     velocity: number
     channel: number
