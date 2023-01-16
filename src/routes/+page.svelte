@@ -25,9 +25,11 @@
             case "action.note":
                 const noteActionData: MidiActionData = {
                     type: "Note",
-                    key: 36,
-                    velocity: 127,
-                    channel: 1
+                    data: {
+                        key: 0,
+                        velocity: false,
+                        channel: 0,
+                    }
                 }
 
                 editorBackend.addAction(selectedKey, actionIdentifier, noteActionData)

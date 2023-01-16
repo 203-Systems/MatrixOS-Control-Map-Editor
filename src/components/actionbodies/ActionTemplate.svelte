@@ -39,7 +39,7 @@
     .action-body {
         width: calc(100% - 25px);
 
-        border: 1px solid gray;
+        border: 1px solid #ababab;
         border-radius: 6px;
 
         display: flex;
@@ -53,7 +53,7 @@
             display: grid;
             grid-template-columns: 35px 1fr 35px;
 
-            background-color: #e0e0e0;
+            background-color: #eaeaea;
 
             .icon-section {
                 display: flex;
@@ -91,7 +91,7 @@
         .action-controls {
             height: min-content;
 
-            background-color: #f8f8f8;
+            background-color: #fcfcfc;
 
             display: flex;
             justify-content: center;
