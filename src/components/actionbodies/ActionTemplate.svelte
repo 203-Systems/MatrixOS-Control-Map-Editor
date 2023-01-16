@@ -6,6 +6,7 @@
 
     const dispatch = createEventDispatcher();
 
+    export let actionTitle: string = "Action"
     let expanded: boolean = true;
 </script>
 
@@ -20,7 +21,7 @@
         </div>
 
         <div class="text-section">
-            <span>Play a Midi Note</span>
+            <span>{actionTitle}</span>
         </div>
 
         <div class="icon-section delete-icon" on:click={() => dispatch('removeAction')}>

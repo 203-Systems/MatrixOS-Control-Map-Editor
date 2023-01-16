@@ -54,7 +54,7 @@
     }
 </script>
 
-<ActionTemplate on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle="Play a Midi Note" on:removeAction={() => dispatch('removeAction')}>
     <div class="midi-action-body">
         <div class="setting-slot">
             <span>Message Type</span>
