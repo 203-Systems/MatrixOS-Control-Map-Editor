@@ -3,6 +3,7 @@
     import AddActionMenu from "./AddActionMenu.svelte";
     import {createEventDispatcher, SvelteComponent} from 'svelte';
     import MidiNoteAction from "./actionbodies/MidiActionBody.svelte";
+    import KeyboardActionBody from "./actionbodies/KeyboardActionBody.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -13,6 +14,7 @@
 
     let actionBodies: { [id: string]: SvelteComponent } = {
         "action.note": MidiNoteAction,
+        "action.keyboard": KeyboardActionBody,
     };
 </script>
 
@@ -96,6 +98,10 @@
                 font-family: "Roboto Light", sans-serif;
                 font-weight: 400;
                 font-size: 18px;
+            }
+
+            &:hover {
+                background-color: #b4c5e7;
             }
         }
     }

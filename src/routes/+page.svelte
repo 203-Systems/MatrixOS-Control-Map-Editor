@@ -4,6 +4,7 @@
     import Sidebar from "../components/Sidebar.svelte";
     import { MatrixEditor } from "../lib/editors/MatrixEditor";
     import type {MidiActionData} from "$lib/types/MidiActionData";
+    import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
 
     let selectedKey = 11;
     let actionsOnSelectedKey: object[] = []
@@ -33,6 +34,14 @@
                 }
 
                 editorBackend.addAction(selectedKey, actionIdentifier, noteActionData)
+                break;
+
+            case "action.keyboard":
+                const keyboardActionData: KeyboardActionData = {
+                    key: -1
+                }
+
+                editorBackend.addAction(selectedKey, actionIdentifier, keyboardActionData)
                 break;
 
             default:
