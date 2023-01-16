@@ -1,5 +1,8 @@
 <script lang="ts">
     import { ChevronLeft, ChevronDown } from "carbon-icons-svelte";
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     export let options: string[]
     export let value: string
@@ -29,6 +32,8 @@
         value = option
 
         expanded = false;
+
+        dispatch('selectionChanged', { option: option })
     }
 </script>
 
