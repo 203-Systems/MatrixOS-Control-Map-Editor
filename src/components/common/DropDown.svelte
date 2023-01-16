@@ -99,6 +99,10 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
+                &:hover {
+                    background-color: #b7b7b7;
+                }
             }
         }
 
