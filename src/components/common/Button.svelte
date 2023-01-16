@@ -1,8 +1,12 @@
 <script lang="ts">
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
     export let text: string
 </script>
 
-<button class="custom-button">
+<button class="custom-button" on:click={() => dispatch('click')}>
     {text}
 </button>
 
