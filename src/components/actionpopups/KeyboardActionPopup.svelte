@@ -40,16 +40,8 @@
 
 <Popup title="Select a Keyboard Key" bind:show={show}>
     <div class="key-selector-popup">
-        <!-- <div class="page-selector-bar">
-            {#each keyPages as keyPage}
-                <div class="nav-container" on:click={() => selectedPage = keyPages.indexOf(keyPage)} class:selected={selectedPage === keyPages.indexOf(keyPage)}>
-                    <span>{keyPage.title}</span>
-                </div>
-            {/each}
-        </div> -->
-
         <div class="key-view-grid">
-            {#each keyPages[selectedPage].keyCollections as keyCollection}
+            {#each keyPages[0].keyCollections as keyCollection}
                 <div class="key-collection-title-container">
                     <div style="height: 58px; line-height: 58px;">
                         <span>{keyCollection.title}</span>
@@ -79,51 +71,6 @@
 
 <style lang="scss">
     .key-selector-popup {
-        /*.page-selector-bar {
-            width: 100%;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1em;
-
-            .nav-container {
-                width: 100px;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                font-family: Inter, sans-serif;
-
-                &.selected {
-                    span {
-                        background-color: cornflowerblue !important;
-                        color: white !important;
-                    }
-                }
-
-                span {
-                    padding: 6px 12px;
-                    border-radius: 6px;
-                    color: #494949;
-                    cursor: pointer;
-
-                    user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    -webkit-user-select: none;
-
-                    transition: background-color 0.1s ease, color 0.1s ease;
-
-                    &:hover {
-                        background-color: #d5d5d5;
-                        color: #2d2d2d;
-                    }
-                }
-            }
-        }*/
-
         .bottom-bar {
             width: 100%;
             display: flex;
