@@ -17,7 +17,14 @@
     <div class="keyboard-action-body">
         <div class="preview-key-section">
             <div class="key-preview">
-                <span>{data.key === -1? 'No Key selected' : data.key}</span>
+                <span>{
+                    data.key === -1?
+                        'No Key selected' :
+                        data.key
+                            .replace("VK_", "")
+                            .replace("CONTROL", "CTRL")
+                            .replace("NUMPAD", "NUM ")
+                }</span>
             </div>
         </div>
 
@@ -27,9 +34,7 @@
     </div>
 </ActionTemplate>
 
-<KeyboardActionPopup bind:show={showSelectKeyPopup}>
-
-</KeyboardActionPopup>
+<KeyboardActionPopup bind:selectedKey={data.key} bind:show={showSelectKeyPopup}/>
 
 <style lang="scss">
     .keyboard-action-body {
@@ -58,6 +63,7 @@
                 align-items: center;
 
                 font-family: Inter, sans-serif;
+                font-size: 14px;
                 text-align: center;
 
                 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25), inset 2px 2px 4px rgba(0, 0, 0, 0.25);

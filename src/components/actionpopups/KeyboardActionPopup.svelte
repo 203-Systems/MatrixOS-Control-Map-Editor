@@ -2,6 +2,7 @@
     import Popup from "../common/Popup.svelte";
     import {onMount} from "svelte";
     import {VirtualKey} from "$lib/types/VirtualKeys";
+    import Button from "../common/Button.svelte";
 
     export let show: boolean
 
@@ -86,6 +87,10 @@
                 </div>
             {/each}
         </div>
+
+        <div class="bottom-bar">
+            <Button text="Close" on:click={() => show = false}/>
+        </div>
     </div>
 </Popup>
 
@@ -134,6 +139,13 @@
                     }
                 }
             }
+        }
+
+        .bottom-bar {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
         }
 
         .key-view-grid {
