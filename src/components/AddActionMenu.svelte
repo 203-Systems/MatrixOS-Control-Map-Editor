@@ -9,7 +9,7 @@
 
     let actions: Action[] = [
         { actionName: "Play a Midi Note", actionIdentifier: "action.note", carbonIcon: Music },
-        { actionName: "Simulate Keyboard Key", actionIdentifier: "action.keyboard", carbonIcon: Keyboard },
+        { actionName: "Simulate a Keyboard Key", actionIdentifier: "action.keyboard", carbonIcon: Keyboard },
     ];
 
     function clickOutside(node) {

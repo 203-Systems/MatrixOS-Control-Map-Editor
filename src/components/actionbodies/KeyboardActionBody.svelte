@@ -3,25 +3,33 @@
     import ActionTemplate from "./ActionTemplate.svelte";
     import Button from "../common/Button.svelte";
     import {createEventDispatcher} from 'svelte';
+    import {VirtualKey} from "$lib/types/VirtualKeys";
+    import KeyboardActionPopup from "../actionpopups/KeyboardActionPopup.svelte";
 
     const dispatch = createEventDispatcher();
 
     export let data: KeyboardActionData;
+
+    let showSelectKeyPopup: boolean = false;
 </script>
 
-<ActionTemplate on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle="Simulate a Keyboard Key" on:removeAction={() => dispatch('removeAction')}>
     <div class="keyboard-action-body">
         <div class="preview-key-section">
             <div class="key-preview">
-                <span>{data.key}</span>
+                <span>{data.key === -1? 'No Key selected' : data.key}</span>
             </div>
         </div>
 
         <div class="change-key-section">
-            <Button text="Select a Keyboard Key"/>
+            <Button text="Select a Keyboard Key" on:click={() => showSelectKeyPopup = true}/>
         </div>
     </div>
 </ActionTemplate>
+
+<KeyboardActionPopup bind:show={showSelectKeyPopup}>
+
+</KeyboardActionPopup>
 
 <style lang="scss">
     .keyboard-action-body {
@@ -50,8 +58,14 @@
                 align-items: center;
 
                 font-family: Inter, sans-serif;
+                text-align: center;
 
                 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25), inset 2px 2px 4px rgba(0, 0, 0, 0.25);
+
+                user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
             }
         }
 
@@ -63,4 +77,6 @@
             align-items: center;
         }
     }
+
+
 </style>
