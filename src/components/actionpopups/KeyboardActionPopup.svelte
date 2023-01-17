@@ -34,36 +34,19 @@
                 { title: "Move", keys: getAllKeysByRegex(/^VK_(PRIOR|NEXT|HOME|END|LEFT|UP|RIGHT|DOWN)$/) },
                 { title: "Numpad", keys: getAllKeysByRegex(/^VK_(NUMPAD[0-9]|(DECIMAL|ADD|SUBTRACT|MULTIPLY|DIVIDE))$/) }
             ]
-        },
-        {
-            title: "Special",
-            keyCollections: []
-        },
-        {
-            title: "Function",
-            keyCollections: [
-                {
-                    title: "Function Keys",
-                    keys: getAllKeysByRegex(/^VK_[A-Z]$/)
-                },
-            ]
         }
     ]
-
-    onMount(() => {
-
-    })
 </script>
 
 <Popup title="Select a Keyboard Key" bind:show={show}>
     <div class="key-selector-popup">
-        <div class="page-selector-bar">
+        <!-- <div class="page-selector-bar">
             {#each keyPages as keyPage}
                 <div class="nav-container" on:click={() => selectedPage = keyPages.indexOf(keyPage)} class:selected={selectedPage === keyPages.indexOf(keyPage)}>
                     <span>{keyPage.title}</span>
                 </div>
             {/each}
-        </div>
+        </div> -->
 
         <div class="key-view-grid">
             {#each keyPages[selectedPage].keyCollections as keyCollection}
@@ -96,7 +79,7 @@
 
 <style lang="scss">
     .key-selector-popup {
-        .page-selector-bar {
+        /*.page-selector-bar {
             width: 100%;
             height: 40px;
             display: flex;
@@ -139,7 +122,7 @@
                     }
                 }
             }
-        }
+        }*/
 
         .bottom-bar {
             width: 100%;
