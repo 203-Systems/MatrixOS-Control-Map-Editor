@@ -1,11 +1,16 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+    import {createEventDispatcher, onDestroy} from 'svelte';
+    import {MatrixEditor} from "$lib/editors/MatrixEditor";
 
     const dispatch = createEventDispatcher();
 
+    export let editor: MatrixEditor
+
     export let selectedKey: number = 11;
 
-    function getCornerRadius (x: number, y: number) {
+    let activeActions: object[64] = []
+
+    function getCornerRadius(x: number, y: number) {
         switch (x + y * 10) {
             case 43:
                 return "polygon(80% 0, 100% 20%, 100% 100%, 0 100%, 0 0)";
@@ -27,13 +32,101 @@
             key: key
         });
     }
+
+    function getNormalized(x: number, y: number): number {
+        return (x + 1) + (8 - y) * 10
+    }
+
+    function getXY(index: number): number {
+        console.log(index % 8 + 1, Math.floor(index / 8) + 1)
+
+        return 11
+    }
+
+    function getActionTitle(action: object): string {
+        switch (action.actionIdentifier) {
+            case "action.note":
+                return action.actionData.type
+
+            case "action.keyboard":
+                return "Key"
+        }
+
+        return "None"
+    }
+
+    function getActionSubTitle(action: object): string {
+        switch (action.actionIdentifier) {
+            case "action.note":
+                switch (action.actionData.type) {
+                    case "Note":
+                        return action.actionData.data.key
+                    case "CC":
+                        return action.actionData.data.control
+                }
+                break;
+
+            case "action.keyboard":
+                if (action.actionData.key !== -1) {
+                    return action.actionData.key
+                        .replace("VK_", "")
+                        .replace("CONTROL", "CTRL")
+                        .replace("NUMPAD", "NUM ")
+                }
+
+
+        }
+
+        return "None"
+    }
+
+    function refreshGrid() {
+        for (let i = 0; i < 64; i++) {
+            const keyIndex = getXY(i)
+
+            activeActions[keyIndex] = editor.getActions(keyIndex)
+        }
+    }
+
+    let refreshInterval = setInterval(() => refreshGrid(), 100)
+
+    onDestroy(() => {
+        clearInterval(refreshInterval)
+    })
 </script>
 
 <div class="lp-border">
     {#each Array(8) as _, y}
         {#each Array(8) as _, x}
-            <div class="matrix-button-container" class:selected={selectedKey === ((x + 1) + (8 - y) * 10)}>
-                <div class="matrix-button" on:click={() => selectKey((x + 1) + (8 - y) * 10)} style="clip-path: {getCornerRadius(x, y)}"></div>
+            <div class="matrix-button-container" class:selected={selectedKey === getNormalized(x, y)}>
+                <div class="matrix-button" on:click={() => selectKey(getNormalized(x, y))}
+                     style="clip-path: {getCornerRadius(x, y)}">
+                    {#if activeActions[getNormalized(x, y)]}
+                        {#if activeActions[getNormalized(x, y)].length === 1}
+                            <div class="button-action-display">
+                                <div class="action-display-container">
+                                    <span class="action-title">
+                                        {getActionTitle(activeActions[getNormalized(x, y)][0])}
+                                    </span>
+
+                                    <div class="subtitle-container">
+                                        <span class="action-subtitle">
+                                            {getActionSubTitle(activeActions[getNormalized(x, y)][0])}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        {:else if activeActions[getNormalized(x, y)].length >= 1}
+                            <div class="button-action-display">
+                                <div class="action-display-container">
+                                    <span class="action-title">
+                                        ({activeActions[getNormalized(x, y)].length})
+                                    </span>
+                                </div>
+                            </div>
+                        {/if}
+                    {/if}
+                </div>
             </div>
         {/each}
     {/each}
@@ -77,11 +170,59 @@
         height: 100%;
         border-radius: 10%;
         background-color: rgb(80, 80, 80);
+        overflow: hidden;
 
         &:hover {
             background-color: rgb(60, 60, 60);
         }
 
         cursor: pointer;
+
+        .button-action-display {
+            width: 100%;
+            height: 100%;
+
+            background-color: #868686;
+
+            display: grid;
+            place-items: center;
+
+            .action-display-container {
+                width: 70%;
+                height: 70%;
+                border-radius: 8%;
+
+                background-color: #ffffff;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+                span {
+                    font-family: Inter, sans-serif;
+                }
+
+                span.action-title {
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                }
+
+                .subtitle-container {
+                    width: 100%;
+                    padding: 0 8%;
+                    box-sizing: border-box;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    text-align: center;
+
+                    span.action-subtitle {
+                        font-size: 0.8rem;
+                        font-weight: 300;
+                    }
+                }
+            }
+        }
     }
 </style>

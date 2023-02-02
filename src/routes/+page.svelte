@@ -2,6 +2,7 @@
     import OverflowMenuHorizontal from "carbon-icons-svelte/lib/OverflowMenuHorizontal.svelte";
     import Matrix from "../components/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
+    import LayerSelector from "../components/LayerSelector.svelte";
     import { MatrixEditor } from "../lib/editors/MatrixEditor";
     import type {MidiActionData} from "$lib/types/MidiActionData";
     import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
@@ -82,9 +83,17 @@
         </div>
 
         <div class="matrix-container">
-            <div style="width: 600px; height: 600px">
-                <Matrix bind:selectedKey={selectedKey}/>
+            <div class="matrix">
+                <Matrix
+                        bind:editor={editorBackend}
+                        bind:selectedKey={selectedKey}
+                />
             </div>
+
+            <LayerSelector
+                bind:selectedLayer={editorBackend.selectedLayer}
+                bind:editorBackend={editorBackend}
+            />
         </div>
     </div>
 
@@ -166,6 +175,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
+
+            gap: 4rem;
+
+            .matrix {
+                width: 600px;
+
+                aspect-ratio: 1 / 1;
+            }
+
+            flex-direction: column;
 
             width: calc(100vw - 335px);
         }
