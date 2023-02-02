@@ -38,7 +38,7 @@
     }
 
     function getXY(index: number): number {
-        console.log(index % 8 + 1, Math.floor(index / 8) + 1)
+        // console.log(index % 8 + 1, Math.floor(index / 8) + 1)
 
         return 11
     }

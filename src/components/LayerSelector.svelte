@@ -1,15 +1,16 @@
 <script lang="ts">
     import {ChevronLeft, ChevronRight, Add} from "carbon-icons-svelte";
     import {MatrixEditor} from "$lib/editors/MatrixEditor";
+    import {onMount} from "svelte";
 
-    let layers = 1;
+    let layers: object[] = []
     export let selectedLayer = 0;
     export let editorBackend: MatrixEditor
 
     function createLayer() {
-        layers += 1
-
         editorBackend.createLayer()
+
+        layers = editorBackend.getLayers()
     }
 
     function selectLayer(index) {
@@ -17,17 +18,36 @@
 
         editorBackend.selectedLayer = selectedLayer
     }
+
+    function selectOffsetLayer(offset: -1 | 1): void {
+        if(offset == -1) {
+            if (selectedLayer - 1 >= 0) {
+                selectedLayer -= 1
+            }
+        }
+        else {
+            if (selectedLayer + 1 < layers.length) {
+                selectedLayer += 1
+            }
+        }
+
+        editorBackend.selectedLayer = selectedLayer
+    }
+
+    onMount(() => {
+        layers = editorBackend.getLayers()
+    })
 </script>
 
 <div class="layer-selector-container">
-    <div class="layer-control">
+    <div class="layer-control" on:click={() => selectOffsetLayer(-1)}>
         <ChevronLeft size={24}/>
     </div>
 
     <div class="layers-container">
-        {#each Array(layers) as _, i}
-            <div class="layer" on:click={() => selectLayer(i)} class:selected={selectedLayer === i}>
-                <span>{i + 1}</span>
+        {#each layers as layer}
+            <div class="layer" on:click={() => selectLayer(layers.indexOf(layer))} class:selected={selectedLayer === layers.indexOf(layer)}>
+                <span>{layer.layer}</span>
             </div>
         {/each}
 
@@ -36,7 +56,7 @@
         </div>
     </div>
 
-    <div class="layer-control">
+    <div class="layer-control" on:click={() => selectOffsetLayer(1)}>
         <ChevronRight size={24}/>
     </div>
 </div>
