@@ -3,7 +3,7 @@
     import Matrix from "../components/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
-    import { MatrixEditor } from "../lib/editors/MatrixEditor";
+    import { MatrixEditor } from "$lib/editors/MatrixEditor";
     import type {MidiActionData} from "$lib/types/MidiActionData";
     import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
 

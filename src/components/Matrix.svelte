@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {createEventDispatcher, onDestroy} from 'svelte';
+    import {createEventDispatcher, onDestroy, onMount} from 'svelte';
     import {MatrixEditor} from "$lib/editors/MatrixEditor";
 
     const dispatch = createEventDispatcher();
@@ -38,9 +38,7 @@
     }
 
     function getXY(index: number): number {
-        // console.log(index % 8 + 1, Math.floor(index / 8) + 1)
-
-        return 11
+        return getNormalized(index % 8, Math.floor(index / 8))
     }
 
     function getActionTitle(action: object): string {
@@ -87,6 +85,10 @@
             activeActions[keyIndex] = editor.getActions(keyIndex)
         }
     }
+
+    onMount(() => {
+        refreshGrid()
+    })
 
     let refreshInterval = setInterval(() => refreshGrid(), 100)
 
