@@ -70,4 +70,25 @@ export class MatrixEditor {
             }
         }
     }
+
+    exportData() {
+        /*
+        To export the Data you have to access the this.editorLayers value
+        The Dataset inside the Array looks like this:
+
+        {
+            layer, (number)
+            grid (array) {  // This is where all the Action Data is
+                key, (number)
+                actions (action array)
+            }
+        }
+
+        The structure of a single action can be different by model, but you can identify the model by the .type value
+        You can check out the structure of the actions in lib/types
+            - MidiActionData.ts
+            - KeyboardActionData.ts
+
+         */
+    }
 }
