@@ -1,11 +1,11 @@
 <script lang="ts">
     import {ChevronLeft, ChevronRight, Add} from "carbon-icons-svelte";
-    import {MatrixEditor} from "$lib/editors/MatrixEditor";
+    import {KeymapEditor} from "$lib/editors/KeymapEditor";
     import {onMount} from "svelte";
 
     let layers: object[] = []
     export let selectedLayer = 0;
-    export let editorBackend: MatrixEditor
+    export let editorBackend: KeymapEditor
 
     function createLayer() {
         editorBackend.createLayer()

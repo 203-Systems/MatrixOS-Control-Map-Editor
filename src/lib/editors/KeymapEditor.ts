@@ -1,4 +1,4 @@
-export class MatrixEditor {
+export class KeymapEditor {
     private editorLayers: { layer: number, grid: { key: number, actions: object[] }[] }[] = [];
     public selectedLayer: number = 0;
     public refreshMatrixButton: (keyIndex: number, actions: object[]) => void = (keyIndex, actions) => { };

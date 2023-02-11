@@ -1,16 +1,16 @@
 <script lang="ts">
     import OverflowMenuHorizontal from "carbon-icons-svelte/lib/OverflowMenuHorizontal.svelte";
-    import Matrix from "../components/Matrix.svelte";
+    import Matrix from "../components/Devices/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
-    import { MatrixEditor } from "$lib/editors/MatrixEditor";
+    import { KeymapEditor } from "$lib/editors/KeymapEditor";
     import type {MidiActionData} from "$lib/types/MidiActionData";
     import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
 
     let selectedKey = 11;
     let actionsOnSelectedKey: object[] = []
 
-    let editorBackend = new MatrixEditor()
+    let editorBackend = new KeymapEditor()
 
     function refreshActionDisplay(): void {
         actionsOnSelectedKey = editorBackend.getActions(selectedKey)
@@ -82,8 +82,8 @@
             </div>
         </div>
 
-        <div class="matrix-container">
-            <div class="matrix">
+        <div class="device-container">
+            <div class="device">
                 <Matrix
                         bind:editor={editorBackend}
                         bind:selectedKey={selectedKey}
@@ -173,14 +173,14 @@
             }
         }
 
-        .matrix-container {
+        .device-container {
             display: flex;
             justify-content: center;
             align-items: center;
 
             gap: 4rem;
 
-            .matrix {
+            .device {
                 width: 600px;
 
                 aspect-ratio: 1 / 1;

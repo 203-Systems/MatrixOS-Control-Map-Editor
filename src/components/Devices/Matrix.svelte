@@ -1,10 +1,10 @@
 <script lang="ts">
     import {createEventDispatcher, onDestroy, onMount} from 'svelte';
-    import {MatrixEditor} from "$lib/editors/MatrixEditor";
+    import {KeymapEditor} from "$lib/editors/KeymapEditor";
 
     const dispatch = createEventDispatcher();
 
-    export let editor: MatrixEditor
+    export let editor: KeymapEditor
 
     export let selectedKey: number = 11;
 
