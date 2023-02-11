@@ -2,28 +2,21 @@
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
     import {createEventDispatcher, SvelteComponent} from 'svelte';
-    import MidiNoteAction from "./actionbodies/MidiActionBody.svelte";
-    import KeyboardActionBody from "./actionbodies/KeyboardActionBody.svelte";
     import type { Action, Effect } from '$lib/types/Action';
+    import { actions } from "./actionbodies/ActionRegistry";
 
 
     const dispatch = createEventDispatcher();
 
-    export let selectedKey: number = 11;
     export let showingActions: Action[] = [];
 
     let showAddActionMenu: boolean = false;
-
-    let actionBodies: { [id: string]: SvelteComponent } = {
-        "action.note": MidiNoteAction,
-        "action.keyboard": KeyboardActionBody,
-    };
 </script>
 
 <div class="sidebar-body">
     {#each showingActions as showingAction}
         <svelte:component
-                this={actionBodies[showingAction.type]}
+                this={actions[showingAction.type]}
                 bind:data={showingAction.data}
                 on:removeAction={() => dispatch('removeAction', { index: showingActions.indexOf(showingAction) })}
         />

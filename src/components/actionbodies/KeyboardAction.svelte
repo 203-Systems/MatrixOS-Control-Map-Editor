@@ -1,19 +1,27 @@
 <script lang="ts">
+    import type {ActionMeta} from "$lib/types/Action";
     import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
     import ActionTemplate from "./ActionTemplate.svelte";
     import Button from "../common/Button.svelte";
     import {createEventDispatcher} from 'svelte';
     import {VirtualKey} from "$lib/types/VirtualKeys";
     import KeyboardActionPopup from "../actionpopups/KeyboardActionPopup.svelte";
+    import { Keyboard } from "carbon-icons-svelte";
 
     const dispatch = createEventDispatcher();
+
+    export const meta: ActionMeta = {
+        actionName: "Simulate a Keyboard Key",
+        actionIdentifier: "action.keyboard",
+        carbonIcon: Keyboard
+    }
 
     export let data: KeyboardActionData;
 
     let showSelectKeyPopup: boolean = false;
 </script>
 
-<ActionTemplate actionTitle="Simulate a Keyboard Key" on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={meta.actionName} on:removeAction={() => dispatch('removeAction')}>
     <div class="keyboard-action-body">
         <div class="preview-key-section">
             <div class="key-preview">

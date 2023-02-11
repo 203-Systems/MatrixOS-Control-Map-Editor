@@ -1,12 +1,20 @@
 <script lang="ts">
+    import type {ActionMeta} from "$lib/types/Action";
     import type {MidiActionData} from "$lib/types/MidiActionData";
     import ActionTemplate from "./ActionTemplate.svelte";
     import DropDown from "../common/DropDown.svelte";
     import {createEventDispatcher} from 'svelte';
     import NumericUpDown from "../common/NumericUpDown.svelte";
     import CheckBox from "../common/CheckBox.svelte";
+    import { Music } from "carbon-icons-svelte";
 
     const dispatch = createEventDispatcher();
+
+    export const meta: ActionMeta = {
+        actionName: "Play a Midi Note",
+        actionIdentifier: "action.note",
+        carbonIcon: Music
+    }
 
     export let data: MidiActionData;
 
@@ -54,7 +62,7 @@
     }
 </script>
 
-<ActionTemplate actionTitle="Play a Midi Note" on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={meta.actionName} on:removeAction={() => dispatch('removeAction')}>
     <div class="midi-action-body">
         <div class="setting-slot">
             <span>Message Type</span>

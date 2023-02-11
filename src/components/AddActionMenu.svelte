@@ -1,16 +1,14 @@
 <script lang="ts">
     import type { ActionMeta } from "../lib/types/Action";
+    import { actions } from "./actionbodies/ActionRegistry";
     import { Keyboard, Music } from "carbon-icons-svelte";
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, SvelteComponent } from 'svelte';
+    import MidiNoteAction from "./actionbodies/MidiAction.svelte";
+    import KeyboardActionBody from "./actionbodies/KeyboardAction.svelte";
 
     export let show: boolean = false;
     let onEffectTab: boolean = false;
     const dispatch = createEventDispatcher();
-
-    let actions: ActionMeta[] = [
-        { actionName: "Play a Midi Note", actionIdentifier: "action.note", carbonIcon: Music },
-        { actionName: "Simulate a Keyboard Key", actionIdentifier: "action.keyboard", carbonIcon: Keyboard },
-    ];
 
     function clickOutside(node) {
         const handleClick = (event) => {
@@ -58,14 +56,14 @@
 
         <div class="menu-action-list">
             {#if !onEffectTab}
-                {#each actions as action}
-                    <div class="menu-action-item" on:click={() => addAction(action)}>
+                {#each Object.values(actions) as action}
+                    <div class="menu-action-item" on:click={() => addAction(action.meta)}>
                         <div class="icon-section">
-                            <svelte:component this={action.carbonIcon} size={24}/>
+                            <svelte:component this={action.meta.carbonIcon} size={24}/>
                         </div>
 
                         <div class="label-section">
-                            <span>{action.actionName}</span>
+                            <span>{action.meta.actionName}</span>
                         </div>
                     </div>
                 {/each}
