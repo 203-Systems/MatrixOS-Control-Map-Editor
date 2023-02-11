@@ -61,18 +61,18 @@
 </script>
 
 <svelte:head>
-    <title>Keypad Editor</title>
+    <title>Matrix OS Keymap Editor</title>
 </svelte:head>
 
 <main>
     <div class="main-content">
         <div class="header">
             <div class="logo">
-                <img src="Logo.png" class="logo">
+                <img src="Matrix OS.svg" class="logo">
             </div>
 
             <div class="title">
-                <span>Keypad Editor</span>
+                <span>KEYMAP EDITOR</span>
             </div>
 
             <div class="controls">
@@ -129,11 +129,13 @@
 
             .logo {
                 img {
-                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center; 
+
+                    height: 85%;
                     padding: 18px;
                     box-sizing: border-box;
-
-                    filter: invert(1);
                 }
             }
 
@@ -143,8 +145,8 @@
                 align-items: center;
 
                 font-family: Inter, sans-serif;
-                font-weight: 200;
-                letter-spacing: 0.1rem;
+                font-weight: 500;
+                letter-spacing: 0.2rem;
                 font-size: 1.4rem;
             }
 

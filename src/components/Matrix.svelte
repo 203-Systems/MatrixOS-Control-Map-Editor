@@ -140,7 +140,7 @@
         border: 2px solid rgb(120, 120, 120);
         border-radius: 3%;
         padding: 3%;
-        filter: drop-shadow(2px 2px 8px black);
+        filter: drop-shadow(0px 0px 20px rgba(0,0,0,0.3));
 
         aspect-ratio: 1 / 1;
 
@@ -157,7 +157,7 @@
         border-radius: 10%;
 
         &.selected {
-            box-shadow: 0 0 0 6px cornflowerblue;
+            box-shadow: 0 0 0 4px cornflowerblue;
         }
 
         &:hover {
@@ -170,12 +170,12 @@
     .matrix-button {
         width: 100%;
         height: 100%;
-        border-radius: 10%;
-        background-color: rgb(80, 80, 80);
+        border-radius: 8%;
+        background-color: rgb(120, 120, 120);
         overflow: hidden;
 
         &:hover {
-            background-color: rgb(60, 60, 60);
+            background-color: rgb(80, 80, 80);
         }
 
         cursor: pointer;
