@@ -89,7 +89,8 @@
                         bind:selectedKey={selectedKey}
                 />
             </div>
-
+        </div>
+        <div class="layer-selector">
             <LayerSelector
                 bind:selectedLayer={editorBackend.selectedLayer}
                 bind:editorBackend={editorBackend}
@@ -189,6 +190,10 @@
             flex-direction: column;
 
             width: calc(100vw - 335px);
+        }
+
+        .layer-selector {
+            padding-bottom: 30px;
         }
     }
 
