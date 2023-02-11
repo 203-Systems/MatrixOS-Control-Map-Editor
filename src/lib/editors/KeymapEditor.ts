@@ -1,72 +1,52 @@
+import type { KeyID } from "$lib/types/KeyID";
+import type { Action, Effect, KeyConfig } from '$lib/types/Action';
+
 export class KeymapEditor {
-    private editorLayers: { layer: number, grid: { key: number, actions: object[] }[] }[] = [];
+    private editorLayers: KeyConfig[][][] = []; //Layer, X, Y
     public selectedLayer: number = 0;
-    public refreshMatrixButton: (keyIndex: number, actions: object[]) => void = (keyIndex, actions) => { };
+    public refreshDeviceButton: (key: KeyID, config: KeyConfig) => void = (key, config) => { };
 
     constructor() {
-        this.editorLayers.push({
-            layer: 1,
-            grid: []
-        })
+       this.createLayer();
+    }
 
-        for (let y = 0; y < 8; y++) {
-            for(let x = 0; x < 8; x++) {
-                this.editorLayers[0].grid.push({
-                    key: x + 1 + ((y + 1) * 10),
-                    actions: []
-                })
-            }
+    addAction(key: KeyID, actionIdentifier: string, actionData: any[]): void {
+
+        let action:Action = {type: actionIdentifier, data: actionData}
+        
+        if(Array.isArray(key)) {
+            this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(action);
+            this.refreshDeviceButton(key, this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]);
+        }
+
+    }
+
+    removeAction(key: KeyID, actionIndex: number): void {
+        if(Array.isArray(key)) {
+            this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]].actions.splice(actionIndex, 1);
+            this.refreshDeviceButton(key, this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]);
         }
     }
 
-    private getNormalIndex(keyIndex: number): number {
-        let x = Math.floor(keyIndex % 10)
-        let y = Math.floor(keyIndex / 10)
-
-        return (y - 1) * 8 + x - 1
-    }
-
-    addAction(keyIndex: number, actionIdentifier: string, action: object): void {
-        this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions.push({
-            actionIdentifier: actionIdentifier,
-            actionData: action
-        })
-
-        this.refreshMatrixButton(keyIndex, this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
-    }
-
-    removeAction(keyIndex: number, actionIndex: number): void {
-        this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions.splice(actionIndex, 1)
-
-        this.refreshMatrixButton(keyIndex, this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
-    }
-
-    getActions(keyIndex: number): object[] {
+    getActions(key: KeyID): KeyConfig | undefined {
         // console.log(this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
-
-        return this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions
+        if(Array.isArray(key)) {
+            return this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]
+        }
+        return undefined
     }
 
-    getLayers(): object[] {
-        return this.editorLayers.map(editorLayer => {
-            return {
-                layer: editorLayer.layer
-            }
-        })
+    getLayerCount(): number {
+        return this.editorLayers.length;        
     }
 
     createLayer(): void {
-        this.editorLayers.push({
-            layer: this.editorLayers.length + 1,
-            grid: []
-        })
+        this.editorLayers.push([])
 
         for (let y = 0; y < 8; y++) {
+            this.editorLayers[this.editorLayers.length - 1].push([])
             for(let x = 0; x < 8; x++) {
-                this.editorLayers[this.editorLayers.length - 1].grid.push({
-                    key: x + 1 + ((y + 1) * 10),
-                    actions: []
-                })
+                this.editorLayers[this.editorLayers.length - 1][y].push({actions: [], effects: []})
             }
         }
     }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Action } from "../lib/types/Action";
+    import type { ActionMeta } from "../lib/types/Action";
     import { Keyboard, Music } from "carbon-icons-svelte";
     import { createEventDispatcher } from 'svelte';
 
@@ -7,7 +7,7 @@
     let onEffectTab: boolean = false;
     const dispatch = createEventDispatcher();
 
-    let actions: Action[] = [
+    let actions: ActionMeta[] = [
         { actionName: "Play a Midi Note", actionIdentifier: "action.note", carbonIcon: Music },
         { actionName: "Simulate a Keyboard Key", actionIdentifier: "action.keyboard", carbonIcon: Keyboard },
     ];
@@ -30,7 +30,7 @@
         };
     }
 
-    function addAction(action: Action): void {
+    function addAction(action: ActionMeta): void {
         dispatch('addAction', {
             actionIdentifier: action.actionIdentifier
         });

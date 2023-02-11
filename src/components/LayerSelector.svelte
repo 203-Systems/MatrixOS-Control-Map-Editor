@@ -3,19 +3,18 @@
     import {KeymapEditor} from "$lib/editors/KeymapEditor";
     import {onMount} from "svelte";
 
-    let layers: object[] = []
+    let layerCount: number;
     export let selectedLayer = 0;
     export let editorBackend: KeymapEditor
 
     function createLayer() {
         editorBackend.createLayer()
 
-        layers = editorBackend.getLayers()
+        layerCount = editorBackend.getLayerCount()
     }
 
-    function selectLayer(index) {
+    function selectLayer(index: number) {
         selectedLayer = index
-
         editorBackend.selectedLayer = selectedLayer
     }
 
@@ -26,7 +25,7 @@
             }
         }
         else {
-            if (selectedLayer + 1 < layers.length) {
+            if (selectedLayer + 1 < layerCount) {
                 selectedLayer += 1
             }
         }
@@ -35,7 +34,7 @@
     }
 
     onMount(() => {
-        layers = editorBackend.getLayers()
+        layerCount = editorBackend.getLayerCount()
     })
 </script>
 
@@ -45,9 +44,9 @@
     </div>
 
     <div class="layers-container">
-        {#each layers as layer}
-            <div class="layer" on:click={() => selectLayer(layers.indexOf(layer))} class:selected={selectedLayer === layers.indexOf(layer)}>
-                <span>{layer.layer}</span>
+        {#each Array(layerCount) as _, layer}
+            <div class="layer" on:click={() => selectLayer(layer)} class:selected={selectedLayer === layer}>
+                <span>{layer}</span>
             </div>
         {/each}
 

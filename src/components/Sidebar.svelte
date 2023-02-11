@@ -4,11 +4,13 @@
     import {createEventDispatcher, SvelteComponent} from 'svelte';
     import MidiNoteAction from "./actionbodies/MidiActionBody.svelte";
     import KeyboardActionBody from "./actionbodies/KeyboardActionBody.svelte";
+    import type { Action, Effect } from '$lib/types/Action';
+
 
     const dispatch = createEventDispatcher();
 
     export let selectedKey: number = 11;
-    export let showingActions: object[];
+    export let showingActions: Action[] = [];
 
     let showAddActionMenu: boolean = false;
 
@@ -21,8 +23,8 @@
 <div class="sidebar-body">
     {#each showingActions as showingAction}
         <svelte:component
-                this={actionBodies[showingAction.actionIdentifier]}
-                bind:data={showingAction.actionData}
+                this={actionBodies[showingAction.type]}
+                bind:data={showingAction.data}
                 on:removeAction={() => dispatch('removeAction', { index: showingActions.indexOf(showingAction) })}
         />
     {/each}
