@@ -4,10 +4,10 @@
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
     import { KeymapEditor } from "$lib/editors/KeymapEditor";
-    import type {MidiActionData} from "src/components/actionbodies/Midi/MidiActionData";
-    import type {KeyboardActionData} from "src/components/actionbodies/Keyboard/KeyboardActionDataeyboard/KeyboardActionData";
-    import type { Action, KeyConfig } from "$lib/types/Action";
+    import type { KeyConfig } from "$lib/types/Action";
     import type { KeyID } from "$lib/types/KeyID";
+
+    import { Download } from "carbon-icons-svelte";
 
     let selectedKey:KeyID = undefined;
     let actionsOnSelectedKey: KeyConfig|undefined;
@@ -47,8 +47,11 @@
             </div>
 
             <div class="controls">
+                <div class="control" on:click={() => editorBackend.uploadToDevice()}>
+                    <Download size={24}/>
+                </div>
                 <div class="control">
-                    <OverflowMenuHorizontal size={32}/>
+                    <OverflowMenuHorizontal size={24}/>
                 </div>
             </div>
         </div>
@@ -127,6 +130,7 @@
                 justify-content: end;
                 align-items: center;
                 padding-right: 18px;
+                gap: 8px;
 
                 .control {
                     width: 40px;
@@ -141,6 +145,13 @@
                     align-items: center;
 
                     cursor: pointer;
+
+                    transition: background-color 0.2s ease;
+                    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
+
+                    &:hover {
+                    background-color: #404040;
+                }
                 }
             }
         }

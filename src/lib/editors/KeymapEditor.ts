@@ -77,7 +77,8 @@ export class KeymapEditor {
     }
 
 
-    exportData() {
+    uploadToDevice() {
+        console.log("Upload to Device")
         /*
         To export the Data you have to access the this.data value
         The Dataset inside the Array looks like this:
