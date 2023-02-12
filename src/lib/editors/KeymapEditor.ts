@@ -1,6 +1,7 @@
 import type { KeyID } from "$lib/types/KeyID";
 import { actions } from "/src/components/actionbodies/ActionRegistry"
 import type { Action, Effect, KeyConfig } from '$lib/types/Action';
+import type { UniversalActionDesciptor, universalaActionDesciptorDevice } from '$lib/types/UAD';
 
 export class KeymapEditor {
     private data: KeyConfig[][][] = []; //Layer, X, Y
@@ -76,26 +77,72 @@ export class KeymapEditor {
         this.updateCallback();
     }
 
+    compressArray(array: any[]): any[] {
+        var bitmap = 0;
 
-    uploadToDevice() {
-        console.log("Upload to Device")
-        /*
-        To export the Data you have to access the this.data value
-        The Dataset inside the Array looks like this:
-
-        {
-            layer, (number)
-            grid (array) {  // This is where all the Action Data is
-                key, (number)
-                actions (action array)
+        // Generate Bitmap, if the element is not empty, set the bit to 1
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] != undefined && !(array[i]?.[0] == 0)) { // Check if the element is [0] then that meas it is a previously compressed empty array
+                bitmap |= 1 << i;
             }
         }
 
-        The structure of a single action can be different by model, but you can identify the model by the .type value
-        You can check out the structure of the actions in lib/types
-            - MidiActionData.ts
-            - KeyboardActionData.ts
+        // Remove Empty Elements
+        var array = array.filter((value) => {
+            return value != undefined && !(value?.[0] == 0); // Same as above
+        })
 
-         */
+        array = [bitmap].concat(array);
+
+        return array
+    }
+
+    uploadToDevice() {
+        console.log("Upload to Device")
+
+        var uad: UniversalActionDesciptor = {
+            uad_version: 0,
+            action_list: [],
+            effect_list: [],
+            devices: []
+        }
+
+        //TODO: Data are hardcoded for now - Pending for dynamic device support
+        var deviceData: universalaActionDesciptorDevice = {
+            name: "Matrix",
+            id: [0x0203, 0x1040],
+            size: [8, 8],
+            effects: [0],
+            actions: []
+        }
+
+        // Fetch All Actions
+        for (let x = 0; x < 8; x++) {
+            deviceData.actions.push([])
+            for (let y = 0; y < 8; y++) {
+                deviceData.actions[x].push([])
+                for (let layer = 0; layer < this.getLayerCount(); layer++) {
+                    deviceData.actions[x][y].push([])
+                    for (let action = 0; action < this.data[layer]?.[x]?.[y]?.actions.length; action++) {
+                        var local_action = this.data[layer][x][y].actions[action];
+                        deviceData.actions[x][y][layer].push([local_action.constructor.identifier].concat(local_action.export()))
+                    }
+
+                    if(deviceData.actions[x][y][layer].length === 0) {
+                        deviceData.actions[x][y][layer] = undefined;
+                    }
+                }
+                console.log("Compressing X: {0}, Y: {1}", x, y)
+                deviceData.actions[x][y] = this.compressArray(deviceData.actions[x][y]);
+            }
+            console.log("Compressing X: {0}", x)
+            deviceData.actions[x] = this.compressArray(deviceData.actions[x]);
+        }
+        console.log("Compressing device data")
+        deviceData.actions = this.compressArray(deviceData.actions);
+        
+        uad.devices.push(deviceData);
+
+        console.log(uad);
     }
 }
