@@ -34,9 +34,7 @@ export class KeymapEditor {
 
     getActions(key: KeyID): KeyConfig | undefined {
         // console.log(this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
-        console.log(key)
         if(Array.isArray(key)) {
-            console.log(this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]])
             return this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]
         }
         return undefined

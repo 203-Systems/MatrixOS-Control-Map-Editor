@@ -7,7 +7,7 @@ import type { KeyboardActionData } from "./KeyboardActionData";
 
 export class KeyboardAction implements Action {
     static readonly identifier: string = "keyboard";
-    static readonly description: string = "Simulate a Keyboard Key";
+    static readonly description: string = "Send a Keyboard Key";
     static readonly icon: SvelteComponent = Keyboard;
     static readonly body: SvelteComponent = KeyboardActionBody;
 

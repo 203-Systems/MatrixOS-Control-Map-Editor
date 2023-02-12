@@ -7,7 +7,7 @@ import type { MidiActionData } from "./MidiActionData";
 
 export class MidiAction implements Action {
     static readonly identifier: string = "midi";
-    static readonly description: string = "Play a Midi Note";
+    static readonly description: string = "Send a Midi Message";
     static readonly icon: SvelteComponent = Music;
     static readonly body: SvelteComponent = MidiActionBody;
 
@@ -19,7 +19,7 @@ export class MidiAction implements Action {
             data: {
                 key: 60,
                 velocity: true,
-                channel: 1
+                channel: 0
             }
         }
     }
