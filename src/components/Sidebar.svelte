@@ -5,12 +5,13 @@
     import type { Action, Effect, KeyConfig } from '$lib/types/Action';
     import { actions } from "./actionbodies/ActionRegistry";
     import type { KeyID } from "$lib/types/KeyID";
+    import MidiActionBody from "./actionbodies/Midi/MidiActionBody.svelte";
     
 
     const dispatch = createEventDispatcher();
 
     export let selectedKey: KeyID;
-    export let showingActions: KeyConfig;
+    export let showingActions: KeyConfig|undefined;
 
     let showAddActionMenu: boolean = false;
 </script>
@@ -19,10 +20,10 @@
 
     {#if selectedKey != undefined}
         {#if showingActions != undefined}
-            {#each showingActions.actions as showingAction, index}
+            {#each showingActions.actions as action, index}
                 <svelte:component
-                        this={actions[showingAction.type].action}
-                        bind:data={showingAction.data}
+                        this={action.constructor.body}  
+                        bind:data={action.data}
                         on:removeAction={() => dispatch('removeAction', { index: index})}
                 />
             {/each}

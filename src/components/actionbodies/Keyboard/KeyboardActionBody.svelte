@@ -1,9 +1,10 @@
 <script lang="ts">
-    import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
+    import type {KeyboardActionData} from "src/components/actionbodies/Keyboard/KeyboardActionDataeyboard/KeyboardActionData";
     import ActionTemplate from "../ActionTemplate.svelte";
     import Button from "../../common/Button.svelte";
     import {createEventDispatcher} from 'svelte';
     import KeyboardActionPopup from "./KeyboardActionPopup.svelte";
+    import {KeyboardAction} from "./KeyboardAction";
 
     const dispatch = createEventDispatcher();
 
@@ -12,12 +13,12 @@
     let showSelectKeyPopup: boolean = false;
 </script>
 
-<ActionTemplate actionTitle={meta.actionName} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={KeyboardAction.description} on:removeAction={() => dispatch('removeAction')}>
     <div class="keyboard-action-body">
         <div class="preview-key-section">
             <div class="key-preview">
                 <span>{
-                    data.key === -1?
+                    data.key === undefined?
                         'No Key selected' :
                         data.key
                             .replace("VK_", "")

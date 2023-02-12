@@ -10,7 +10,7 @@
 
     export let selectedKey: KeyID = undefined;
 
-    let activeActions: KeyConfig[][] = Array(8).fill(Array(8))
+    let activeActions: (KeyConfig|undefined)[][] = Array(8).fill(Array(8))
 
     function getCornerRadius(x: number, y: number) {
         switch (x + y * 10) {
@@ -36,38 +36,38 @@
     }
 
     function getActionTitle(action: object): string {
-        switch (action.actionIdentifier) {
-            case "action.note":
-                return action.actionData.type
+        // switch (action.actionIdentifier) {
+        //     case "action.note":
+        //         return action.actionData.type
 
-            case "action.keyboard":
-                return "Key"
-        }
+        //     case "action.keyboard":
+        //         return "Key"
+        // }
 
         return "None"
     }
 
     function getActionSubTitle(action: object): string {
-        switch (action.actionIdentifier) {
-            case "action.note":
-                switch (action.actionData.type) {
-                    case "Note":
-                        return action.actionData.data.key
-                    case "CC":
-                        return action.actionData.data.control
-                }
-                break;
+        // switch (action.actionIdentifier) {
+        //     case "midi":
+        //         switch (action.actionData.type) {
+        //             case "Note":
+        //                 return action.actionData.data.key
+        //             case "CC":
+        //                 return action.actionData.data.control
+        //         }
+        //         break;
 
-            case "action.keyboard":
-                if (action.actionData.key !== -1) {
-                    return action.actionData.key
-                        .replace("VK_", "")
-                        .replace("CONTROL", "CTRL")
-                        .replace("NUMPAD", "NUM ")
-                }
+        //     case "keyboard":
+        //         if (action.actionData.key !== -1) {
+        //             return action.actionData.key
+        //                 .replace("VK_", "")
+        //                 .replace("CONTROL", "CTRL")
+        //                 .replace("NUMPAD", "NUM ")
+        //         }
 
 
-        }
+        // }
 
         return "None"
     }
@@ -85,11 +85,11 @@
         refreshGrid()
     })
 
-    let refreshInterval = setInterval(() => refreshGrid(), 100)
+    // let refreshInterval = setInterval(() => refreshGrid(), 100)
 
-    onDestroy(() => {
-        clearInterval(refreshInterval)
-    })
+    // onDestroy(() => {
+    //     clearInterval(refreshInterval)
+    // })
 </script>
 
 <div class="lp-border">
@@ -98,25 +98,25 @@
             <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
-                    {#if activeActions[x]?.[y]?.length === 1}
+                    {#if activeActions[x]?.[y]?.actions?.length === 1}
                         <div class="button-action-display">
                             <div class="action-display-container">
                                 <span class="action-title">
-                                    {getActionTitle(activeActions[x][y][0])}
+                                    {getActionTitle(activeActions[x][y].actions[0])}
                                 </span>
 
                                 <div class="subtitle-container">
                                     <span class="action-subtitle">
-                                        {getActionSubTitle(activeActions[x][y][0])}
+                                        {getActionSubTitle(activeActions[x][y].actions[0])}
                                     </span>
                                 </div>
                             </div>
                         </div>
-                    {:else if activeActions[x]?.[y]?.length >= 1}
+                    {:else if activeActions[x]?.[y]?.actions?.length > 1}
                         <div class="button-action-display">
                             <div class="action-display-container">
                                 <span class="action-title">
-                                    ({activeActions[x][y].length})
+                                    ({activeActions[x][y].actions.length})
                                 </span>
                             </div>
                         </div>

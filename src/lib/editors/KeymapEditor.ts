@@ -1,4 +1,5 @@
 import type { KeyID } from "$lib/types/KeyID";
+import { actions } from "/src/components/actionbodies/ActionRegistry"
 import type { Action, Effect, KeyConfig } from '$lib/types/Action';
 
 export class KeymapEditor {
@@ -10,12 +11,15 @@ export class KeymapEditor {
        this.createLayer();
     }
 
-    addAction(key: KeyID, actionIdentifier: string, actionData: any[]): void {
+    addAction(key: KeyID, actionIdentifier: string): void {
 
-        let action:Action = {type: actionIdentifier, data: actionData}
+        if(actions[actionIdentifier] === undefined) {
+            console.error("Action not found");
+            return;
+        }
         
         if(Array.isArray(key)) {
-            this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(action);
+            this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(new actions[actionIdentifier]);
             this.refreshDeviceButton(key, this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]);
         }
 
@@ -30,7 +34,9 @@ export class KeymapEditor {
 
     getActions(key: KeyID): KeyConfig | undefined {
         // console.log(this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
+        console.log(key)
         if(Array.isArray(key)) {
+            console.log(this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]])
             return this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]
         }
         return undefined

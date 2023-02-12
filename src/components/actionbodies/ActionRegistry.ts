@@ -1,18 +1,21 @@
-import { SvelteComponent } from 'svelte';
-import { Keyboard, Music } from "carbon-icons-svelte";
+import type { SvelteComponent } from 'svelte';
 
-import MidiNoteAction from "./Midi/MidiAction.svelte";
-import KeyboardAction from "./Keyboard/KeyboardAction.svelte";
+import { MidiAction } from "./Midi/MidiAction";
+import { KeyboardAction } from "./Keyboard/KeyboardAction";
 
-export type ActionMeta = {
-    actionName: string,
-    actionIdentifier: string,
-    actionIcon: SvelteComponent, 
-    action: SvelteComponent
-    
+export interface Action {
+    static readonly identifier: string;
+    static readonly description: string;
+    static readonly icon: SvelteComponent;
+    static readonly body: SvelteComponent;
+
+    constructor(): void;
+    import(data: any[]): boolean;
+    export(): any[];
+    summary(): object;
 }
 
-export const actions : {[actionIdentifier:string]: ActionMeta} = {
-    "action.note":      { actionName: "Play a Midi Note", actionIdentifier: "action.note", actionIcon: Music, action: MidiNoteAction},
-    "action.keyboard":  { actionName: "Simulate a Keyboard Key", actionIdentifier: "action.keyboard", actionIcon: Keyboard, action: MidiNoteAction},
-} as const;
+export const actions : {[actionIdentifier:string]: Action} = {
+    "midi": MidiAction,
+    "keyboard":  KeyboardAction,
+};

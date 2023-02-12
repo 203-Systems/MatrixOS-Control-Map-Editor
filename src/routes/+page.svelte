@@ -4,13 +4,13 @@
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
     import { KeymapEditor } from "$lib/editors/KeymapEditor";
-    import type {MidiActionData} from "$lib/types/MidiActionData";
-    import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
+    import type {MidiActionData} from "src/components/actionbodies/Midi/MidiActionData";
+    import type {KeyboardActionData} from "src/components/actionbodies/Keyboard/KeyboardActionDataeyboard/KeyboardActionData";
     import type { Action, KeyConfig } from "$lib/types/Action";
     import type { KeyID } from "$lib/types/KeyID";
 
     let selectedKey:KeyID = undefined;
-    let actionsOnSelectedKey: KeyConfig;
+    let actionsOnSelectedKey: KeyConfig|undefined;
     let editorBackend = new KeymapEditor()
 
     function refreshActionDisplay(): void {
@@ -24,32 +24,7 @@
     }
 
     function addAction(actionIdentifier: string): void {
-        switch (actionIdentifier) {
-            case "action.note":
-                const noteActionData: MidiActionData = {
-                    type: "Note",
-                    data: {
-                        key: 0,
-                        velocity: false,
-                        channel: 0,
-                    }
-                }
-
-                editorBackend.addAction(selectedKey, actionIdentifier, noteActionData)
-                break;
-
-            case "action.keyboard":
-                const keyboardActionData: KeyboardActionData = {
-                    key: -1
-                }
-
-                editorBackend.addAction(selectedKey, actionIdentifier, keyboardActionData)
-                break;
-
-            default:
-                console.error("Could not add Action due to lack of implementation for: " + actionIdentifier)
-                break;
-        }
+        editorBackend.addAction(selectedKey, actionIdentifier);
 
         refreshActionDisplay()
     }

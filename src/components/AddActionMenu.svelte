@@ -55,11 +55,11 @@
                 {#each Object.entries(actions) as action}
                     <div class="menu-action-item" on:click={() => addAction(action[0])}>
                         <div class="icon-section">
-                            <svelte:component this={action[1].actionIcon} size={24}/>
+                            <svelte:component this={action[1].icon} size={24}/>
                         </div>
 
                         <div class="label-section">
-                            <span>{action[1].actionName}</span>
+                            <span>{action[1].description}</span>
                         </div>
                     </div>
                 {/each}

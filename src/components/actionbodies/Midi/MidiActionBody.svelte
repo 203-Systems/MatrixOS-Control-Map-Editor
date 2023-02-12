@@ -1,10 +1,11 @@
 <script lang="ts">
-    import type {MidiActionData} from "$lib/types/MidiActionData";
+    import type { MidiActionData } from "./MidiActionData";
     import ActionTemplate from "../ActionTemplate.svelte";
     import DropDown from "../../common/DropDown.svelte";
     import {createEventDispatcher} from 'svelte';
     import NumericUpDown from "../../common/NumericUpDown.svelte";
     import CheckBox from "../../common/CheckBox.svelte";
+    import {MidiAction} from "./MidiAction";
 
     const dispatch = createEventDispatcher();
     
@@ -54,7 +55,7 @@
     }
 </script>
 
-<ActionTemplate actionTitle={meta.actionName} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={MidiAction.description} on:removeAction={() => dispatch('removeAction')}>
     <div class="midi-action-body">
         <div class="setting-slot">
             <span>Message Type</span>
