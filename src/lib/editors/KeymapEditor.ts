@@ -44,6 +44,14 @@ export class KeymapEditor {
         return this.editorLayers.length;        
     }
 
+    getSelectedLayer(): number {
+        return this.selectedLayer;
+    }
+    
+    selectLayer(layer: number): void {
+        this.selectedLayer = layer;
+    }
+
     createLayer(): void {
         this.editorLayers.push([])
 

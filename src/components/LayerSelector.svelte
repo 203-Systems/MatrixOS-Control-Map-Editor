@@ -1,40 +1,48 @@
 <script lang="ts">
     import {ChevronLeft, ChevronRight, Add} from "carbon-icons-svelte";
-    import {KeymapEditor} from "$lib/editors/KeymapEditor";
+    import type {KeymapEditor} from "$lib/editors/KeymapEditor";
     import {onMount} from "svelte";
 
-    let layerCount: number;
-    export let selectedLayer = 0;
     export let editorBackend: KeymapEditor
+
+    let selectedLayer: number = 0;
+    let layerCount: number = 1;
 
     function createLayer() {
         editorBackend.createLayer()
-
-        layerCount = editorBackend.getLayerCount()
+        resync()
     }
 
     function selectLayer(index: number) {
-        selectedLayer = index
-        editorBackend.selectedLayer = selectedLayer
+        editorBackend.selectLayer(index)
+        resync()
     }
 
     function selectOffsetLayer(offset: -1 | 1): void {
+        var newLayer = editorBackend.getSelectedLayer()
         if(offset == -1) {
-            if (selectedLayer - 1 >= 0) {
-                selectedLayer -= 1
+            if (newLayer - 1 >= 0) {
+                newLayer -= 1
             }
         }
         else {
-            if (selectedLayer + 1 < layerCount) {
-                selectedLayer += 1
+            if (newLayer + 1 < editorBackend.getLayerCount()) {
+                newLayer += 1
             }
         }
 
-        editorBackend.selectedLayer = selectedLayer
+        editorBackend.selectLayer(newLayer)
+        resync()
+    }
+
+    function resync()
+    {
+        selectedLayer = editorBackend.getSelectedLayer();
+        layerCount = editorBackend.getLayerCount();
     }
 
     onMount(() => {
-        layerCount = editorBackend.getLayerCount()
+        resync();
     })
 </script>
 
@@ -46,11 +54,11 @@
     <div class="layers-container">
         {#each Array(layerCount) as _, layer}
             <div class="layer" on:click={() => selectLayer(layer)} class:selected={selectedLayer === layer}>
-                <span>{layer}</span>
+                <span>{layer + 1}</span>
             </div>
         {/each}
 
-        <div class="layer-add-button" on:click={createLayer}>
+        <div class="layer-add-button" on:click={() => createLayer()}>
             <Add size={24}/>
         </div>
     </div>

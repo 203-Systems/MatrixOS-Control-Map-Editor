@@ -68,7 +68,6 @@
         </div>
         <div class="layer-selector">
             <LayerSelector
-                bind:selectedLayer={editorBackend.selectedLayer}
                 bind:editorBackend={editorBackend}
             />
         </div>
