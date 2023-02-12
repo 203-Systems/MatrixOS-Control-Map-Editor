@@ -1,10 +1,6 @@
 <script lang="ts">
-    import type { ActionMeta } from "../lib/types/Action";
     import { actions } from "./actionbodies/ActionRegistry";
-    import { Keyboard, Music } from "carbon-icons-svelte";
     import { createEventDispatcher, SvelteComponent } from 'svelte';
-    import MidiNoteAction from "./actionbodies/MidiAction.svelte";
-    import KeyboardActionBody from "./actionbodies/KeyboardAction.svelte";
 
     export let show: boolean = false;
     let onEffectTab: boolean = false;

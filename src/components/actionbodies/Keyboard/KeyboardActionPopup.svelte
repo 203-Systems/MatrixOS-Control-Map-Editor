@@ -1,8 +1,7 @@
 <script lang="ts">
-    import Popup from "../common/Popup.svelte";
-    import {onMount} from "svelte";
+    import Popup from "../../common/Popup.svelte";
     import {VirtualKey} from "$lib/types/VirtualKeys";
-    import Button from "../common/Button.svelte";
+    import Button from "../../common/Button.svelte";
 
     export let show: boolean
 

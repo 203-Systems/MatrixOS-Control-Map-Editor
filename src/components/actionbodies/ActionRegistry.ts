@@ -1,8 +1,8 @@
 import { SvelteComponent } from 'svelte';
 import { Keyboard, Music } from "carbon-icons-svelte";
 
-import MidiNoteAction from "./MidiAction.svelte";
-import KeyboardAction from "./KeyboardAction.svelte";
+import MidiNoteAction from "./Midi/MidiAction.svelte";
+import KeyboardAction from "./Keyboard/KeyboardAction.svelte";
 
 export type ActionMeta = {
     actionName: string,

@@ -1,11 +1,9 @@
 <script lang="ts">
-    import type {ActionMeta} from "$lib/types/Action";
     import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
-    import ActionTemplate from "./ActionTemplate.svelte";
-    import Button from "../common/Button.svelte";
+    import ActionTemplate from "../ActionTemplate.svelte";
+    import Button from "../../common/Button.svelte";
     import {createEventDispatcher} from 'svelte';
-    import {VirtualKey} from "$lib/types/VirtualKeys";
-    import KeyboardActionPopup from "../actionpopups/KeyboardActionPopup.svelte";
+    import KeyboardActionPopup from "./KeyboardActionPopup.svelte";
 
     const dispatch = createEventDispatcher();
 
