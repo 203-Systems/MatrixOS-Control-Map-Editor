@@ -25,7 +25,33 @@ export class MidiAction implements Action {
     }
 
     import(data: any[]): boolean {
-        return false;
+        try
+        {
+            switch(data[0] & 0b11110000)
+            {
+                case 0x90:
+                    this.data.type = "Note";
+                    this.data.data.key = data[1] & 0b01111111;
+                    this.data.data.velocity = data[1] & 0b10000000;
+                    this.data.data.channel = data[0] & 0b00001111;
+                    return true;
+                case 0xB0:
+                    this.data.type = "CC";
+                    this.data.data.control = data[1];
+                    this.data.data.value = data[2];
+                    this.data.data.channel = data[0] & 0b00001111;
+                    return true;
+                default:
+                    console.error("MidiAction: Unknown Midi Type");
+                    return false;
+            }
+        }
+        catch (error)
+        {
+            console.error("MidiAction: Import Failed");
+            return false;
+        }
+
     }
 
     export(): any[] | undefined {

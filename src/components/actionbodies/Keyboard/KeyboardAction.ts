@@ -20,7 +20,9 @@ export class KeyboardAction implements Action {
     }
 
     import(data: any[]): boolean {
-        return false;
+        if(data.length != 1) return false;
+        this.data.key = data[0];
+        return true;
     }
 
     export(): any[] | undefined {

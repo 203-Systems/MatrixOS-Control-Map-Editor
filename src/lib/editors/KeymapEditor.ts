@@ -110,6 +110,7 @@ export class KeymapEditor {
             name: "Matrix",
             id: [0x0203, 0x1040],
             size: [8, 8],
+            layers: this.getLayerCount(),
             effects: [0],
             actions: []
         }
@@ -156,7 +157,80 @@ export class KeymapEditor {
         return uad;
     }
 
-    exportJson()
+    bitmapToArray(bitmap: number, length: number): number[] {
+        var newArray: number[] = [];
+
+        // For 1010101, generate [0,2,4,6]
+        for (let i = 0; i < length; i++) {
+            if (BigInt(bitmap) & (BigInt(1) << BigInt(i))) {
+                newArray.push(i)
+            }
+        }
+
+        return newArray;
+    }
+
+    loadUAD(uad: UniversalActionDesciptor)
+    {
+        if (uad === undefined) {
+            console.error("UAD is undefined")
+            return;
+        }
+
+        while(this.getLayerCount() < uad.devices[0].layers){
+            this.createLayer();
+        }
+
+        let actions_to_load = uad.devices[0].actions;
+
+        // iteratur through the array
+        let x_map = this.bitmapToArray(actions_to_load[0], uad.devices[0].size[0]);
+        for (var [x_index, x] of x_map.entries()) 
+        {
+            console.log(`X: ${x}`)
+            let y_map = this.bitmapToArray(actions_to_load[x_index + 1][0], uad.devices[0].size[1]);
+            for (var [y_index, y] of y_map.entries()) 
+            {
+                console.log(`X: ${x} Y: ${y}`)
+                let layer_map = this.bitmapToArray(actions_to_load[x_index + 1][y_index + 1][0], uad.devices[0].layers);
+                for (var [layer_index, layer] of layer_map.entries())
+                {
+                    console.log(`X: ${x} Y: ${y} Layer: ${layer}`)
+                    for(var action of actions_to_load[x_index + 1][y_index + 1][layer_index + 1]) {
+                        var action_type = uad.action_list[action[0]];
+
+                        // Create new action
+                        this.data[layer]?.[x]?.[y].actions.push(new actions[action_type]);
+                        //Import data into action
+                        this.data[layer]?.[x]?.[y].actions[this.data[layer]?.[x]?.[y].actions.length - 1].import(action.slice(1));
+                    }
+                }
+            }
+        }
+
+        this.updateCallback();
+    }
+
+
+    importUADA() {
+        // Open File Dialog
+        var input = document.createElement('input');
+
+        input.type = 'file';
+        input.onchange = (e) => {
+            var file = (e.target as HTMLInputElement).files[0];
+            var reader = new FileReader();
+            reader.readAsText(file,'UTF-8');
+            reader.onload = readerEvent => {
+                var content = (readerEvent.target as any).result; // this is the content!
+                var uad: UniversalActionDesciptor = JSON.parse(content);
+                this.loadUAD(uad);
+            }
+        }
+        input.click();
+    }
+
+    exportUADA()
     {
         console.log("Export JSON")
 
@@ -166,7 +240,7 @@ export class KeymapEditor {
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(uad));
         var downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "keymap.json");
+        downloadAnchorNode.setAttribute("download", "keymap.uada");
         document.body.appendChild(downloadAnchorNode); // required for firefox
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
@@ -182,5 +256,14 @@ export class KeymapEditor {
         // Convert to CBOR
 
         // Upload to Device
+    }
+
+    importFromDevice() {
+        console.log("Import From Device")
+
+        // Get UAD from Device
+        // let uad = 
+
+        this.loadUAD(uad);
     }
 }

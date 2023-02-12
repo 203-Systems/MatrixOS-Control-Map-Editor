@@ -7,7 +7,7 @@
     import type { KeyConfig } from "$lib/types/Action";
     import type { KeyID } from "$lib/types/KeyID";
 
-    import { DocumentDownload, Download } from "carbon-icons-svelte";
+    import { DocumentImport, DocumentExport, Upload, Download } from "carbon-icons-svelte";
 
     let selectedKey:KeyID = undefined;
     let actionsOnSelectedKey: KeyConfig|undefined;
@@ -47,11 +47,17 @@
             </div>
 
             <div class="controls">
-                <div class="control" on:click={() => editorBackend.exportJson()}>
-                    <DocumentDownload size={24}/>
+                <div class="control" on:click={() => editorBackend.importUADA()}>
+                    <DocumentImport size={24}/>
+                </div>
+                <div class="control" on:click={() => editorBackend.exportUADA()}>
+                    <DocumentExport size={24}/>
+                </div>
+                <div class="control" on:click={() => editorBackend.importFromDevice()}>
+                    <Download size={24}/>
                 </div>
                 <div class="control" on:click={() => editorBackend.uploadToDevice()}>
-                    <Download size={24}/>
+                    <Upload size={24}/>
                 </div>
                 <div class="control">
                     <OverflowMenuHorizontal size={24}/>
