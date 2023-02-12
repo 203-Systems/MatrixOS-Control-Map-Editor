@@ -35,39 +35,40 @@
         });
     }
 
-    function getActionTitle(action: object): string {
-        // switch (action.actionIdentifier) {
-        //     case "action.note":
-        //         return action.actionData.type
+    function getActionTitle(action: Action): string {
+        console.log(action)
+        switch (action.constructor.identifier) {
+            case "midi":
+                return action.data.type
 
-        //     case "action.keyboard":
-        //         return "Key"
-        // }
+            case "keyboard":
+                return "Key"
+        }
 
         return "None"
     }
 
-    function getActionSubTitle(action: object): string {
-        // switch (action.actionIdentifier) {
-        //     case "midi":
-        //         switch (action.actionData.type) {
-        //             case "Note":
-        //                 return action.actionData.data.key
-        //             case "CC":
-        //                 return action.actionData.data.control
-        //         }
-        //         break;
+    function getActionSubTitle(action: Action): string {
+        switch (action.constructor.identifier) {
+            case "midi":
+                switch (action.data.type) {
+                    case "Note":
+                        return action.data.data.key
+                    case "CC":
+                        return action.data.data.control
+                }
+                break;
 
-        //     case "keyboard":
-        //         if (action.actionData.key !== -1) {
-        //             return action.actionData.key
-        //                 .replace("VK_", "")
-        //                 .replace("CONTROL", "CTRL")
-        //                 .replace("NUMPAD", "NUM ")
-        //         }
+            case "keyboard":
+                if (action.data.key !== -1) {
+                    return action.data.key
+                        .replace("VK_", "")
+                        .replace("CONTROL", "CTRL")
+                        .replace("NUMPAD", "NUM ")
+                }
 
 
-        // }
+        }
 
         return "None"
     }
