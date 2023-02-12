@@ -11,25 +11,6 @@
     
     export let data: MidiActionData;
 
-    const stringifiedChannels = [
-        "Channel 1",
-        "Channel 2",
-        "Channel 3",
-        "Channel 4",
-        "Channel 5",
-        "Channel 6",
-        "Channel 7",
-        "Channel 8",
-        "Channel 9",
-        "Channel 10",
-        "Channel 11",
-        "Channel 12",
-        "Channel 13",
-        "Channel 14",
-        "Channel 15",
-        "Channel 16"
-    ]
-
     function changeMidiActionType(type: "Note" | "CC"): void {
         switch (type) {
             case "Note":
@@ -48,10 +29,6 @@
                 }
                 break;
         }
-    }
-
-    function selectChannel(channel: string): void {
-        data.data.channel = parseInt(channel.split(" ")[1]) - 1
     }
 </script>
 
@@ -91,8 +68,8 @@
 
         <div class="setting-slot">
             <span>Channel</span>
-
-            <DropDown options={stringifiedChannels} value={stringifiedChannels[data.data.channel]} on:selectionChanged={e => selectChannel(e.detail.option)}/>
+            
+            <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
         </div>
     </div>
 </ActionTemplate>
