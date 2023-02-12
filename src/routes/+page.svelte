@@ -110,8 +110,8 @@
                     justify-content: center;
                     align-items: center; 
 
-                    height: 85%;
-                    padding: 18px;
+                    height: 100%;
+                    padding: 24px;
                     box-sizing: border-box;
                 }
             }
@@ -122,9 +122,9 @@
                 align-items: center;
 
                 font-family: Inter, sans-serif;
-                font-weight: 500;
-                letter-spacing: 0.2rem;
-                font-size: 1.4rem;
+                font-weight: 400;
+                letter-spacing: 0.4rem;
+                font-size: 1.9rem;
             }
 
             .controls {
