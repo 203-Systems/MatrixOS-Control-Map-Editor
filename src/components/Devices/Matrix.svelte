@@ -36,7 +36,6 @@
     }
 
     function getActionTitle(action: Action): string {
-        console.log(action)
         switch (action.constructor.identifier) {
             case "midi":
                 return action.data.type
@@ -60,7 +59,7 @@
                 break;
 
             case "keyboard":
-                if (action.data.key !== -1) {
+                if (action.data.key !== undefined) {
                     return action.data.key
                         .replace("VK_", "")
                         .replace("CONTROL", "CTRL")
@@ -100,8 +99,6 @@
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
                     {#if activeActions[x]?.[y]?.actions?.length === 1}
-                        {(console.log(`${x}, ${y} - ${activeActions[x]?.[y]?.actions?.length}`)), ""}
-                        {(console.log(activeActions)), ""}
                         <div class="button-action-display">
                             <div class="action-display-container">
                                 <span class="action-title">
