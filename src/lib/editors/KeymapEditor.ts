@@ -65,6 +65,18 @@ export class KeymapEditor {
         }
     }
 
+    deleteLayer(layer: number): void {
+        this.data.splice(layer, 1);
+        if(this.getLayerCount() === 0) {
+            this.createLayer();
+        }
+        if(this.selectedLayer >= this.getLayerCount()) {
+            this.selectedLayer = this.getLayerCount() - 1;
+        }
+        this.updateCallback();
+    }
+
+
     exportData() {
         /*
         To export the Data you have to access the this.data value

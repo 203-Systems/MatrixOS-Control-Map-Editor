@@ -13,6 +13,11 @@
         resync()
     }
 
+    function deleteLayer(index: number) {
+        editorBackend.deleteLayer(index)
+        resync()
+    }
+
     function selectLayer(index: number) {
         editorBackend.selectLayer(index)
         resync()
@@ -53,7 +58,7 @@
 
     <div class="layers-container">
         {#each Array(layerCount) as _, layer}
-            <div class="layer" on:click={() => selectLayer(layer)} class:selected={selectedLayer === layer}>
+            <div class="layer" on:click={() => selectedLayer === layer ? deleteLayer(layer) : selectLayer(layer)} class:selected={selectedLayer === layer}>
                 <span>{layer + 1}</span>
             </div>
         {/each}
@@ -75,7 +80,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2em;
+        gap: 1em;
         filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
 
         .layer-control {
@@ -101,7 +106,7 @@
         .layers-container {
             min-width: fit-content;
             max-width: calc(80px * 6 + 0.5em * 5);
-            display: grid;
+            display: flex;
             justify-content: center;
             grid-template-columns: repeat(auto-fit, 80px);
             gap: 0.5em;
@@ -109,7 +114,7 @@
             overflow: hidden;
 
             .layer {
-                width: 80px;
+                width: 40px;
                 height: 40px;
                 border-radius: 6px;
 
@@ -121,6 +126,8 @@
                 align-items: center;
 
                 flex-shrink: 0;
+
+                transition: background-color 0.2s ease, width 0.2s ease;
 
                 span {
                     color: white;
@@ -134,15 +141,16 @@
 
                 &.selected {
                     background-color: #2c2c2c;
+                    width: 80px;
 
                     &:hover {
-                        background-color: #232323;
+                        background-color: #D00000;
                     }
                 }
             }
 
             .layer-add-button {
-                width: 80px;
+                width: 40px;
                 height: 40px;
                 border-radius: 6px;
                 box-sizing: border-box;
