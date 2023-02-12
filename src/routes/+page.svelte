@@ -6,9 +6,11 @@
     import { KeymapEditor } from "$lib/editors/KeymapEditor";
     import type {MidiActionData} from "$lib/types/MidiActionData";
     import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
+    import type { Action } from "$lib/types/Action";
+    import type { KeyID } from "$lib/types/KeyID";
 
-    let selectedKey = 11;
-    let actionsOnSelectedKey: object[] = []
+    let selectedKey:KeyID = [0, 0];
+    let actionsOnSelectedKey: Action[] = []
 
     let editorBackend = new KeymapEditor()
 
@@ -100,7 +102,6 @@
 
     <div class="sidebar-container">
         <Sidebar
-                bind:selectedKey={selectedKey}
                 bind:showingActions={actionsOnSelectedKey}
                 on:addAction={e => addAction(e.detail.actionIdentifier)}
                 on:removeAction={e => removeAction(e.detail.index)}
