@@ -6,9 +6,15 @@
 
     const dispatch = createEventDispatcher();
 
-    export let editor: KeymapEditor
+    export let editorBackend: KeymapEditor
 
     export let selectedKey: KeyID = undefined;
+    export let actionsOnSelectedKey: KeyConfig|undefined;
+
+    $: {
+        actionsOnSelectedKey; // Mentioning actionsOnSelectedKey in here makes the UI changes when it changes
+        refreshGrid();
+    }
 
     let activeActions: (KeyConfig|undefined)[][] = Array(8).fill(null).map(() => Array(8));
 
@@ -76,7 +82,7 @@
         // 8 by 8 dual for loop
         for (let x = 0; x < 8; x++) {
             for (let y = 0; y < 8; y++) {
-                activeActions[x][y] = editor.getActions([x, y])
+                activeActions[x][y] = editorBackend.getActions([x, y])
             }
         }
     }

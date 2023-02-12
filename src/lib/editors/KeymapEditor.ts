@@ -3,12 +3,13 @@ import { actions } from "/src/components/actionbodies/ActionRegistry"
 import type { Action, Effect, KeyConfig } from '$lib/types/Action';
 
 export class KeymapEditor {
-    private editorLayers: KeyConfig[][][] = []; //Layer, X, Y
-    public selectedLayer: number = 0;
-    public refreshDeviceButton: (key: KeyID, config: KeyConfig) => void = (key, config) => { };
-
-    constructor() {
-       this.createLayer();
+    private data: KeyConfig[][][] = []; //Layer, X, Y
+    private selectedLayer: number = 0;
+    private updateCallback:()=>void;
+    
+    constructor(updateCallbackFunc:()=>void) {
+        this.updateCallback = updateCallbackFunc;
+        this.createLayer();
     }
 
     addAction(key: KeyID, actionIdentifier: string): void {
@@ -19,29 +20,29 @@ export class KeymapEditor {
         }
         
         if(Array.isArray(key)) {
-            this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(new actions[actionIdentifier]);
-            this.refreshDeviceButton(key, this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]);
+            this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(new actions[actionIdentifier]);
+            this.updateCallback()
         }
 
     }
 
     removeAction(key: KeyID, actionIndex: number): void {
         if(Array.isArray(key)) {
-            this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]].actions.splice(actionIndex, 1);
-            this.refreshDeviceButton(key, this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]);
+            this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.splice(actionIndex, 1);
+            this.updateCallback()
         }
     }
 
     getActions(key: KeyID): KeyConfig | undefined {
-        // console.log(this.editorLayers[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
+        // console.log(this.data[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
         if(Array.isArray(key)) {
-            return this.editorLayers[this.selectedLayer]?.[key[0]]?.[key[1]]
+            return this.data[this.selectedLayer]?.[key[0]]?.[key[1]]
         }
         return undefined
     }
 
     getLayerCount(): number {
-        return this.editorLayers.length;        
+        return this.data.length;        
     }
 
     getSelectedLayer(): number {
@@ -50,22 +51,23 @@ export class KeymapEditor {
     
     selectLayer(layer: number): void {
         this.selectedLayer = layer;
+        this.updateCallback()
     }
 
     createLayer(): void {
-        this.editorLayers.push([])
+        this.data.push([])
 
         for (let y = 0; y < 8; y++) {
-            this.editorLayers[this.editorLayers.length - 1].push([])
+            this.data[this.data.length - 1].push([])
             for(let x = 0; x < 8; x++) {
-                this.editorLayers[this.editorLayers.length - 1][y].push({actions: [], effects: []})
+                this.data[this.data.length - 1][y].push({actions: [], effects: []})
             }
         }
     }
 
     exportData() {
         /*
-        To export the Data you have to access the this.editorLayers value
+        To export the Data you have to access the this.data value
         The Dataset inside the Array looks like this:
 
         {

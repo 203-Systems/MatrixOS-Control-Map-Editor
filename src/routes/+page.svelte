@@ -11,28 +11,23 @@
 
     let selectedKey:KeyID = undefined;
     let actionsOnSelectedKey: KeyConfig|undefined;
-    let editorBackend = new KeymapEditor()
+    let editorBackend = new KeymapEditor(updateActionsOnSelected)
 
-    function refreshActionDisplay(): void {
-        actionsOnSelectedKey = editorBackend.getActions(selectedKey)
+    function updateActionsOnSelected(): void {
+        actionsOnSelectedKey = editorBackend.getActions(selectedKey);
     }
 
     $: {
         selectedKey; // Mentioning selectedKey in here makes this reactive function run on every change of it
-
-        refreshActionDisplay()
+        updateActionsOnSelected();
     }
 
     function addAction(actionIdentifier: string): void {
         editorBackend.addAction(selectedKey, actionIdentifier);
-
-        refreshActionDisplay()
     }
 
     function removeAction(actionIndex: number): void {
         editorBackend.removeAction(selectedKey, actionIndex)
-
-        refreshActionDisplay()
     }
 </script>
 
@@ -61,8 +56,9 @@
         <div class="device-container">
             <div class="device">
                 <Matrix
-                        bind:editor={editorBackend}
+                        bind:editorBackend={editorBackend}
                         bind:selectedKey={selectedKey}
+                        bind:actionsOnSelectedKey={actionsOnSelectedKey}
                 />
             </div>
         </div>
