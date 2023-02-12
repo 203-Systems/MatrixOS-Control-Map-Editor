@@ -77,19 +77,19 @@ export class KeymapEditor {
         this.updateCallback();
     }
 
-    compressArray(array: any[]): any[] {
+    compressArray(array: any[], nested: bool = false): any[] { //Nest is for compressed array inside of compressed array
         var bitmap = 0;
 
         // Generate Bitmap, if the element is not empty, set the bit to 1
         for (let i = 0; i < array.length; i++) {
-            if (array[i] != undefined && !(array[i]?.[0] == 0)) { // Check if the element is [0] then that meas it is a previously compressed empty array
+            if (array[i] != undefined && (!nested || !(array[i]?.[0] == 0))) { // Check if the element is [0] then that meas it is a previously compressed empty array
                 bitmap |= 1 << i;
             }
         }
 
         // Remove Empty Elements
         var array = array.filter((value) => {
-            return value != undefined && !(value?.[0] == 0); // Same as above
+            return value != undefined && (!nested || !(value?.[0] == 0)); // Same as above
         })
 
         array = [bitmap].concat(array);
@@ -125,21 +125,33 @@ export class KeymapEditor {
                     deviceData.actions[x][y].push([])
                     for (let action = 0; action < this.data[layer]?.[x]?.[y]?.actions.length; action++) {
                         var local_action = this.data[layer][x][y].actions[action];
-                        deviceData.actions[x][y][layer].push([local_action.constructor.identifier].concat(local_action.export()))
+                        
+                        var local_action_identifier = local_action.constructor.identifier;
+
+                        var local_action_data = local_action.export();
+                        if (local_action_data === undefined) {
+                            continue;
+                        }
+
+                        var action_index = uad.action_list.indexOf(local_action_identifier);
+
+                        if(action_index === -1) {
+                            uad.action_list.push(local_action_identifier);
+                            action_index = uad.action_list.length - 1;
+                        }
+
+                        deviceData.actions[x][y][layer].push([action_index].concat(local_action_data))
                     }
 
                     if(deviceData.actions[x][y][layer].length === 0) {
                         deviceData.actions[x][y][layer] = undefined;
                     }
                 }
-                console.log("Compressing X: {0}, Y: {1}", x, y)
                 deviceData.actions[x][y] = this.compressArray(deviceData.actions[x][y]);
             }
-            console.log("Compressing X: {0}", x)
-            deviceData.actions[x] = this.compressArray(deviceData.actions[x]);
+            deviceData.actions[x] = this.compressArray(deviceData.actions[x], true);
         }
-        console.log("Compressing device data")
-        deviceData.actions = this.compressArray(deviceData.actions);
+        deviceData.actions = this.compressArray(deviceData.actions, true);
         
         uad.devices.push(deviceData);
 

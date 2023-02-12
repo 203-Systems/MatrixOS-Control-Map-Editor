@@ -28,8 +28,26 @@ export class MidiAction implements Action {
         return false;
     }
 
-    export(): any[] {
-        return [];
+    export(): any[] | undefined {
+        var data = []
+        if(this.data.type == "Note")
+        {
+            data[0] = 0x90;
+            data[1] = this.data.data.key + this.data.data.velocity * 0b10000000; // If first bit is set, then velocity sensitivty is on.
+            if (this.data.data.velocity) {
+                data[2] = 127; // Custom Velocity, UI todo
+            }
+        }
+        else if(this.data.type == "CC")
+        {
+            data[0] = 0xB0;
+            data[1] = this.data.data.control;
+            data[2] = this.data.data.value;
+        }
+
+        data[0] += this.data.data.channel;
+
+        return data;
     }
 
     summary(): object {

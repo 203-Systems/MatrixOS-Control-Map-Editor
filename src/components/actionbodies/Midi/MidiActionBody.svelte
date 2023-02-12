@@ -15,8 +15,8 @@
         switch (type) {
             case "Note":
                 data.data = {
-                    key: 0,
-                    velocity: false,
+                    key: 60,
+                    velocity: true,
                     channel: 0,
                 }
                 break;

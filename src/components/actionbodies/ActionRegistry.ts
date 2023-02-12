@@ -11,7 +11,7 @@ export interface Action {
 
     constructor(): void;
     import(data: any[]): boolean;
-    export(): any[];
+    export(): any[] | undefined; //If undefined, then the action is not valid and should not be exported
     summary(): object;
 }
 

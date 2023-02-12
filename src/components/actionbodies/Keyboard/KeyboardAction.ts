@@ -23,8 +23,9 @@ export class KeyboardAction implements Action {
         return false;
     }
 
-    export(): any[] {
-        return [];
+    export(): any[] | undefined {
+        if(this.data.key == undefined) return undefined
+        return [this.data.key];
     }
 
     summary(): object {
