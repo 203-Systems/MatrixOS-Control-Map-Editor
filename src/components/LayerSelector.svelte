@@ -68,6 +68,7 @@
         justify-content: center;
         align-items: center;
         gap: 2em;
+        filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
 
         .layer-control {
             width: 36px;
@@ -82,6 +83,7 @@
             border: 2px solid gray;
 
             transition: background-color 0.2s ease;
+            background-color: #eff0f3;
 
             &:hover {
                 background-color: lightgray;

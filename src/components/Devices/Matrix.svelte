@@ -136,7 +136,7 @@
         border: 2px solid rgb(120, 120, 120);
         border-radius: 3%;
         padding: 3%;
-        filter: drop-shadow(0px 0px 20px rgba(0,0,0,0.3));
+        filter: drop-shadow(0px 0px 12px rgba(0,0,0,0.5));
 
         aspect-ratio: 1 / 1;
 

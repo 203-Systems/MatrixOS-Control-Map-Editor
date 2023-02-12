@@ -175,5 +175,6 @@
 
     .sidebar-container {
         height: 100vh;
+        filter: drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.25));
     }
 </style>
