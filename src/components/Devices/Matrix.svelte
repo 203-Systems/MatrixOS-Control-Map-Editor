@@ -173,6 +173,8 @@
         background-color: rgb(120, 120, 120);
         overflow: hidden;
 
+        transition: background-color 0.1s ease;
+
         &:hover {
             background-color: rgb(80, 80, 80);
         }

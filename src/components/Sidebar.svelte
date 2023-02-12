@@ -40,7 +40,9 @@
             on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
         />
     {:else}
-        <span>Select a key first</span>
+    <div class="no-key-selected">
+        <span>Please Select a Key</span>
+    </div>
     {/if}
 </div>
 
@@ -109,5 +111,28 @@
                 background-color: #b4c5e7;
             }
         }
+
+        .no-key-selected {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            width: 300px;
+            min-height: 50px;
+
+            border: 2px solid;
+            border-radius: 4px;
+            color: #2c2c2c;
+
+            cursor: pointer;
+
+            span {
+                font-family: "Roboto Light", sans-serif;
+                font-weight: 400;
+                font-size: 18px;
+                color: black;
+            }
+        }
+        
     }
 </style>

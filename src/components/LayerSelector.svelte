@@ -126,7 +126,7 @@
                 align-items: center;
 
                 flex-shrink: 0;
-
+                
                 transition: background-color 0.2s ease, width 0.2s ease;
 
                 span {
@@ -137,6 +137,7 @@
 
                 &:hover {
                     background-color: #969696;
+                    width: 50px;
                 }
 
                 &.selected {
@@ -145,6 +146,7 @@
 
                     &:hover {
                         background-color: #D00000;
+                        width: 90px;
                     }
                 }
             }
@@ -162,9 +164,12 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
+                
+                transition: background-color 0.2s ease, width 0.2s ease;
+                
                 &:hover {
                     background-color: #cecece;
+                    width: 50px;
                 }
             }
         }
