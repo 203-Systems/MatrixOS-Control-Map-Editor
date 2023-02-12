@@ -10,7 +10,7 @@
 
     export let selectedKey: KeyID = undefined;
 
-    let activeActions: (KeyConfig|undefined)[][] = Array(8).fill(Array(8))
+    let activeActions: (KeyConfig|undefined)[][] = Array(8).fill(null).map(() => Array(8));
 
     function getCornerRadius(x: number, y: number) {
         switch (x + y * 10) {
@@ -99,6 +99,8 @@
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
                     {#if activeActions[x]?.[y]?.actions?.length === 1}
+                        {(console.log(`${x}, ${y} - ${activeActions[x]?.[y]?.actions?.length}`)), ""}
+                        {(console.log(activeActions)), ""}
                         <div class="button-action-display">
                             <div class="action-display-container">
                                 <span class="action-title">
