@@ -7,7 +7,7 @@
     import type { KeyConfig } from "$lib/types/Action";
     import type { KeyID } from "$lib/types/KeyID";
 
-    import { Download } from "carbon-icons-svelte";
+    import { DocumentDownload, Download } from "carbon-icons-svelte";
 
     let selectedKey:KeyID = undefined;
     let actionsOnSelectedKey: KeyConfig|undefined;
@@ -47,6 +47,9 @@
             </div>
 
             <div class="controls">
+                <div class="control" on:click={() => editorBackend.exportJson()}>
+                    <DocumentDownload size={24}/>
+                </div>
                 <div class="control" on:click={() => editorBackend.uploadToDevice()}>
                     <Download size={24}/>
                 </div>

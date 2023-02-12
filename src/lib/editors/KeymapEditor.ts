@@ -97,7 +97,7 @@ export class KeymapEditor {
         return array
     }
 
-    exportUAD() {
+    generateUAD() {
         var uad: UniversalActionDesciptor = {
             uad_version: 0,
             action_list: [],
@@ -156,12 +156,28 @@ export class KeymapEditor {
         return uad;
     }
 
+    exportJson()
+    {
+        console.log("Export JSON")
+
+        let uad = this.generateUAD();
+
+        // Download JSON
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(uad));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "keymap.json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
     uploadToDevice() {
         console.log("Upload to Device")
 
         // Check if device is connected
 
-        let uad = this.exportUAD();
+        let uad = this.generateUAD();
 
         // Convert to CBOR
 
