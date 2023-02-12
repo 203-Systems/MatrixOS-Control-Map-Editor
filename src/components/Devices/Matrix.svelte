@@ -8,7 +8,7 @@
 
     export let editor: KeymapEditor
 
-    export let selectedKey: KeyID = [0, 0];
+    export let selectedKey: KeyID = undefined;
 
     let activeActions: KeyConfig[][] = Array(8).fill(Array(8))
 

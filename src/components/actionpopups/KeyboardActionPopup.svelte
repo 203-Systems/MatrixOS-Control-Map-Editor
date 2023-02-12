@@ -6,7 +6,6 @@
 
     export let show: boolean
 
-    let selectedPage: number = 0;
     export let selectedKey: VirtualKey
 
     function getAllKeysByRegex(regex: RegExp): VirtualKey[] {

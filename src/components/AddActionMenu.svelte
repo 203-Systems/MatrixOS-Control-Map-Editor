@@ -28,9 +28,9 @@
         };
     }
 
-    function addAction(action: ActionMeta): void {
+    function addAction(actionIdentifier: string): void {
         dispatch('addAction', {
-            actionIdentifier: action.actionIdentifier
+            actionIdentifier: actionIdentifier
         });
 
         show = false;
@@ -56,14 +56,14 @@
 
         <div class="menu-action-list">
             {#if !onEffectTab}
-                {#each Object.values(actions) as action}
-                    <div class="menu-action-item" on:click={() => addAction(action.meta)}>
+                {#each Object.entries(actions) as action}
+                    <div class="menu-action-item" on:click={() => addAction(action[0])}>
                         <div class="icon-section">
-                            <svelte:component this={action.meta.carbonIcon} size={24}/>
+                            <svelte:component this={action[1].actionIcon} size={24}/>
                         </div>
 
                         <div class="label-section">
-                            <span>{action.meta.actionName}</span>
+                            <span>{action[1].actionName}</span>
                         </div>
                     </div>
                 {/each}

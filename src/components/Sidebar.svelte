@@ -2,36 +2,45 @@
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
     import {createEventDispatcher, SvelteComponent} from 'svelte';
-    import type { Action, Effect } from '$lib/types/Action';
+    import type { Action, Effect, KeyConfig } from '$lib/types/Action';
     import { actions } from "./actionbodies/ActionRegistry";
-
+    import type { KeyID } from "$lib/types/KeyID";
+    
 
     const dispatch = createEventDispatcher();
 
-    export let showingActions: Action[] = [];
+    export let selectedKey: KeyID;
+    export let showingActions: KeyConfig;
 
     let showAddActionMenu: boolean = false;
 </script>
 
 <div class="sidebar-body">
-    {#each showingActions as showingAction}
-        <svelte:component
-                this={actions[showingAction.type]}
-                bind:data={showingAction.data}
-                on:removeAction={() => dispatch('removeAction', { index: showingActions.indexOf(showingAction) })}
+
+    {#if selectedKey != undefined}
+        {#if showingActions != undefined}
+            {#each showingActions.actions as showingAction, index}
+                <svelte:component
+                        this={actions[showingAction.type].action}
+                        bind:data={showingAction.data}
+                        on:removeAction={() => dispatch('removeAction', { index: index})}
+                />
+            {/each}
+        {/if}
+
+        <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
+            <Add size={28}></Add>
+
+            <span>Add a Action</span>
+        </button>
+
+        <AddActionMenu
+            bind:show={showAddActionMenu}
+            on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
         />
-    {/each}
-
-    <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
-        <Add size={28}></Add>
-
-        <span>Add a Action</span>
-    </button>
-
-    <AddActionMenu
-        bind:show={showAddActionMenu}
-        on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
-    />
+    {:else}
+        <span>Select a key first</span>
+    {/if}
 </div>
 
 <style lang="scss">

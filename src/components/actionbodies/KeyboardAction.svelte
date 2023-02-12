@@ -6,15 +6,8 @@
     import {createEventDispatcher} from 'svelte';
     import {VirtualKey} from "$lib/types/VirtualKeys";
     import KeyboardActionPopup from "../actionpopups/KeyboardActionPopup.svelte";
-    import { Keyboard } from "carbon-icons-svelte";
 
     const dispatch = createEventDispatcher();
-
-    export const meta: ActionMeta = {
-        actionName: "Simulate a Keyboard Key",
-        actionIdentifier: "action.keyboard",
-        carbonIcon: Keyboard
-    }
 
     export let data: KeyboardActionData;
 
