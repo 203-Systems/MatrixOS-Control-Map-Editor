@@ -139,8 +139,7 @@
                     width: 80px;
 
                     &:hover {
-                        background-color: #D00000;
-                        width: 90px;
+                        background-color: cornflowerblue;
                     }
                 }
             }
@@ -163,7 +162,6 @@
                 
                 &:hover {
                     background-color: #cecece;
-                    width: 50px;
                 }
             }
         }
