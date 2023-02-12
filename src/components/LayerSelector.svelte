@@ -3,24 +3,29 @@
     import type {KeymapEditor} from "$lib/editors/KeymapEditor";
     import {onMount} from "svelte";
 
+    export let updateCount: number
     export let editorBackend: KeymapEditor
 
     let selectedLayer: number = 0;
     let layerCount: number = 1;
+    
+    
+    $: {
+        updateCount;
+        selectedLayer = editorBackend.getSelectedLayer();
+        layerCount = editorBackend.getLayerCount();
+    }
 
     function createLayer() {
         editorBackend.createLayer()
-        resync()
     }
 
     function deleteLayer(index: number) {
         editorBackend.deleteLayer(index)
-        resync()
     }
 
     function selectLayer(index: number) {
         editorBackend.selectLayer(index)
-        resync()
     }
 
     function selectOffsetLayer(offset: -1 | 1): void {
@@ -37,18 +42,7 @@
         }
 
         editorBackend.selectLayer(newLayer)
-        resync()
     }
-
-    function resync()
-    {
-        selectedLayer = editorBackend.getSelectedLayer();
-        layerCount = editorBackend.getLayerCount();
-    }
-
-    onMount(() => {
-        resync();
-    })
 </script>
 
 <div class="layer-selector-container">

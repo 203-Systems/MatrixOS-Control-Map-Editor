@@ -9,10 +9,10 @@
     export let editorBackend: KeymapEditor
 
     export let selectedKey: KeyID = undefined;
-    export let actionsOnSelectedKey: KeyConfig|undefined;
+    export let updateCount: number
 
     $: {
-        actionsOnSelectedKey; // Mentioning actionsOnSelectedKey in here makes the UI changes when it changes
+        updateCount; // Mentioning actionsOnSelectedKey in here makes the UI changes when it changes
         refreshGrid();
     }
 

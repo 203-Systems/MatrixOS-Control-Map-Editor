@@ -10,7 +10,15 @@ export class KeymapEditor {
     
     constructor(updateCallbackFunc:()=>void) {
         this.updateCallback = updateCallbackFunc;
-        this.createLayer();
+        
+        // Create a default layer
+        this.data.push([])
+        for (let y = 0; y < 8; y++) {
+            this.data[this.data.length - 1].push([])
+            for(let x = 0; x < 8; x++) {
+                this.data[this.data.length - 1][y].push({actions: [], effects: []})
+            }
+        }
     }
 
     addAction(key: KeyID, actionIdentifier: string): void {
@@ -55,7 +63,7 @@ export class KeymapEditor {
         this.updateCallback()
     }
 
-    createLayer(): void {
+    createLayer(switchToNewLayer: boolean = true): void {
         this.data.push([])
 
         for (let y = 0; y < 8; y++) {
@@ -64,6 +72,11 @@ export class KeymapEditor {
                 this.data[this.data.length - 1][y].push({actions: [], effects: []})
             }
         }
+
+        if(switchToNewLayer) {
+            this.selectedLayer = this.data.length - 1;
+        }
+        this.updateCallback()
     }
 
     deleteLayer(layer: number): void {

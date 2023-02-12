@@ -1,17 +1,23 @@
 <script lang="ts">
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
-    import {createEventDispatcher, SvelteComponent} from 'svelte';
-    import type { Action, Effect, KeyConfig } from '$lib/types/Action';
-    import { actions } from "./actionbodies/ActionRegistry";
+    import {createEventDispatcher} from 'svelte';
+    import type { KeyConfig } from '$lib/types/Action';
     import type { KeyID } from "$lib/types/KeyID";
-    import MidiActionBody from "./actionbodies/Midi/MidiActionBody.svelte";
+    import type { KeymapEditor } from "$lib/editors/KeymapEditor";
     
 
     const dispatch = createEventDispatcher();
 
+    export let updateCount: number
     export let selectedKey: KeyID;
-    export let showingActions: KeyConfig|undefined;
+    export let editorBackend: KeymapEditor;
+    let currentActions: KeyConfig|undefined;
+
+    $: {
+        updateCount;
+        currentActions = editorBackend.getActions(selectedKey);
+    }
 
     let showAddActionMenu: boolean = false;
 </script>
@@ -19,8 +25,8 @@
 <div class="sidebar-body">
 
     {#if selectedKey != undefined}
-        {#if showingActions != undefined}
-            {#each showingActions.actions as action, index}
+        {#if currentActions != undefined}
+            {#each currentActions.actions as action, index}
                 <svelte:component
                         this={action.constructor.body}  
                         bind:data={action.data}

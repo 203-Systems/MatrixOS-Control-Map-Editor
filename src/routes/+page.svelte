@@ -8,18 +8,19 @@
     import type { KeyID } from "$lib/types/KeyID";
 
     import { DocumentImport, DocumentExport, Upload, Download } from "carbon-icons-svelte";
+    import { onMount } from "svelte";
 
+    let updateCount: number = 0; //Cause all components to update
     let selectedKey:KeyID = undefined;
-    let actionsOnSelectedKey: KeyConfig|undefined;
-    let editorBackend = new KeymapEditor(updateActionsOnSelected)
+    let editorBackend = new KeymapEditor(update)
 
-    function updateActionsOnSelected(): void {
-        actionsOnSelectedKey = editorBackend.getActions(selectedKey);
+    function update(): void {
+        updateCount += 1;
     }
 
     $: {
         selectedKey; // Mentioning selectedKey in here makes this reactive function run on every change of it
-        updateActionsOnSelected();
+        update();
     }
 
     function addAction(actionIdentifier: string): void {
@@ -29,6 +30,10 @@
     function removeAction(actionIndex: number): void {
         editorBackend.removeAction(selectedKey, actionIndex)
     }
+
+    onMount(() => {
+        update();
+    })
 </script>
 
 <svelte:head>
@@ -68,14 +73,15 @@
         <div class="device-container">
             <div class="device">
                 <Matrix
-                        bind:editorBackend={editorBackend}
+                        bind:updateCount={updateCount}
                         bind:selectedKey={selectedKey}
-                        bind:actionsOnSelectedKey={actionsOnSelectedKey}
+                        bind:editorBackend={editorBackend}
                 />
             </div>
         </div>
         <div class="layer-selector">
             <LayerSelector
+                bind:updateCount={updateCount}
                 bind:editorBackend={editorBackend}
             />
         </div>
@@ -83,8 +89,9 @@
 
     <div class="sidebar-container">
         <Sidebar
+                bind:updateCount={updateCount}
                 bind:selectedKey={selectedKey}
-                bind:showingActions={actionsOnSelectedKey}
+                bind:editorBackend={editorBackend}
                 on:addAction={e => addAction(e.detail.actionIdentifier)}
                 on:removeAction={e => removeAction(e.detail.index)}
         />
