@@ -97,9 +97,7 @@ export class KeymapEditor {
         return array
     }
 
-    uploadToDevice() {
-        console.log("Upload to Device")
-
+    exportUAD() {
         var uad: UniversalActionDesciptor = {
             uad_version: 0,
             action_list: [],
@@ -155,6 +153,18 @@ export class KeymapEditor {
         
         uad.devices.push(deviceData);
 
-        console.log(uad);
+        return uad;
+    }
+
+    uploadToDevice() {
+        console.log("Upload to Device")
+
+        // Check if device is connected
+
+        let uad = this.exportUAD();
+
+        // Convert to CBOR
+
+        // Upload to Device
     }
 }
