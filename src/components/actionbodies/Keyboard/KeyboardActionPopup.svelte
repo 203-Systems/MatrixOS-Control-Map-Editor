@@ -1,12 +1,10 @@
 <script lang="ts">
-    import Popup from "../common/Popup.svelte";
-    import {onMount} from "svelte";
-    import {VirtualKey} from "$lib/types/VirtualKeys";
-    import Button from "../common/Button.svelte";
+    import Popup from "../../common/Popup.svelte";
+    import {VirtualKey} from "./VirtualKeys";
+    import Button from "../../common/Button.svelte";
 
     export let show: boolean
 
-    let selectedPage: number = 0;
     export let selectedKey: VirtualKey
 
     function getAllKeysByRegex(regex: RegExp): VirtualKey[] {

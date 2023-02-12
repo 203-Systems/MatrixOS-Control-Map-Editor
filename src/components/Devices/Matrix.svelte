@@ -1,14 +1,22 @@
 <script lang="ts">
     import {createEventDispatcher, onDestroy, onMount} from 'svelte';
-    import {MatrixEditor} from "$lib/editors/MatrixEditor";
+    import {KeymapEditor} from "$lib/editors/KeymapEditor";
+    import type { Action, Effect, KeyConfig } from '$lib/types/Action';
+    import type { KeyID } from '$lib/types/KeyID';
 
     const dispatch = createEventDispatcher();
 
-    export let editor: MatrixEditor
+    export let editorBackend: KeymapEditor
 
-    export let selectedKey: number = 11;
+    export let selectedKey: KeyID = undefined;
+    export let updateCount: number
 
-    let activeActions: object[64] = []
+    $: {
+        updateCount; // Mentioning actionsOnSelectedKey in here makes the UI changes when it changes
+        refreshGrid();
+    }
+
+    let activeActions: (KeyConfig|undefined)[][] = Array(8).fill(null).map(() => Array(8));
 
     function getCornerRadius(x: number, y: number) {
         switch (x + y * 10) {
@@ -25,7 +33,7 @@
         }
     }
 
-    function selectKey(key) {
+    function selectKey(key: KeyID) {
         selectedKey = key
 
         dispatch('selectKey', {
@@ -33,40 +41,32 @@
         });
     }
 
-    function getNormalized(x: number, y: number): number {
-        return (x + 1) + (8 - y) * 10
-    }
+    function getActionTitle(action: Action): string {
+        switch (action.constructor.identifier) {
+            case "midi":
+                return action.data.type
 
-    function getXY(index: number): number {
-        return getNormalized(index % 8, Math.floor(index / 8))
-    }
-
-    function getActionTitle(action: object): string {
-        switch (action.actionIdentifier) {
-            case "action.note":
-                return action.actionData.type
-
-            case "action.keyboard":
+            case "keyboard":
                 return "Key"
         }
 
         return "None"
     }
 
-    function getActionSubTitle(action: object): string {
-        switch (action.actionIdentifier) {
-            case "action.note":
-                switch (action.actionData.type) {
+    function getActionSubTitle(action: Action): string {
+        switch (action.constructor.identifier) {
+            case "midi":
+                switch (action.data.type) {
                     case "Note":
-                        return action.actionData.data.key
+                        return action.data.data.key
                     case "CC":
-                        return action.actionData.data.control
+                        return action.data.data.control
                 }
                 break;
 
-            case "action.keyboard":
-                if (action.actionData.key !== -1) {
-                    return action.actionData.key
+            case "keyboard":
+                if (action.data.key !== undefined) {
+                    return action.data.key
                         .replace("VK_", "")
                         .replace("CONTROL", "CTRL")
                         .replace("NUMPAD", "NUM ")
@@ -79,10 +79,11 @@
     }
 
     function refreshGrid() {
-        for (let i = 0; i < 64; i++) {
-            const keyIndex = getXY(i)
-
-            activeActions[keyIndex] = editor.getActions(keyIndex)
+        // 8 by 8 dual for loop
+        for (let x = 0; x < 8; x++) {
+            for (let y = 0; y < 8; y++) {
+                activeActions[x][y] = editorBackend.getActions([x, y])
+            }
         }
     }
 
@@ -90,43 +91,41 @@
         refreshGrid()
     })
 
-    let refreshInterval = setInterval(() => refreshGrid(), 100)
+    // let refreshInterval = setInterval(() => refreshGrid(), 100)
 
-    onDestroy(() => {
-        clearInterval(refreshInterval)
-    })
+    // onDestroy(() => {
+    //     clearInterval(refreshInterval)
+    // })
 </script>
 
 <div class="lp-border">
     {#each Array(8) as _, y}
         {#each Array(8) as _, x}
-            <div class="matrix-button-container" class:selected={selectedKey === getNormalized(x, y)}>
-                <div class="matrix-button" on:click={() => selectKey(getNormalized(x, y))}
+            <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
+                <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
-                    {#if activeActions[getNormalized(x, y)]}
-                        {#if activeActions[getNormalized(x, y)].length === 1}
-                            <div class="button-action-display">
-                                <div class="action-display-container">
-                                    <span class="action-title">
-                                        {getActionTitle(activeActions[getNormalized(x, y)][0])}
-                                    </span>
+                    {#if activeActions[x]?.[y]?.actions?.length === 1}
+                        <div class="button-action-display">
+                            <div class="action-display-container">
+                                <span class="action-title">
+                                    {getActionTitle(activeActions[x][y].actions[0])}
+                                </span>
 
-                                    <div class="subtitle-container">
-                                        <span class="action-subtitle">
-                                            {getActionSubTitle(activeActions[getNormalized(x, y)][0])}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        {:else if activeActions[getNormalized(x, y)].length >= 1}
-                            <div class="button-action-display">
-                                <div class="action-display-container">
-                                    <span class="action-title">
-                                        ({activeActions[getNormalized(x, y)].length})
+                                <div class="subtitle-container">
+                                    <span class="action-subtitle">
+                                        {getActionSubTitle(activeActions[x][y].actions[0])}
                                     </span>
                                 </div>
                             </div>
-                        {/if}
+                        </div>
+                    {:else if activeActions[x]?.[y]?.actions?.length > 1}
+                        <div class="button-action-display">
+                            <div class="action-display-container">
+                                <span class="action-title">
+                                    ({activeActions[x][y].actions.length})
+                                </span>
+                            </div>
+                        </div>
                     {/if}
                 </div>
             </div>
@@ -140,7 +139,7 @@
         border: 2px solid rgb(120, 120, 120);
         border-radius: 3%;
         padding: 3%;
-        filter: drop-shadow(0px 0px 20px rgba(0,0,0,0.3));
+        filter: drop-shadow(0px 0px 12px rgba(0,0,0,0.5));
 
         aspect-ratio: 1 / 1;
 
@@ -173,6 +172,8 @@
         border-radius: 8%;
         background-color: rgb(120, 120, 120);
         overflow: hidden;
+
+        transition: background-color 0.1s ease;
 
         &:hover {
             background-color: rgb(80, 80, 80);

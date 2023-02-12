@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {MidiActionData} from "$lib/types/MidiActionData";
+    import type {MidiActionData} from "/src/components/actionbodies/Midi/MidiActionData";
     import ActionTemplate from "./ActionTemplate.svelte";
     import {TrashCan, ChevronDown, ChevronRight} from "carbon-icons-svelte";
     import { createEventDispatcher } from 'svelte';

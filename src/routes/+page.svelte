@@ -1,63 +1,39 @@
 <script lang="ts">
     import OverflowMenuHorizontal from "carbon-icons-svelte/lib/OverflowMenuHorizontal.svelte";
-    import Matrix from "../components/Matrix.svelte";
+    import Matrix from "../components/Devices/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
-    import { MatrixEditor } from "$lib/editors/MatrixEditor";
-    import type {MidiActionData} from "$lib/types/MidiActionData";
-    import type {KeyboardActionData} from "$lib/types/KeyboardActionData";
+    import { KeymapEditor } from "$lib/editors/KeymapEditor";
+    import type { KeyConfig } from "$lib/types/Action";
+    import type { KeyID } from "$lib/types/KeyID";
 
-    let selectedKey = 11;
-    let actionsOnSelectedKey: object[] = []
+    import { DocumentImport, DocumentExport, Upload, Download } from "carbon-icons-svelte";
+    import { onMount } from "svelte";
 
-    let editorBackend = new MatrixEditor()
+    let updateCount: number = 0; //Cause all components to update
+    let selectedKey:KeyID = undefined;
+    let editorBackend = new KeymapEditor(update)
 
-    function refreshActionDisplay(): void {
-        actionsOnSelectedKey = editorBackend.getActions(selectedKey)
+    function update(): void {
+        updateCount += 1;
     }
 
     $: {
         selectedKey; // Mentioning selectedKey in here makes this reactive function run on every change of it
-
-        refreshActionDisplay()
+        update();
     }
 
     function addAction(actionIdentifier: string): void {
-        switch (actionIdentifier) {
-            case "action.note":
-                const noteActionData: MidiActionData = {
-                    type: "Note",
-                    data: {
-                        key: 0,
-                        velocity: false,
-                        channel: 0,
-                    }
-                }
-
-                editorBackend.addAction(selectedKey, actionIdentifier, noteActionData)
-                break;
-
-            case "action.keyboard":
-                const keyboardActionData: KeyboardActionData = {
-                    key: -1
-                }
-
-                editorBackend.addAction(selectedKey, actionIdentifier, keyboardActionData)
-                break;
-
-            default:
-                console.error("Could not add Action due to lack of implementation for: " + actionIdentifier)
-                break;
-        }
-
-        refreshActionDisplay()
+        editorBackend.addAction(selectedKey, actionIdentifier);
     }
 
     function removeAction(actionIndex: number): void {
         editorBackend.removeAction(selectedKey, actionIndex)
-
-        refreshActionDisplay()
     }
+
+    onMount(() => {
+        update();
+    })
 </script>
 
 <svelte:head>
@@ -76,22 +52,36 @@
             </div>
 
             <div class="controls">
+                <div class="control" on:click={() => editorBackend.importUADA()}>
+                    <DocumentImport size={24}/>
+                </div>
+                <div class="control" on:click={() => editorBackend.exportUADA()}>
+                    <DocumentExport size={24}/>
+                </div>
+                <div class="control" on:click={() => editorBackend.importFromDevice()}>
+                    <Download size={24}/>
+                </div>
+                <div class="control" on:click={() => editorBackend.uploadToDevice()}>
+                    <Upload size={24}/>
+                </div>
                 <div class="control">
-                    <OverflowMenuHorizontal size={32}/>
+                    <OverflowMenuHorizontal size={24}/>
                 </div>
             </div>
         </div>
 
-        <div class="matrix-container">
-            <div class="matrix">
+        <div class="device-container">
+            <div class="device">
                 <Matrix
-                        bind:editor={editorBackend}
+                        bind:updateCount={updateCount}
                         bind:selectedKey={selectedKey}
+                        bind:editorBackend={editorBackend}
                 />
             </div>
-
+        </div>
+        <div class="layer-selector">
             <LayerSelector
-                bind:selectedLayer={editorBackend.selectedLayer}
+                bind:updateCount={updateCount}
                 bind:editorBackend={editorBackend}
             />
         </div>
@@ -99,8 +89,9 @@
 
     <div class="sidebar-container">
         <Sidebar
+                bind:updateCount={updateCount}
                 bind:selectedKey={selectedKey}
-                bind:showingActions={actionsOnSelectedKey}
+                bind:editorBackend={editorBackend}
                 on:addAction={e => addAction(e.detail.actionIdentifier)}
                 on:removeAction={e => removeAction(e.detail.index)}
         />
@@ -133,8 +124,8 @@
                     justify-content: center;
                     align-items: center; 
 
-                    height: 85%;
-                    padding: 18px;
+                    height: 100%;
+                    padding: 24px;
                     box-sizing: border-box;
                 }
             }
@@ -145,9 +136,9 @@
                 align-items: center;
 
                 font-family: Inter, sans-serif;
-                font-weight: 500;
-                letter-spacing: 0.2rem;
-                font-size: 1.4rem;
+                font-weight: 400;
+                letter-spacing: 0.4rem;
+                font-size: 1.9rem;
             }
 
             .controls {
@@ -155,6 +146,7 @@
                 justify-content: end;
                 align-items: center;
                 padding-right: 18px;
+                gap: 8px;
 
                 .control {
                     width: 40px;
@@ -169,18 +161,25 @@
                     align-items: center;
 
                     cursor: pointer;
+
+                    transition: background-color 0.2s ease;
+                    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
+
+                    &:hover {
+                    background-color: #404040;
+                }
                 }
             }
         }
 
-        .matrix-container {
+        .device-container {
             display: flex;
             justify-content: center;
             align-items: center;
 
             gap: 4rem;
 
-            .matrix {
+            .device {
                 width: 600px;
 
                 aspect-ratio: 1 / 1;
@@ -190,9 +189,14 @@
 
             width: calc(100vw - 335px);
         }
+
+        .layer-selector {
+            padding-bottom: 30px;
+        }
     }
 
     .sidebar-container {
         height: 100vh;
+        filter: drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.25));
     }
 </style>

@@ -1,16 +1,10 @@
 <script lang="ts">
-    import type { Action } from "../lib/types/Action";
-    import { Keyboard, Music } from "carbon-icons-svelte";
-    import { createEventDispatcher } from 'svelte';
+    import { actions } from "./actionbodies/ActionRegistry";
+    import { createEventDispatcher, SvelteComponent } from 'svelte';
 
     export let show: boolean = false;
     let onEffectTab: boolean = false;
     const dispatch = createEventDispatcher();
-
-    let actions: Action[] = [
-        { actionName: "Play a Midi Note", actionIdentifier: "action.note", carbonIcon: Music },
-        { actionName: "Simulate a Keyboard Key", actionIdentifier: "action.keyboard", carbonIcon: Keyboard },
-    ];
 
     function clickOutside(node) {
         const handleClick = (event) => {
@@ -30,9 +24,9 @@
         };
     }
 
-    function addAction(action: Action): void {
+    function addAction(actionIdentifier: string): void {
         dispatch('addAction', {
-            actionIdentifier: action.actionIdentifier
+            actionIdentifier: actionIdentifier
         });
 
         show = false;
@@ -58,14 +52,14 @@
 
         <div class="menu-action-list">
             {#if !onEffectTab}
-                {#each actions as action}
-                    <div class="menu-action-item" on:click={() => addAction(action)}>
+                {#each Object.entries(actions) as action}
+                    <div class="menu-action-item" on:click={() => addAction(action[0])}>
                         <div class="icon-section">
-                            <svelte:component this={action.carbonIcon} size={24}/>
+                            <svelte:component this={action[1].icon} size={24}/>
                         </div>
 
                         <div class="label-section">
-                            <span>{action.actionName}</span>
+                            <span>{action[1].description}</span>
                         </div>
                     </div>
                 {/each}

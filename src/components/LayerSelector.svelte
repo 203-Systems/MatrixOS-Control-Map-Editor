@@ -1,42 +1,48 @@
 <script lang="ts">
     import {ChevronLeft, ChevronRight, Add} from "carbon-icons-svelte";
-    import {MatrixEditor} from "$lib/editors/MatrixEditor";
+    import type {KeymapEditor} from "$lib/editors/KeymapEditor";
     import {onMount} from "svelte";
 
-    let layers: object[] = []
-    export let selectedLayer = 0;
-    export let editorBackend: MatrixEditor
+    export let updateCount: number
+    export let editorBackend: KeymapEditor
+
+    let selectedLayer: number = 0;
+    let layerCount: number = 1;
+    
+    
+    $: {
+        updateCount;
+        selectedLayer = editorBackend.getSelectedLayer();
+        layerCount = editorBackend.getLayerCount();
+    }
 
     function createLayer() {
         editorBackend.createLayer()
-
-        layers = editorBackend.getLayers()
     }
 
-    function selectLayer(index) {
-        selectedLayer = index
+    function deleteLayer(index: number) {
+        editorBackend.deleteLayer(index)
+    }
 
-        editorBackend.selectedLayer = selectedLayer
+    function selectLayer(index: number) {
+        editorBackend.selectLayer(index)
     }
 
     function selectOffsetLayer(offset: -1 | 1): void {
+        var newLayer = editorBackend.getSelectedLayer()
         if(offset == -1) {
-            if (selectedLayer - 1 >= 0) {
-                selectedLayer -= 1
+            if (newLayer - 1 >= 0) {
+                newLayer -= 1
             }
         }
         else {
-            if (selectedLayer + 1 < layers.length) {
-                selectedLayer += 1
+            if (newLayer + 1 < editorBackend.getLayerCount()) {
+                newLayer += 1
             }
         }
 
-        editorBackend.selectedLayer = selectedLayer
+        editorBackend.selectLayer(newLayer)
     }
-
-    onMount(() => {
-        layers = editorBackend.getLayers()
-    })
 </script>
 
 <div class="layer-selector-container">
@@ -45,13 +51,13 @@
     </div>
 
     <div class="layers-container">
-        {#each layers as layer}
-            <div class="layer" on:click={() => selectLayer(layers.indexOf(layer))} class:selected={selectedLayer === layers.indexOf(layer)}>
-                <span>{layer.layer}</span>
+        {#each Array(layerCount) as _, layer}
+            <div class="layer" on:click={() => selectedLayer === layer ? deleteLayer(layer) : selectLayer(layer)} class:selected={selectedLayer === layer}>
+                <span>{layer + 1}</span>
             </div>
         {/each}
 
-        <div class="layer-add-button" on:click={createLayer}>
+        <div class="layer-add-button" on:click={() => createLayer()}>
             <Add size={24}/>
         </div>
     </div>
@@ -68,7 +74,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2em;
+        gap: 1em;
+        filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
 
         .layer-control {
             width: 36px;
@@ -83,6 +90,7 @@
             border: 2px solid gray;
 
             transition: background-color 0.2s ease;
+            background-color: #eff0f3;
 
             &:hover {
                 background-color: lightgray;
@@ -92,7 +100,7 @@
         .layers-container {
             min-width: fit-content;
             max-width: calc(80px * 6 + 0.5em * 5);
-            display: grid;
+            display: flex;
             justify-content: center;
             grid-template-columns: repeat(auto-fit, 80px);
             gap: 0.5em;
@@ -100,7 +108,7 @@
             overflow: hidden;
 
             .layer {
-                width: 80px;
+                width: 40px;
                 height: 40px;
                 border-radius: 6px;
 
@@ -112,6 +120,8 @@
                 align-items: center;
 
                 flex-shrink: 0;
+                
+                transition: background-color 0.2s ease, width 0.2s ease;
 
                 span {
                     color: white;
@@ -121,19 +131,22 @@
 
                 &:hover {
                     background-color: #969696;
+                    width: 50px;
                 }
 
                 &.selected {
                     background-color: #2c2c2c;
+                    width: 80px;
 
                     &:hover {
-                        background-color: #232323;
+                        background-color: #D00000;
+                        width: 90px;
                     }
                 }
             }
 
             .layer-add-button {
-                width: 80px;
+                width: 40px;
                 height: 40px;
                 border-radius: 6px;
                 box-sizing: border-box;
@@ -145,9 +158,12 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
+                
+                transition: background-color 0.2s ease, width 0.2s ease;
+                
                 &:hover {
                     background-color: #cecece;
+                    width: 50px;
                 }
             }
         }
