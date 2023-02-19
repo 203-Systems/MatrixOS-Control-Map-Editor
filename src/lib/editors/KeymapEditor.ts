@@ -1,7 +1,8 @@
 import type { KeyID } from "$lib/types/KeyID";
 import { actions } from "/src/components/actionbodies/ActionRegistry"
 import type { Action, Effect, KeyConfig } from '$lib/types/Action';
-import type { UniversalActionDesciptor, universalaActionDesciptorDevice } from '$lib/types/UAD';
+import type { UniversalActionDesciptor, UniversalActionDesciptorDevice } from '$lib/types/UAD';
+import * as cbor from 'cbor-web';
 
 export class KeymapEditor {
     private data: KeyConfig[][][] = []; //Layer, X, Y
@@ -119,7 +120,7 @@ export class KeymapEditor {
         }
 
         //TODO: Data are hardcoded for now - Pending for dynamic device support
-        var deviceData: universalaActionDesciptorDevice = {
+        var deviceData: UniversalActionDesciptorDevice = {
             name: "Matrix",
             id: [0x0203, 0x1040],
             size: [8, 8],
@@ -251,7 +252,7 @@ export class KeymapEditor {
 
     exportUADA()
     {
-        console.log("Export JSON")
+        console.log("Export UADA")
 
         let uad = this.generateUAD();
 
@@ -273,8 +274,19 @@ export class KeymapEditor {
         let uad = this.generateUAD();
 
         // Convert to CBOR
+        let uad_encoded = cbor.encode(uad);
 
-        // Upload to Device
+        // Download binary file
+        console.log(uad_encoded)
+        var blob = new Blob([uad_encoded], {
+            type: "application/octet-stream"
+          });
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", window.URL.createObjectURL(blob));
+        downloadAnchorNode.setAttribute("download", "keymap.uad");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
     }
 
     importFromDevice() {
