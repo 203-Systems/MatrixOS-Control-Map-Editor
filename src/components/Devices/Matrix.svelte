@@ -41,43 +41,6 @@
         });
     }
 
-    function getActionTitle(action: Action): string {
-        switch (action.constructor.identifier) {
-            case "midi":
-                return action.data.type
-
-            case "keyboard":
-                return "Key"
-        }
-
-        return "None"
-    }
-
-    function getActionSubTitle(action: Action): string {
-        switch (action.constructor.identifier) {
-            case "midi":
-                switch (action.data.type) {
-                    case "Note":
-                        return action.data.data.key
-                    case "CC":
-                        return action.data.data.control
-                }
-                break;
-
-            case "keyboard":
-                if (action.data.key !== undefined) {
-                    return action.data.key
-                        .replace("VK_", "")
-                        .replace("CONTROL", "CTRL")
-                        .replace("NUMPAD", "NUM ")
-                }
-
-
-        }
-
-        return "None"
-    }
-
     function refreshGrid() {
         // 8 by 8 dual for loop
         for (let x = 0; x < 8; x++) {
@@ -90,12 +53,6 @@
     onMount(() => {
         refreshGrid()
     })
-
-    // let refreshInterval = setInterval(() => refreshGrid(), 100)
-
-    // onDestroy(() => {
-    //     clearInterval(refreshInterval)
-    // })
 </script>
 
 <div class="lp-border">
@@ -108,12 +65,12 @@
                         <div class="button-action-display">
                             <div class="action-display-container">
                                 <span class="action-title">
-                                    {getActionTitle(activeActions[x][y].actions[0])}
+                                    {activeActions[x][y].actions[0].info("Title")}
                                 </span>
 
                                 <div class="subtitle-container">
                                     <span class="action-subtitle">
-                                        {getActionSubTitle(activeActions[x][y].actions[0])}
+                                        {activeActions[x][y].actions[0].info("Subtitle")}
                                     </span>
                                 </div>
                             </div>

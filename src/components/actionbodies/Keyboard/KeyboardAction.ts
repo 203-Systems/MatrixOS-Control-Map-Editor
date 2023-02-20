@@ -1,4 +1,4 @@
-import type { Action } from "../ActionRegistry";
+import type { Action, InfoTextType } from "../ActionRegistry";
 import type { SvelteComponent } from 'svelte';
 
 import KeyboardActionBody from "./KeyboardActionBody.svelte";
@@ -30,7 +30,20 @@ export class KeyboardAction implements Action {
         return [this.data.key];
     }
 
-    summary(): object {
-        return {};
+    info(type: InfoTextType): string | null{
+        switch(type)
+        {
+            case "Title":
+                return "Key"
+            case "Subtitle":
+                if (this.data.key !== undefined) {
+                    return this.data.key
+                        .replace("VK_", "")
+                        .replace("CONTROL", "CTRL")
+                        .replace("NUMPAD", "NUM ")
+                }
+                return "None"
+        }
+        return null;
     }
 }
