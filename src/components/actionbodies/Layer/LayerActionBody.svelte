@@ -17,14 +17,7 @@
     }
 
     function changeLayerIndexMode(mode: boolean): void {
-        if(mode)
-        {
-            data.layer = 0;
-        }
-        else
-        {
-            data.layer = 1;
-        }
+        data.layer = mode ? 0 : 1;
     }
 </script>
 
