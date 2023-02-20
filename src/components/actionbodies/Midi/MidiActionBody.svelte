@@ -15,7 +15,7 @@
         switch (type) {
             case "Note":
                 data.data = {
-                    key: 60,
+                    note: 60,
                     velocity: true,
                     channel: 0,
                 }
@@ -42,9 +42,9 @@
 
         {#if data.type === "Note"}
             <div class="setting-slot">
-                <span>Midi Key</span>
+                <span>Note</span>
 
-                <NumericUpDown bind:value={data.data.key} min={0} max={127}/>
+                <NumericUpDown bind:value={data.data.note} min={0} max={127}/>
             </div>
 
             <div class="setting-slot">

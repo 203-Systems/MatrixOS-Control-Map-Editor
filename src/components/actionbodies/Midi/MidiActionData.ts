@@ -1,5 +1,5 @@
 export type MidiNoteData = {
-    key: number,
+    note: number,
     velocity: boolean
     channel: number
 }

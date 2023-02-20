@@ -17,7 +17,7 @@ export class MidiAction implements Action {
         this.data = {
             type: "Note",
             data: {
-                key: 60,
+                note: 60,
                 velocity: true,
                 channel: 0
             }
@@ -31,7 +31,7 @@ export class MidiAction implements Action {
             {
                 case 0x90:
                     this.data.type = "Note";
-                    this.data.data.key = data[1] & 0b01111111;
+                    this.data.data.note = data[1] & 0b01111111;
                     this.data.data.velocity = data[1] & 0b10000000;
                     this.data.data.channel = data[0] & 0b00001111;
                     return true;
@@ -59,7 +59,7 @@ export class MidiAction implements Action {
         if(this.data.type == "Note")
         {
             data[0] = 0x90;
-            data[1] = this.data.data.key + this.data.data.velocity * 0b10000000; // If first bit is set, then velocity sensitivty is on.
+            data[1] = this.data.data.note + this.data.data.velocity * 0b10000000; // If first bit is set, then velocity sensitivty is on.
             if (this.data.data.velocity) {
                 data[2] = 127; // Custom Velocity, UI todo
             }
