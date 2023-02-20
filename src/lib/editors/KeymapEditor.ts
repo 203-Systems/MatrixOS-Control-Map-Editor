@@ -125,7 +125,7 @@ export class KeymapEditor {
             id: [0x0203, 0x1040],
             size: [8, 8],
             layers: this.getLayerCount(),
-            effects: [0],
+            effects: [],
             actions: []
         }
 
@@ -166,6 +166,9 @@ export class KeymapEditor {
         }
         deviceData.actions = this.compressArray(deviceData.actions, true);
         
+        // Add Effects
+        deviceData.effects.push(0)
+        
         uad.devices.push(deviceData);
 
         return uad;
@@ -202,15 +205,15 @@ export class KeymapEditor {
             let x_map = this.bitmapToArray(actions_to_load[0], uad.devices[0].size[0]);
             for (var [x_index, x] of x_map.entries()) 
             {
-                console.log(`X: ${x}`)
+                // console.log(`X: ${x}`)
                 let y_map = this.bitmapToArray(actions_to_load[x_index + 1][0], uad.devices[0].size[1]);
                 for (var [y_index, y] of y_map.entries()) 
                 {
-                    console.log(`X: ${x} Y: ${y}`)
+                    // console.log(`X: ${x} Y: ${y}`)
                     let layer_map = this.bitmapToArray(actions_to_load[x_index + 1][y_index + 1][0], uad.devices[0].layers);
                     for (var [layer_index, layer] of layer_map.entries())
                     {
-                        console.log(`X: ${x} Y: ${y} Layer: ${layer}`)
+                        // console.log(`X: ${x} Y: ${y} Layer: ${layer}`)
                         for(var action of actions_to_load[x_index + 1][y_index + 1][layer_index + 1]) {
                             var action_type = uad.action_list[action[0]];
 
