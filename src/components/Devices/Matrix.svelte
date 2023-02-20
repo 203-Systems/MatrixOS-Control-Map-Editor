@@ -3,6 +3,7 @@
     import {KeymapEditor} from "$lib/editors/KeymapEditor";
     import type { Action, Effect, KeyConfig } from '$lib/types/Action';
     import type { KeyID } from '$lib/types/KeyID';
+    import { fade } from 'svelte/transition';
 
     const dispatch = createEventDispatcher();
 
@@ -61,9 +62,10 @@
             <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
-                    {#if activeActions[x]?.[y]?.actions?.length === 1}
                         <div class="button-action-display">
-                            <div class="action-display-container">
+                        {#if activeActions[x]?.[y]?.actions?.length > 0}
+                            <div class="action-display-container" in:fade="{{duration: 100}}" out:fade="{{duration: 100}}">
+                                {#if activeActions[x]?.[y]?.actions?.length === 1}
                                 <span class="action-title">
                                     {activeActions[x][y].actions[0].info("Title")}
                                 </span>
@@ -73,17 +75,14 @@
                                         {activeActions[x][y].actions[0].info("Subtitle")}
                                     </span>
                                 </div>
-                            </div>
-                        </div>
-                    {:else if activeActions[x]?.[y]?.actions?.length > 1}
-                        <div class="button-action-display">
-                            <div class="action-display-container">
+                                {:else if activeActions[x]?.[y]?.actions?.length > 1}
                                 <span class="action-title">
                                     ({activeActions[x][y].actions.length})
                                 </span>
+                                {/if}
                             </div>
-                        </div>
-                    {/if}
+                        {/if}
+                    </div>
                 </div>
             </div>
         {/each}
