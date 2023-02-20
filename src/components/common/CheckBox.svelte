@@ -1,12 +1,20 @@
 <script lang="ts">
     import { Checkmark } from "carbon-icons-svelte";
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     export let toggled: boolean
     export let text: string = ""
+
+    function changed(): void {
+        toggled = !toggled
+        dispatch('changed', { toggled: toggled })
+    }
 </script>
 
 <div class="checkbox-body">
-    <div class="checkbox" on:click={() => toggled = !toggled}>
+    <div class="checkbox" on:click={() => changed()}>
         <div class="inner-checkbox" class:toggled={toggled}>
             <Checkmark size={16}/>
         </div>
