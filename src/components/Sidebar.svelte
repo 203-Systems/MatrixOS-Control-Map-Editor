@@ -38,7 +38,7 @@
         <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
             <Add size={28}></Add>
 
-            <span>Add a Action</span>
+            <span>Add an Action</span>
         </button>
 
         <AddActionMenu
