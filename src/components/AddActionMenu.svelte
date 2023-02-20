@@ -170,6 +170,8 @@
                 background: #dde8fd;
                 border-radius: 4px;
 
+                transition: background-color 0.1s ease;
+
                 cursor: pointer;
 
                 &:hover {

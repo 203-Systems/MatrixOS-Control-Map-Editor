@@ -115,6 +115,8 @@
             box-shadow: 0 0 0 4px cornflowerblue;
         }
 
+        transition: width 0.1s ease, height 0.1s ease, margin 0.1s ease;
+
         &:hover {
             margin: 2%;
             width: 96%;

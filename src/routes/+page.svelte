@@ -7,7 +7,7 @@
     import type { KeyConfig } from "$lib/types/Action";
     import type { KeyID } from "$lib/types/KeyID";
 
-    import { DocumentImport, DocumentExport, Upload, Download } from "carbon-icons-svelte";
+    import { DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
     import { onMount } from "svelte";
 
     let updateCount: number = 0; //Cause all components to update
@@ -65,7 +65,7 @@
                     <Upload size={24}/>
                 </div>
                 <div class="control">
-                    <OverflowMenuHorizontal size={24}/>
+                    <Settings size={24}/>
                 </div>
             </div>
         </div>
@@ -167,7 +167,12 @@
 
                     &:hover {
                     background-color: #404040;
-                }
+                    }
+
+                    &:active  {
+                    background-color: #404040;
+                    scale: 0.95;
+                    }
                 }
             }
         }

@@ -95,6 +95,11 @@
             &:hover {
                 background-color: lightgray;
             }
+
+            &:active  {
+                background-color: #lightgray;
+                scale: 0.95;
+            }
         }
 
         .layers-container {
@@ -163,6 +168,7 @@
                 &:hover {
                     background-color: #cecece;
                 }
+                
             }
         }
     }

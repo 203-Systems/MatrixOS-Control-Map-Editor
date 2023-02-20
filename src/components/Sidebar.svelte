@@ -107,6 +107,8 @@
 
             cursor: pointer;
 
+            transition: background-color 0.2s ease;
+
             span {
                 font-family: "Roboto Light", sans-serif;
                 font-weight: 400;
