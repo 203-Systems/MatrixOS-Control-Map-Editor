@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {ChevronLeft, ChevronRight, Add} from "carbon-icons-svelte";
+    import {ChevronLeft, ChevronRight, Add, Close} from "carbon-icons-svelte";
     import type {KeymapEditor} from "$lib/editors/KeymapEditor";
     import {onMount} from "svelte";
 
@@ -8,6 +8,7 @@
 
     let selectedLayer: number = 0;
     let layerCount: number = 1;
+    let hoverOnLayer: number = -1;
     
     
     $: {
@@ -52,8 +53,13 @@
 
     <div class="layers-container">
         {#each Array(layerCount) as _, layer}
-            <div class="layer" on:click={() => selectedLayer === layer ? deleteLayer(layer) : selectLayer(layer)} class:selected={selectedLayer === layer}>
-                <span>{layer + 1}</span>
+            <div class="layer" on:click={() => selectedLayer === layer ? deleteLayer(layer) : selectLayer(layer)} on:mouseover={() => hoverOnLayer = layer} on:mouseleave={() => hoverOnLayer = -1} class:selected={selectedLayer === layer}>
+                {#if hoverOnLayer === layer}
+                    <Close fill="white" size={26}/>
+                {:else}
+                    <span>{layer + 1}</span>
+                {/if}
+                
             </div>
         {/each}
 
@@ -144,7 +150,10 @@
                     width: 80px;
 
                     &:hover {
-                        background-color: cornflowerblue;
+                        background-color: #c00000;
+                        span {
+                            text-decoration:line-through;
+                        }
                     }
                 }
             }
