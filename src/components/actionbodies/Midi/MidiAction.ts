@@ -60,7 +60,7 @@ export class MidiAction implements Action {
         {
             data[0] = 0x90;
             data[1] = this.data.data.note + this.data.data.velocity * 0b10000000; // If first bit is set, then velocity sensitivty is on.
-            if (this.data.data.velocity) {
+            if (!this.data.data.velocity) { // If velocity sensitivity is off, then set velocity to the custom velocity output value
                 data[2] = 127; // Custom Velocity, UI todo
             }
         }
