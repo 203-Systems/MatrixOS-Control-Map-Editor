@@ -19,7 +19,7 @@ export class MidiAction implements Action {
             data: {
                 note: 60,
                 velocity: true,
-                channel: 0
+                channel: 1
             }
         }
     }
@@ -33,13 +33,13 @@ export class MidiAction implements Action {
                     this.data.type = "Note";
                     this.data.data.note = data[1] & 0b01111111;
                     this.data.data.velocity = data[1] & 0b10000000;
-                    this.data.data.channel = data[0] & 0b00001111;
+                    this.data.data.channel = (data[0] & 0b00001111) + 1;
                     return true;
                 case 0xB0:
                     this.data.type = "CC";
                     this.data.data.control = data[1];
                     this.data.data.value = data[2];
-                    this.data.data.channel = data[0] & 0b00001111;
+                    this.data.data.channel = (data[0] & 0b00001111) + 1;
                     return true;
                 default:
                     console.error("MidiAction: Unknown Midi Type");
@@ -71,7 +71,7 @@ export class MidiAction implements Action {
             data[2] = this.data.data.value;
         }
 
-        data[0] += this.data.data.channel;
+        data[0] += (this.data.data.channel - 1);
 
         return data;
     }

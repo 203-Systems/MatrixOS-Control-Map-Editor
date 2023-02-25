@@ -17,7 +17,7 @@
                 data.data = {
                     note: 60,
                     velocity: true,
-                    channel: 0,
+                    channel: 1,
                 }
                 break;
 
@@ -25,7 +25,7 @@
                 data.data = {
                     control: 0,
                     value: 0,
-                    channel: 0,
+                    channel: 1,
                 }
                 break;
         }
