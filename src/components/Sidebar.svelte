@@ -2,17 +2,17 @@
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
     import {createEventDispatcher} from 'svelte';
-    import type { KeyConfig } from '$lib/types/Action';
-    import type { KeyID } from "$lib/types/KeyID";
-    import type { KeymapEditor } from "$lib/editors/KeymapEditor";
-    
+    import type {KeyConfig} from '$lib/types/Action';
+    import type {KeyID} from "$lib/types/KeyID";
+    import type {KeymapEditor} from "$lib/editors/KeymapEditor";
 
     const dispatch = createEventDispatcher();
 
     export let updateCount: number
     export let selectedKey: KeyID;
     export let editorBackend: KeymapEditor;
-    let currentActions: KeyConfig|undefined;
+    let currentActions: KeyConfig | undefined;
+    let tabIndex: 0 | 1 = 0;
 
     $: {
         updateCount;
@@ -20,35 +20,59 @@
     }
 
     let showAddActionMenu: boolean = false;
+
+    function actionDisplayable(action): boolean {
+        const actionTypes = ["action", "effect"]
+
+        return action[1].type == actionTypes[tabIndex]
+    }
 </script>
 
 <div class="sidebar-body">
+    {#if selectedKey !== undefined}
+        <div class="sidebar-topbar">
+            <div
+                    class="tab-button"
+                    class:selected={tabIndex === 0}
+                    on:click={() => tabIndex = 0}>
 
-    {#if selectedKey != undefined}
-        {#if currentActions != undefined}
-            {#each currentActions.actions as action, index}
-                <svelte:component
-                        this={action.constructor.body}  
-                        bind:data={action.data}
-                        on:removeAction={() => dispatch('removeAction', { index: index})}
-                />
-            {/each}
-        {/if}
+                <span>Actions</span>
+            </div>
 
-        <button class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
-            <Add size={28}></Add>
+            <div
+                    class="tab-button"
+                    class:selected={tabIndex === 1}
+                    on:click={() => tabIndex = 1}>
 
-            <span>Add an Action</span>
-        </button>
+                <span>Effects</span>
+            </div>
+
+            <div class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
+                <Add size={28}></Add>
+            </div>
+        </div>
 
         <AddActionMenu
-            bind:show={showAddActionMenu}
-            on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
+                bind:show={showAddActionMenu}
+                bind:tab={tabIndex}
+                on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
         />
+
+        {#if currentActions !== undefined}
+            {#each currentActions.actions as action, index}
+                {#if actionDisplayable(action)}
+                    <svelte:component
+                            this={action.constructor.body}
+                            bind:data={action.data}
+                            on:removeAction={() => dispatch('removeAction', { index: index})}
+                    />
+                {/if}
+            {/each}
+        {/if}
     {:else}
-    <div class="no-key-selected">
-        <span>Please Select a Key</span>
-    </div>
+        <div class="no-key-selected">
+            <span>Please Select a Key</span>
+        </div>
     {/if}
 </div>
 
@@ -92,55 +116,87 @@
             background: #3a3a3a;
         }
 
-        .add-button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            width: 300px;
-            min-height: 50px;
-
-            border: 1px solid cornflowerblue;
-            background-color: #c7d7f8;
-            border-radius: 4px;
-            color: #2c2c2c;
-
-            cursor: pointer;
-
-            transition: background-color 0.2s ease;
-
-            span {
-                font-family: "Roboto Light", sans-serif;
-                font-weight: 400;
-                font-size: 18px;
-            }
-
-            &:hover {
-                background-color: #b4c5e7;
-            }
-        }
-
         .no-key-selected {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            width: 300px;
-            min-height: 50px;
+            display: grid;
+            place-items: center;
 
-            border: 2px solid;
+            width: calc(100% - 30px);
+            height: 100%;
+
+            border: 2px solid #bbbbbb;
             border-radius: 4px;
-            color: #2c2c2c;
 
-            cursor: pointer;
+            cursor: not-allowed;
+
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
 
             span {
                 font-family: "Roboto Light", sans-serif;
-                font-weight: 400;
                 font-size: 18px;
-                color: black;
             }
         }
-        
+
+        .sidebar-topbar {
+            height: 50px;
+            width: calc(100% - 30px);
+
+            display: flex;
+
+            border: 1px solid gray;
+            border-radius: 4px;
+            overflow: hidden;
+
+            .tab-button {
+                display: grid;
+                place-items: center;
+
+                width: 100%;
+
+                cursor: pointer;
+
+                user-select: none;
+                -ms-user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+
+                &:hover {
+                    background-color: #eff0f3;
+                }
+
+                &.selected {
+                    background-color: #eff0f3;
+
+                    &:hover {
+                        background-color: #e0e0e0;
+                    }
+                }
+
+                span {
+                    font-family: "Roboto", sans-serif;
+                    font-weight: 500;
+                }
+            }
+
+            .add-button {
+                display: grid;
+                place-items: center;
+
+                width: 50px;
+                height: 50px;
+
+                flex-shrink: 0;
+                cursor: pointer;
+
+                background-color: #e0e0e0;
+                border-left: 1px solid gray;
+
+                &:hover {
+                    background-color: #cbcbcb;
+                }
+            }
+        }
     }
 </style>

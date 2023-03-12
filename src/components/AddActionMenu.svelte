@@ -3,7 +3,7 @@
     import { createEventDispatcher, SvelteComponent } from 'svelte';
 
     export let show: boolean = false;
-    let onEffectTab: boolean = false;
+    export let tab: 0 | 1 = 0;
     const dispatch = createEventDispatcher();
 
     function clickOutside(node) {
@@ -31,28 +31,19 @@
 
         show = false;
     }
+
+    function getActionAddable(action): boolean {
+        const actionTypes = ["action", "effect"]
+
+        return action[1].type == actionTypes[tab]
+    }
 </script>
 
 {#if show}
     <div class="menu-container" use:clickOutside on:outclick={() => (show = false)}>
-        <div class="menu-tab-selector">
-            <div class="menu-tab-names">
-                <div class="menu-tab-name-container" on:click={() => onEffectTab = false}>
-                    <span>Actions</span>
-                </div>
-                <div class="menu-tab-name-container" on:click={() => onEffectTab = true}>
-                    <span>Effects</span>
-                </div>
-            </div>
-
-            <div class="menu-tab-underline-tray">
-                <div class="menu-tab-underline" class:on-effect-tab={onEffectTab}></div>
-            </div>
-        </div>
-
         <div class="menu-action-list">
-            {#if !onEffectTab}
-                {#each Object.entries(actions) as action}
+            {#each Object.entries(actions) as action}
+                {#if getActionAddable(action)}
                     <div class="menu-action-item" on:click={() => addAction(action[0])}>
                         <div class="icon-section">
                             <svelte:component this={action[1].icon} size={24}/>
@@ -62,8 +53,8 @@
                             <span>{action[1].description}</span>
                         </div>
                     </div>
-                {/each}
-            {/if}
+                {/if}
+            {/each}
         </div>
     </div>
 {/if}
@@ -76,77 +67,11 @@
         border: 1px solid lightgray;
         filter: drop-shadow(1px 2px 2px #818181);
 
-        margin-top: 20px;
         background-color: white;
 
         display: flex;
         gap: 10px;
         flex-direction: column;
-
-        &::before {
-            content: ' ';
-            position: fixed;
-
-            margin-left: calc(50% - 10px);
-            margin-top: -10px;
-            width: 20px;
-            height: 20px;
-
-            transform: rotateZ(45deg);
-
-            border-left: 1px solid lightgray;
-            border-top: 1px solid lightgray;
-            border-top-left-radius: 2px;
-            background-color: white;
-        }
-
-        .menu-tab-selector {
-            padding-top: 6px;
-            height: 32px;
-
-            .menu-tab-names {
-                height: 28px;
-                display: flex;
-                align-items: center;
-
-                .menu-tab-name-container {
-                    display: flex;
-                    justify-content: center;
-                    width: 100%;
-
-                    cursor: pointer;
-
-                    span {
-                        font-family: "Roboto", sans-serif;
-
-                        user-select: none;
-                        -webkit-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                    }
-                }
-            }
-
-            .menu-tab-underline-tray {
-                height: 4px;
-
-                .menu-tab-underline {
-                    width: 80px;
-                    height: 4px;
-                    border-radius: 2px;
-                    background-color: cornflowerblue;
-
-                    margin-left: 35px;
-
-                    transition: margin-left 0.2s ease, width 0.1s ease;
-
-                    &.on-effect-tab {
-                        width: 75px;
-                        margin-left: 188px;
-                    }
-                }
-            }
-        }
 
         .menu-action-list {
             width: 100%;
@@ -160,7 +85,7 @@
             gap: 10px;
 
             box-sizing: border-box;
-            padding: 0 8px 8px;
+            padding: 8px;
 
             .menu-action-item {
                 height: 50px;

@@ -7,6 +7,7 @@ import type { LayerActionData} from "./LayerActionData";
 import {LayerActionMode, LayerActionType, LayerActionOption} from "./LayerActionData";
 
 export class LayerAction implements Action {
+    static readonly type: string = "action";
     static readonly identifier: string = "layer";
     static readonly description: string = "Layer Control";
     static readonly icon: SvelteComponent = Layers;

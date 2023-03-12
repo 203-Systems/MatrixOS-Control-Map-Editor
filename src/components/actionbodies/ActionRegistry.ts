@@ -8,6 +8,7 @@ import { WrapAction } from './Wrap/WrapAction';
 export type InfoTextType = "Title" | "Subtitle" | "Center"
 
 export interface Action {
+    static readonly type: "action" | "effect";
     static readonly identifier: string;
     static readonly description: string;
     static readonly icon: SvelteComponent;
