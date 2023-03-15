@@ -20,12 +20,6 @@
     }
 
     let showAddActionMenu: boolean = false;
-
-    function actionDisplayable(action): boolean {
-        const actionTypes = ["action", "effect"]
-
-        return action[1].type == actionTypes[tabIndex]
-    }
 </script>
 
 <div class="sidebar-body">
@@ -60,7 +54,7 @@
 
         {#if currentActions !== undefined}
             {#each currentActions.actions as action, index}
-                {#if actionDisplayable(action)}
+                {#if action.constructor.type === ["action", "effect"][tabIndex]}
                     <svelte:component
                             this={action.constructor.body}
                             bind:data={action.data}
