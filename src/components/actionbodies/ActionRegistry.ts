@@ -4,6 +4,7 @@ import { MidiAction } from "./Midi/MidiAction";
 import { KeyboardAction } from "./Keyboard/KeyboardAction";
 import { LayerAction } from "./Layer/LayerAction";
 import { WrapAction } from './Wrap/WrapAction';
+import {ColorEffect} from "./Color/ColorEffect";
 
 export type InfoTextType = "Title" | "Subtitle" | "Center"
 
@@ -24,5 +25,6 @@ export const actions : {[actionIdentifier:string]: Action} = {
     "midi": MidiAction,
     "keyboard":  KeyboardAction,
     "layer":  LayerAction,
-    "wrap":  WrapAction
+    "wrap":  WrapAction,
+    "color": ColorEffect
 };
