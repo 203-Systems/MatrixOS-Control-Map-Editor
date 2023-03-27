@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { hsl_to_rgb } from "../../lib/utils/colors";
+
     export let rgb = {
         red: 255,
         green: 0,
@@ -11,10 +13,23 @@
         lightness: 50
     }
 
+    let indicatorData = {
+        offsetX: 0,
+        offsetY: 0
+    }
+
     function setHSLByOnscreenPct(percentX, percentY) {
         pickerData.saturation = percentX * 100;
 
         pickerData.lightness = (1 - percentY) * 100 - (percentX * (50 - 50 * percentY))
+
+        let calculatedRGB = hsl_to_rgb(pickerData.hue, pickerData.saturation, pickerData.lightness)
+
+        console.log(pickerData)
+
+        rgb.red = calculatedRGB[0]
+        rgb.green = calculatedRGB[1]
+        rgb.blue = calculatedRGB[2]
     }
 
     function pickerMouseDown(event: MouseEvent): void {
@@ -55,28 +70,14 @@
         }
     }
 
-    function RGBtoHSL(rgb: object) {
-
-    }
-
-    function HSLtoRGB(hsl: object) {
-        const [h, s, l] = hsl;
-        const c = (1 - Math.abs(2 * l - 1)) * s;
-        const hp = h / 60;
-        const x = c * (1 - Math.abs(hp % 2 - 1));
-        const m = l - c / 2;
-        const [r, g, b] = hp >= 0 && hp < 1 ? [c, x, 0] :
-            hp >= 1 && hp < 2 ? [x, c, 0] :
-                hp >= 2 && hp < 3 ? [0, c, x] :
-                    hp >= 3 && hp < 4 ? [0, x, c] :
-                        hp >= 4 && hp < 5 ? [x, 0, c] :
-                            [c, 0, x];
-
-        return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
-    }
-
     $: {
+        rgb;
 
+        // let hsl = RGBtoHSL(rgb)
+
+        // pickerData.hue = hsl[0]
+        // pickerData.saturation = hsl[1]
+        // pickerData.lightness = hsl[2]
     }
 </script>
 
@@ -88,6 +89,8 @@
             --saturation: {pickerData.saturation};
             --lightness: {pickerData.lightness};
             --hue: {pickerData.hue};
+            --offsetX: {indicatorData.offsetX};
+            --offsetY: {indicatorData.offsetY};
          "
     >
         <div
@@ -103,6 +106,10 @@
          on:mousemove={hueMouseMove}
          style="--hue: {pickerData.hue}"
     ></div>
+
+    <div class="color-picker-num-container">
+
+    </div>
 </div>
 
 <style lang="scss">
@@ -112,7 +119,7 @@
         align-items: center;
         flex-direction: column;
 
-        gap: 8px;
+        gap: 1rem;
     }
 
     .color-picker-body {
@@ -128,13 +135,9 @@
             content: ' ';
             position: absolute;
 
-            $picker-size: 255px;
+            margin-top: calc(((1 - var(--lightness) / 100) * 255px) - ((var(--saturation) / 2 / 100) * 255px) - 9px);
 
-            margin-left: calc((var(--saturation) / 100) * #{$picker-size} - 9px);
-
-            // Mind you that this doesnt really work yet so i will probably remake this in js
-            margin-top: max(calc((100 - var(--lightness)) / 100 * #{$picker-size} - (var(--saturation) / 100 * (var(--lightness) / 100 * #{$picker-size})) - 9px), -9px);
-
+            margin-left: calc(var(--saturation) / 100 * 255px - 9px);
 
             width: 18px;
             height: 18px;
@@ -189,8 +192,9 @@
         &::after {
             content: ' ';
             position: absolute;
-            margin-left: calc(-4px + (var(--hue) / 360 * 255) * 1px);
+
             margin-top: -3px;
+            margin-left: calc((var(--hue) / 360 * 255px) - 4px);
 
             width: 8px;
             height: 18px;

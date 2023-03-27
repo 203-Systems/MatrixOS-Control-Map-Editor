@@ -31,15 +31,14 @@
 
 <style lang="scss">
     .numeric-up-down-body {
-        min-width: 100px;
+        min-width: 60px;
         height: 32px;
 
         background: white;
         border: 1px solid gray;
         border-radius: 6px;
 
-        display: grid;
-        grid-template-columns: 1fr 18px;
+        display: flex;
 
         overflow: hidden;
 
@@ -49,6 +48,7 @@
         -moz-user-select: none;
 
         input {
+            width: 100%;
             outline: 0;
             border: none;
             text-indent: 8px;
@@ -63,14 +63,14 @@
         }
 
         .numeric-up-down-buttons-container {
+            width: 18px;
+            flex-shrink: 0;
             background: lightgray;
-
-            display: grid;
-            grid-template-rows: 1fr 1fr;
 
             cursor: pointer;
 
             .num-button {
+                height: 50%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
