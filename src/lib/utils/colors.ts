@@ -45,3 +45,41 @@ export function hsl_to_rgb(hue: number, saturation: number, lightness: number): 
 
     return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
 }
+
+export function rgb_to_hsl(red: number, green: number, blue: number): [number, number, number] {
+    const r = red / 255;
+    const g = green / 255;
+    const b = blue / 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+
+    const lightness = (max + min) / 2;
+
+    if (max === min) {
+        return [0, 0, lightness * 100];
+    }
+
+    let saturation;
+    if (lightness < 0.5) {
+        saturation = (max - min) / (max + min);
+    } else {
+        saturation = (max - min) / (2 - max - min);
+    }
+    saturation *= 100;
+
+    let hue;
+    if (max === r) {
+        hue = (g - b) / (max - min);
+    } else if (max === g) {
+        hue = 2 + (b - r) / (max - min);
+    } else {
+        hue = 4 + (r - g) / (max - min);
+    }
+    hue *= 60;
+    if (hue < 0) {
+        hue += 360;
+    }
+
+    return [hue, saturation, lightness * 100];
+}

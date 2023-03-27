@@ -18,7 +18,7 @@
 
 <ActionTemplate actionTitle={ColorEffect.description} on:removeAction={() => dispatch('removeAction')}>
     <div class="color-effect-body">
-        <ColorPicker bind:rgb={rgbData}/>
+        <ColorPicker/>
 
         <div class="color-indicators">
             <div class="color-slot">

@@ -1,21 +1,10 @@
 <script lang="ts">
-    import { hsl_to_rgb } from "../../lib/utils/colors";
+    import { hsl_to_rgb, rgb_to_hsl } from "../../lib/utils/colors";
 
-    export let rgb = {
-        red: 255,
-        green: 0,
-        blue: 0,
-    };
-
-    let pickerData = {
+    export let pickerData = {
         hue: 360,
         saturation: 100,
         lightness: 50
-    }
-
-    let indicatorData = {
-        offsetX: 0,
-        offsetY: 0
     }
 
     function setHSLByOnscreenPct(percentX, percentY) {
@@ -23,13 +12,7 @@
 
         pickerData.lightness = (1 - percentY) * 100 - (percentX * (50 - 50 * percentY))
 
-        let calculatedRGB = hsl_to_rgb(pickerData.hue, pickerData.saturation, pickerData.lightness)
-
         console.log(pickerData)
-
-        rgb.red = calculatedRGB[0]
-        rgb.green = calculatedRGB[1]
-        rgb.blue = calculatedRGB[2]
     }
 
     function pickerMouseDown(event: MouseEvent): void {
@@ -69,16 +52,6 @@
             pickerData.hue = calculatedHue < 0 ? 0 : calculatedHue > 360 ? 360 : calculatedHue
         }
     }
-
-    $: {
-        rgb;
-
-        // let hsl = RGBtoHSL(rgb)
-
-        // pickerData.hue = hsl[0]
-        // pickerData.saturation = hsl[1]
-        // pickerData.lightness = hsl[2]
-    }
 </script>
 
 <div class="color-picker-container">
@@ -89,8 +62,6 @@
             --saturation: {pickerData.saturation};
             --lightness: {pickerData.lightness};
             --hue: {pickerData.hue};
-            --offsetX: {indicatorData.offsetX};
-            --offsetY: {indicatorData.offsetY};
          "
     >
         <div
@@ -106,10 +77,6 @@
          on:mousemove={hueMouseMove}
          style="--hue: {pickerData.hue}"
     ></div>
-
-    <div class="color-picker-num-container">
-
-    </div>
 </div>
 
 <style lang="scss">
@@ -135,7 +102,14 @@
             content: ' ';
             position: absolute;
 
-            margin-top: calc(((1 - var(--lightness) / 100) * 255px) - ((var(--saturation) / 2 / 100) * 255px) - 9px);
+            @function getCorrectMarginTop() {
+                $sat: calc(var(--saturation) / 100 * 255px * var(--lightness) / 100);
+                $calculation: calc((1 - var(--lightness) / 100) * 255px - $sat);
+
+                @return calc($calculation - 9px);
+            }
+
+            margin-top: getCorrectMarginTop();
 
             margin-left: calc(var(--saturation) / 100 * 255px - 9px);
 
