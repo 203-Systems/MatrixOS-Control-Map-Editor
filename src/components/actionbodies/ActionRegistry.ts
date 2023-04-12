@@ -9,7 +9,6 @@ import {ColorEffect} from "./Color/ColorEffect";
 export type InfoTextType = "Title" | "Subtitle" | "Center"
 
 export interface Action {
-    static readonly type: "action" | "effect";
     static readonly identifier: string;
     static readonly description: string;
     static readonly icon: SvelteComponent;
@@ -26,5 +25,9 @@ export const actions : {[actionIdentifier:string]: Action} = {
     "keyboard":  KeyboardAction,
     "layer":  LayerAction,
     "wrap":  WrapAction,
+};
+
+export const effects : {[actionIdentifier:string]: Action} = {
     "color": ColorEffect
 };
+

@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { actions } from "./actionbodies/ActionRegistry";
+    import { actions, effects } from "./actionbodies/ActionRegistry";
     import { createEventDispatcher, SvelteComponent } from 'svelte';
 
     export let show: boolean = false;
-    export let tab: 0 | 1 = 0;
+    export let selectedClass:"actions"|"effects" = "actions";
+    let classRegisteryLUT = {"actions": actions, "effects": effects};
     const dispatch = createEventDispatcher();
 
     function clickOutside(node) {
@@ -31,19 +32,12 @@
 
         show = false;
     }
-
-    function getActionAddable(action): boolean {
-        const actionTypes = ["action", "effect"]
-
-        return action[1].type == actionTypes[tab]
-    }
 </script>
 
 {#if show}
     <div class="menu-container" use:clickOutside on:outclick={() => (show = false)}>
         <div class="menu-action-list">
-            {#each Object.entries(actions) as action}
-                {#if getActionAddable(action)}
+                {#each Object.entries(classRegisteryLUT[selectedClass]) as action}
                     <div class="menu-action-item" on:click={() => addAction(action[0])}>
                         <div class="icon-section">
                             <svelte:component this={action[1].icon} size={24}/>
@@ -53,8 +47,7 @@
                             <span>{action[1].description}</span>
                         </div>
                     </div>
-                {/if}
-            {/each}
+                {/each}
         </div>
     </div>
 {/if}
@@ -67,11 +60,29 @@
         border: 1px solid lightgray;
         filter: drop-shadow(1px 2px 2px #818181);
 
+        margin-top: 20px;
         background-color: white;
 
         display: flex;
         gap: 10px;
         flex-direction: column;
+
+        &::before {
+            content: ' ';
+            position: fixed;
+
+            margin-left: calc(50% - 10px);
+            margin-top: -10px;
+            width: 20px;
+            height: 20px;
+
+            transform: rotateZ(45deg);
+
+            border-left: 1px solid lightgray;
+            border-top: 1px solid lightgray;
+            border-top-left-radius: 2px;
+            background-color: white;
+        }
 
         .menu-action-list {
             width: 100%;
@@ -85,7 +96,7 @@
             gap: 10px;
 
             box-sizing: border-box;
-            padding: 8px;
+            padding: 0 8px 8px;
 
             .menu-action-item {
                 height: 50px;

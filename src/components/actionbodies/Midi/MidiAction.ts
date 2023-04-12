@@ -6,7 +6,6 @@ import { Music } from "carbon-icons-svelte";
 import type { MidiActionData } from "./MidiActionData";
 
 export class MidiAction implements Action {
-    static readonly type: string = "action";
     static readonly identifier: string = "midi";
     static readonly description: string = "Send a Midi Message";
     static readonly icon: SvelteComponent = Music;
