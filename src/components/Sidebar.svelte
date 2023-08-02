@@ -59,18 +59,8 @@
                 <span bind:this={tabTextElements[1]}>Effects</span>
             </div>
 
-            <div class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
-                <Add size={28}></Add>
-            </div>
-
             <div class="sidebar-page-indicator" bind:this={pageIndicatorElement}></div>
         </div>
-
-        <AddActionMenu
-                bind:show={showAddActionMenu}
-                bind:tab={tabIndex}
-                on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
-        />
 
         {#if currentActions !== undefined}
             {#each currentActions.actions as action, index}
@@ -83,6 +73,18 @@
                 {/if}
             {/each}
         {/if}
+
+        <div class="add-action-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
+            <span>Add Action</span>
+
+            <Add size={24}></Add>
+        </div>
+
+        <AddActionMenu
+                bind:show={showAddActionMenu}
+                bind:tab={tabIndex}
+                on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
+        />
     {:else}
         <div class="no-key-selected">
             <span>Please Select a Key to begin</span>
@@ -95,7 +97,7 @@
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: 12px;
+        gap: 24px;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
@@ -153,6 +155,30 @@
             }
         }
 
+		.add-action-button {
+			height: 40px;
+			display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px;
+
+			flex-shrink: 0;
+			cursor: pointer;
+			border-radius: 20px;
+
+			background-color: #e0e0e0;
+
+			&:hover {
+				background-color: #cbcbcb;
+			}
+
+            span {
+                padding-left: 8px;
+				font-family: "Roboto Light", sans-serif;
+            }
+		}
+
         .sidebar-topbar {
             height: 40px;
             width: calc(100% - 30px);
@@ -178,24 +204,6 @@
                 span {
                     font-family: "Roboto", sans-serif;
                     font-weight: 500;
-                }
-            }
-
-            .add-button {
-                display: grid;
-                place-items: center;
-
-                width: 40px;
-                height: 40px;
-
-                flex-shrink: 0;
-                cursor: pointer;
-                border-radius: 50%;
-
-                background-color: #e0e0e0;
-
-                &:hover {
-                    background-color: #cbcbcb;
                 }
             }
 
