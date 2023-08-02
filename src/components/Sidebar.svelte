@@ -13,10 +13,28 @@
     export let editorBackend: KeymapEditor;
     let currentActions: KeyConfig | undefined;
     let tabIndex: 0 | 1 = 0;
+    let tabTextElements: HTMLDivElement[] = []
+    let pageIndicatorElement: HTMLDivElement
 
     $: {
         updateCount;
         currentActions = editorBackend.getActions(selectedKey);
+    }
+
+    $: {
+        tabIndex;
+
+        if (tabTextElements.length != 0) {
+            const tabTextElement = tabTextElements[tabIndex]
+
+            const width = tabTextElement.clientWidth
+            const left = tabTextElement.offsetLeft - tabTextElements[0].parentElement.offsetLeft
+
+            pageIndicatorElement.style.setProperty("--posX", `${left}px`)
+            pageIndicatorElement.style.setProperty("--width", `${width}px`)
+        }
+
+
     }
 
     let showAddActionMenu: boolean = false;
@@ -30,7 +48,7 @@
                     class:selected={tabIndex === 0}
                     on:click={() => tabIndex = 0}>
 
-                <span>Actions</span>
+                <span bind:this={tabTextElements[0]}>Actions</span>
             </div>
 
             <div
@@ -38,12 +56,14 @@
                     class:selected={tabIndex === 1}
                     on:click={() => tabIndex = 1}>
 
-                <span>Effects</span>
+                <span bind:this={tabTextElements[1]}>Effects</span>
             </div>
 
             <div class="add-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
                 <Add size={28}></Add>
             </div>
+
+            <div class="sidebar-page-indicator" bind:this={pageIndicatorElement}></div>
         </div>
 
         <AddActionMenu
@@ -65,7 +85,7 @@
         {/if}
     {:else}
         <div class="no-key-selected">
-            <span>Please Select a Key</span>
+            <span>Please Select a Key to begin</span>
         </div>
     {/if}
 </div>
@@ -115,9 +135,9 @@
             place-items: center;
 
             width: calc(100% - 30px);
-            height: 100%;
+            height: 60px;
+            border: 1px solid black;
 
-            border: 2px solid #bbbbbb;
             border-radius: 4px;
 
             cursor: not-allowed;
@@ -134,12 +154,11 @@
         }
 
         .sidebar-topbar {
-            height: 50px;
+            height: 40px;
             width: calc(100% - 30px);
 
             display: flex;
 
-            border: 1px solid gray;
             border-radius: 4px;
             overflow: hidden;
 
@@ -156,18 +175,6 @@
                 -moz-user-select: none;
                 -webkit-user-select: none;
 
-                &:hover {
-                    background-color: #eff0f3;
-                }
-
-                &.selected {
-                    background-color: #eff0f3;
-
-                    &:hover {
-                        background-color: #e0e0e0;
-                    }
-                }
-
                 span {
                     font-family: "Roboto", sans-serif;
                     font-weight: 500;
@@ -178,17 +185,36 @@
                 display: grid;
                 place-items: center;
 
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
 
                 flex-shrink: 0;
                 cursor: pointer;
+                border-radius: 50%;
 
                 background-color: #e0e0e0;
-                border-left: 1px solid gray;
 
                 &:hover {
                     background-color: #cbcbcb;
+                }
+            }
+
+			.sidebar-page-indicator {
+                position: absolute;
+                height: 10px;
+                width: 255px;
+                margin-top: 36px;
+
+                &:after {
+                    content: ' ';
+                    position: absolute;
+                    height: 6px;
+                    border-radius: 6px;
+                    width: calc(var(--width) + 20px);
+                    margin-left: calc(var(--posX) - 10px);
+                    background-color: #6c9fff;
+
+                    transition: width 0.2s ease, margin-left 0.2s ease;
                 }
             }
         }
