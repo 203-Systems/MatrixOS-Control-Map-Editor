@@ -209,8 +209,6 @@
 
 			.sidebar-page-indicator {
                 position: absolute;
-                height: 10px;
-                width: 255px;
                 margin-top: 36px;
 
                 &:after {
