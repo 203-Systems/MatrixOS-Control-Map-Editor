@@ -43,6 +43,26 @@
         });
     }
 
+    function processColor(color: string) {
+        const baseOffset = 0x89;
+        if(color === undefined) {
+            return "#898989";
+        }
+        else {
+            let r = parseInt(color.substring(1, 3), 16);
+            let g = parseInt(color.substring(3, 5), 16);
+            let b = parseInt(color.substring(5, 7), 16);
+
+            r = Math.round(baseOffset + (r / 255) * (255 - baseOffset));
+            g = Math.round(baseOffset + (g / 255) * (255 - baseOffset));
+            b = Math.round(baseOffset + (b / 255) * (255 - baseOffset));
+            console.log(color);
+            var newColor = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+            console.log(newColor);
+            return newColor;
+        }
+    }
+
     function refreshGrid() {
         // 8 by 8 dual for loop
         for (let x = 0; x < 8; x++) {
@@ -93,7 +113,7 @@
             <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
-                        <div class="button-action-display" style="background-color: {activeActionsInfo[x]?.[y]?.["Color"] ? activeActionsInfo[x]?.[y]?.["Color"] : "#898989"}"> 
+                        <div class="button-action-display" style="background-color: {activeActionsInfo[x]?.[y]?.["Color"] ? processColor(activeActionsInfo[x]?.[y]?.["Color"]): "#898989"}"> 
                         <!-- I don't like this since the color is hard coded in. TODO fix this -->
                         {#if activeActionsInfo[x]?.[y]?.["Count"] > 0}
                             <div class="action-display-container" in:fade="{{duration: 100}}" out:fade="{{duration: 100}}">
