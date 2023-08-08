@@ -1,4 +1,4 @@
-import type { Action, InfoTextType } from "../ActionRegistry";
+import type { Action, ActionInfoType } from "../ActionRegistry";
 import type { SvelteComponent } from 'svelte';
 
 import MidiActionBody from "./MidiActionBody.svelte";
@@ -77,7 +77,7 @@ export class MidiAction implements Action {
         return data;
     }
 
-    info(type: InfoTextType): string | null{
+    info(type: ActionInfoType): string | null{
         switch(type)
         {
             case "Title":

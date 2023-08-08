@@ -6,7 +6,7 @@ import { LayerAction } from "./Layer/LayerAction";
 import { WrapAction } from './Wrap/WrapAction';
 import {ColorEffect} from "./Color/ColorEffect";
 
-export type InfoTextType = "Title" | "Subtitle" | "Center"
+export type ActionInfoType = "Title" | "Subtitle" | "Center" | "Color"
 
 export interface Action {
     static readonly type: "action" | "effect";
@@ -18,7 +18,7 @@ export interface Action {
     constructor(): void;
     import(data: any[]): boolean;
     export(): any[] | undefined; //If undefined, then the action is not valid and should not be exported
-    info(type: InfoTextType): string | null;
+    info(type: ActionInfoType): string | null;
 }
 
 export const actions : {[actionIdentifier:string]: Action} = {

@@ -1,7 +1,7 @@
 <script lang="ts">
     import {createEventDispatcher, onDestroy, onMount} from 'svelte';
     import {KeymapEditor} from "$lib/editors/KeymapEditor";
-    import type { Action, Effect, KeyConfig } from '$lib/types/Action';
+    import type { Action, ActionInfoType, Effect, KeyAction } from '$lib/types/Action';
     import type { KeyID } from '$lib/types/KeyID';
     import { fade } from 'svelte/transition';
 
@@ -17,7 +17,8 @@
         refreshGrid();
     }
 
-    let activeActions: (KeyConfig|undefined)[][] = Array(8).fill(null).map(() => Array(8));
+    let activeActions: (KeyAction|undefined)[][] = Array(8).fill(null).map(() => Array(8));
+    let activeActionsInfo: ({[key: string]: string}|undefined)[][] = Array(8).fill(null).map(() => Array(8));
 
     function getCornerRadius(x: number, y: number) {
         switch (x + y * 10) {
@@ -47,6 +48,36 @@
         for (let x = 0; x < 8; x++) {
             for (let y = 0; y < 8; y++) {
                 activeActions[x][y] = editorBackend.getActions([x, y])
+                if(activeActions[x][y]?.actions?.length > 0) {
+                    activeActionsInfo[x][y] = {};
+                    for(let action of activeActions[x][y].actions) {
+                        if(activeActionsInfo[x][y]["Count"] === undefined) 
+                        {
+                            activeActionsInfo[x][y]["Count"] = 0;
+                        }
+                        if(action.info("Color") !== null) {
+                            activeActionsInfo[x][y]["Color"] = action.info("Color");
+                        }
+                        if(action.info("Title") !== null) {
+                            activeActionsInfo[x][y]["Title"] = action.info("Title");
+                            activeActionsInfo[x][y]["Count"]  += 1;
+
+                        }
+                        // else if(action.info("Center") !== null) {
+                        //     activeActionsInfo[x][y]["Title"] = action.info("Center");
+                        //     activeActionsInfo[x][y]["Count"]  += 1;
+                        //     continue; // Center can't have subtitle
+                        // }
+
+                        if(action.info("Subtitle") !== null) {
+                            activeActionsInfo[x][y]["Subtitle"] = action.info("Subtitle");
+                        }
+                    }
+                }
+                else
+                {
+                    activeActionsInfo[x][y] = undefined;
+                }
             }
         }
     }
@@ -63,21 +94,21 @@
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
                         <div class="button-action-display">
-                        {#if activeActions[x]?.[y]?.actions?.length > 0}
+                        {#if activeActionsInfo[x]?.[y]?.["Count"] > 0}
                             <div class="action-display-container" in:fade="{{duration: 100}}" out:fade="{{duration: 100}}">
-                                {#if activeActions[x]?.[y]?.actions?.length === 1}
+                                {#if activeActionsInfo[x]?.[y]?.["Count"] === 1}
                                 <span class="action-title">
-                                    {activeActions[x][y].actions[0].info("Title")}
+                                    {activeActionsInfo[x]?.[y]?.["Title"]}
                                 </span>
 
                                 <div class="subtitle-container">
                                     <span class="action-subtitle">
-                                        {activeActions[x][y].actions[0].info("Subtitle")}
+                                        {activeActionsInfo[x]?.[y]?.["Subtitle"]}
                                     </span>
                                 </div>
-                                {:else if activeActions[x]?.[y]?.actions?.length > 1}
+                                {:else if activeActionsInfo[x]?.[y]?.["Count"] > 1}
                                 <span class="action-title">
-                                    ({activeActions[x][y].actions.length})
+                                    ({activeActionsInfo[x]?.[y]?.["Count"]})
                                 </span>
                                 {/if}
                             </div>

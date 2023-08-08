@@ -1,4 +1,4 @@
-import type {Action, InfoTextType} from "../ActionRegistry";
+import type {Action, ActionInfoType} from "../ActionRegistry";
 import type {SvelteComponent} from 'svelte';
 
 import ColorEffectBody from "./ColorEffectBody.svelte";
@@ -38,13 +38,11 @@ export class ColorEffect implements Action {
         return [];
     }
 
-    info(type: InfoTextType): string | null{
+    info(type: ActionInfoType): string | null{
         switch(type)
         {
-            case "Title":
-                return "Color";
-            case "Subtitle":
-                return ""
+            case "Color":
+                return "#" + this.data.red.toString(16).padStart(2, "0") + this.data.green.toString(16).padStart(2, "0") + this.data.blue.toString(16).padStart(2, "0");
         }
         return null;
     }

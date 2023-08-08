@@ -1,4 +1,4 @@
-import type { Action } from "/src/components/actionbodies/ActionRegistry";
+import type { Action} from "/src/components/actionbodies/ActionRegistry";
 
 // Place Holder for the Effect Data
 export type Effect = {
@@ -6,10 +6,9 @@ export type Effect = {
     data:any[]
 }
 
-export type KeyConfig = {
+export type KeyAction = {
     actions:Action[],
     effects:Effect[]
 }
 
 export { Action as Action };
-// export { Effect as Effect };

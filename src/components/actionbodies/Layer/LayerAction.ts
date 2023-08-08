@@ -1,4 +1,4 @@
-import type { Action, InfoTextType } from "../ActionRegistry";
+import type { Action, ActionInfoType } from "../ActionRegistry";
 import type { SvelteComponent } from 'svelte';
 
 import LayerActionBody from "./LayerActionBody.svelte";
@@ -63,7 +63,7 @@ export class LayerAction implements Action {
         return data;
     }
 
-    info(type: InfoTextType): string | null {
+    info(type: ActionInfoType): string | null {
         switch(type)
         {
             case "Title":

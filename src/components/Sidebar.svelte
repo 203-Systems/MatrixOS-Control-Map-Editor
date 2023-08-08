@@ -2,7 +2,7 @@
     import Add from "carbon-icons-svelte/lib/Add.svelte";
     import AddActionMenu from "./AddActionMenu.svelte";
     import {createEventDispatcher} from 'svelte';
-    import type {KeyConfig} from '$lib/types/Action';
+    import type {KeyAction} from '$lib/types/Action';
     import type {KeyID} from "$lib/types/KeyID";
     import type {KeymapEditor} from "$lib/editors/KeymapEditor";
 
@@ -11,7 +11,7 @@
     export let updateCount: number
     export let selectedKey: KeyID;
     export let editorBackend: KeymapEditor;
-    let currentActions: KeyConfig | undefined;
+    let currentActions: KeyAction | undefined;
     let tabIndex: 0 | 1 = 0;
     let tabTextElements: HTMLDivElement[] = []
     let pageIndicatorElement: HTMLDivElement

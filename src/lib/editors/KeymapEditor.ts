@@ -1,11 +1,11 @@
 import type { KeyID } from "$lib/types/KeyID";
 import { actions } from "/src/components/actionbodies/ActionRegistry"
-import type { Action, Effect, KeyConfig } from '$lib/types/Action';
+import type { Action, Effect, KeyAction } from '$lib/types/Action';
 import type { UniversalActionDesciptor, UniversalActionDesciptorDevice } from '$lib/types/UAD';
 import * as cbor from 'cbor-web';
 
 export class KeymapEditor {
-    private data: KeyConfig[][][] = []; //Layer, X, Y
+    private data: KeyAction[][][] = []; //Layer, X, Y
     private selectedLayer: number = 0;
     private updateCallback:()=>void;
     
@@ -43,7 +43,7 @@ export class KeymapEditor {
         }
     }
 
-    getActions(key: KeyID): KeyConfig | undefined {
+    getActions(key: KeyID): KeyAction | undefined {
         // console.log(this.data[this.selectedLayer].grid[this.getNormalIndex(keyIndex)].actions)
         if(Array.isArray(key)) {
             return this.data[this.selectedLayer]?.[key[0]]?.[key[1]]

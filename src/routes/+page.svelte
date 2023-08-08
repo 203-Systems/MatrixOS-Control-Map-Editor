@@ -4,7 +4,7 @@
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
     import { KeymapEditor } from "$lib/editors/KeymapEditor";
-    import type { KeyConfig } from "$lib/types/Action";
+    import type { KeyAction } from "$lib/types/Action";
     import type { KeyID } from "$lib/types/KeyID";
 
     import { DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
