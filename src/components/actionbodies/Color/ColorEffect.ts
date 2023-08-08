@@ -42,7 +42,7 @@ export class ColorEffect implements Action {
         switch(type)
         {
             case "Color":
-                return "#" + this.data.red.toString(16).padStart(2, "0") + this.data.green.toString(16).padStart(2, "0") + this.data.blue.toString(16).padStart(2, "0");
+                return "#" + Math.round(this.data.red * 255).toString(16).padStart(2, "0") + Math.round(this.data.green * 255).toString(16).padStart(2, "0") + Math.round(this.data.blue * 255).toString(16).padStart(2, "0");
         }
         return null;
     }
