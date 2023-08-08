@@ -48,7 +48,7 @@
 
                 <div class="key-collection-container">
                     {#each keyCollection.keys as key}
-                        <div class="keyboard-key" on:click={() => selectedKey = VirtualKey[key]} class:selected-key={selectedKey === VirtualKey[key]}>
+                        <div class="keyboard-key" on:click={() => {selectedKey = VirtualKey[key]; show = false}} class:selected-key={selectedKey === VirtualKey[key]}>
                             <span>{
                                 VirtualKey[key]
                                     .replace("VK_", "")
