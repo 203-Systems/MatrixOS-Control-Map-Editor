@@ -15,21 +15,19 @@
 
 <ActionTemplate actionTitle={KeyboardAction.description} on:removeAction={() => dispatch('removeAction')}>
     <div class="keyboard-action-body">
-        <div class="preview-key-section">
+        <div class="preview-key-section" on:click={() => showSelectKeyPopup = true}>
             <div class="key-preview">
-                <span>{
-                    data.key === undefined?
-                        'No Key selected' :
+                {#if data.key === undefined}
+                <span >No Key Selected</span>
+                {:else}
+                <span style="font-size: 20px;">{
                         data.key
                             .replace("VK_", "")
                             .replace("CONTROL", "CTRL")
                             .replace("NUMPAD", "NUM ")
                 }</span>
+                {/if}
             </div>
-        </div>
-
-        <div class="change-key-section">
-            <Button text="Select a Keyboard Key" on:click={() => showSelectKeyPopup = true}/>
         </div>
     </div>
 </ActionTemplate>
