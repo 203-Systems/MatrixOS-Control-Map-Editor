@@ -180,23 +180,23 @@ export class KeymapEditor {
                         continue;
                     }
         
-                    for (let action = 0; action < this.data[layer][x][y].effects.length; action++) {
-                        var local_action = this.data[layer][x][y].effects[action];
-                        var local_action_identifier = local_action.constructor.identifier;
-                        var local_action_data = local_action.export();
+                    for (let effect = 0; effect < this.data[layer][x][y].effects.length; effect++) {
+                        var local_effect = this.data[layer][x][y].effects[effect];
+                        var local_effect_identifier = local_effect.constructor.identifier;
+                        var local_effect_data = local_effect.export();
         
-                        if (local_action_data === undefined) {
+                        if (local_effect_data === undefined) {
                             continue;
                         }
         
-                        var action_index = uad.action_list.indexOf(local_action_identifier);
+                        var effect_index = uad.effect_list.indexOf(local_effect_identifier);
         
-                        if (action_index === -1) {
-                            uad.action_list.push(local_action_identifier);
-                            action_index = uad.action_list.length - 1;
+                        if (effect_index === -1) {
+                            uad.effect_list.push(local_effect_identifier);
+                            effect_index = uad.effect_list.length - 1;
                         }
         
-                        deviceData.effects[layer][x][y].push([action_index].concat(local_action_data));
+                        deviceData.effects[layer][x][y].push([effect_index].concat(local_effect_data));
                     }
         
                     if (deviceData.effects[layer][x][y].length === 0) {
@@ -278,12 +278,14 @@ export class KeymapEditor {
                     for (var [y_index, y] of y_map.entries()) {
                         // console.log(`Layer: ${layer} X: ${x} Y: ${y}`)
                         for (var effect of effects_to_load[layer_index + 1][x_index + 1][y_index + 1]) {
-                            var effect_type = uad.action_list[effect[0]];
+                            var effect_type = uad.effect_list[effect[0]];
 
-                            // Create new action
-                            this.data[layer]?.[x]?.[y].actions.push(new actions[effect_type]);
-                            // Import data into action
-                            this.data[layer]?.[x]?.[y].actions[this.data[layer]?.[x]?.[y].effects.length - 1].import(effect.slice(1));
+                            console.log(uad.effect_list)
+                            console.log(effect_type)
+                            // Create new effect
+                            this.data[layer]?.[x]?.[y].effects.push(new effects[effect_type]);
+                            // Import data into effect
+                            this.data[layer]?.[x]?.[y].effects[this.data[layer]?.[x]?.[y].effects.length - 1].import(effect.slice(1));
                         }
                     }
                 }
