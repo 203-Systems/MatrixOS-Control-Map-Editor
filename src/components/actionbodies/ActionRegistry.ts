@@ -4,12 +4,15 @@ import { MidiAction } from "./Midi/MidiAction";
 import { KeyboardAction } from "./Keyboard/KeyboardAction";
 import { LayerAction } from "./Layer/LayerAction";
 import { WrapAction } from './Wrap/WrapAction';
-import {ColorEffect} from "./Color/ColorEffect";
+import { ColorEffect } from "./Color/ColorEffect";
+
+import type { ActionType } from '$lib/types/ActionType';
 
 export type ActionInfoType = "Title" | "Subtitle" | "Center" | "Color"
 
+// Both Action and Effects extends on top of this
 export interface Action {
-    static readonly type: "action" | "effect";
+    static readonly type: ActionType;
     static readonly identifier: string;
     static readonly description: string;
     static readonly icon: SvelteComponent;
@@ -21,10 +24,15 @@ export interface Action {
     info(type: ActionInfoType): string | null;
 }
 
+export type { Action as Effect}
+
 export const actions : {[actionIdentifier:string]: Action} = {
     "midi": MidiAction,
     "keyboard":  KeyboardAction,
     "layer":  LayerAction,
     "wrap":  WrapAction,
-    "color": ColorEffect
 };
+
+export const effects : {[actionIdentifier:string]: Effect} = {
+    "color": ColorEffect
+}

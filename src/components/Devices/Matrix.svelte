@@ -18,7 +18,6 @@
     }
 
     let activeActions: (KeyAction|undefined)[][] = Array(8).fill(null).map(() => Array(8));
-    let activeActionsInfo: ({[key: string]: string}|undefined)[][] = Array(8).fill(null).map(() => Array(8));
 
     function getCornerRadius(x: number, y: number) {
         switch (x + y * 10) {
@@ -48,36 +47,6 @@
         for (let x = 0; x < 8; x++) {
             for (let y = 0; y < 8; y++) {
                 activeActions[x][y] = editorBackend.getActions([x, y])
-                if(activeActions[x][y]?.actions?.length > 0) {
-                    activeActionsInfo[x][y] = {};
-                    for(let action of activeActions[x][y].actions) {
-                        if(activeActionsInfo[x][y]["Count"] === undefined) 
-                        {
-                            activeActionsInfo[x][y]["Count"] = 0;
-                        }
-                        if(action.info("Color") !== null) {
-                            activeActionsInfo[x][y]["Color"] = action.info("Color");
-                        }
-                        if(action.info("Title") !== null) {
-                            activeActionsInfo[x][y]["Title"] = action.info("Title");
-                            activeActionsInfo[x][y]["Count"]  += 1;
-
-                        }
-                        // else if(action.info("Center") !== null) {
-                        //     activeActionsInfo[x][y]["Title"] = action.info("Center");
-                        //     activeActionsInfo[x][y]["Count"]  += 1;
-                        //     continue; // Center can't have subtitle
-                        // }
-
-                        if(action.info("Subtitle") !== null) {
-                            activeActionsInfo[x][y]["Subtitle"] = action.info("Subtitle");
-                        }
-                    }
-                }
-                else
-                {
-                    activeActionsInfo[x][y] = undefined;
-                }
             }
         }
     }
@@ -93,23 +62,23 @@
             <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
-                        <div class="button-action-display" style="background-color: {activeActionsInfo[x]?.[y]?.["Color"] ? activeActionsInfo[x]?.[y]?.["Color"] : "#898989"}"> 
+                        <div class="button-action-display" style="background-color: {activeActions[x]?.[y]?.effects?.length > 0 ? activeActions[x]?.[y]?.effects[0].info("Color") : "#898989"}"> 
                         <!-- I don't like this since the color is hard coded in. TODO fix this -->
-                        {#if activeActionsInfo[x]?.[y]?.["Count"] > 0}
+                        {#if activeActions[x]?.[y]?.actions?.length > 0}
                             <div class="action-display-container" in:fade="{{duration: 100}}" out:fade="{{duration: 100}}">
-                                {#if activeActionsInfo[x]?.[y]?.["Count"] === 1}
+                                {#if activeActions[x][y].actions.length === 1}
                                 <span class="action-title">
-                                    {activeActionsInfo[x]?.[y]?.["Title"]}
+                                    {activeActions[x][y].actions[0].info("Title")}
                                 </span>
 
                                 <div class="subtitle-container">
                                     <span class="action-subtitle">
-                                        {activeActionsInfo[x]?.[y]?.["Subtitle"]}
+                                        {activeActions[x][y].actions[0].info("Subtitle")}
                                     </span>
                                 </div>
-                                {:else if activeActionsInfo[x]?.[y]?.["Count"] > 1}
+                                {:else if activeActions[x][y].actions.length > 1}
                                 <span class="action-title">
-                                    ({activeActionsInfo[x]?.[y]?.["Count"]})
+                                    ({activeActions[x][y].actions.length})
                                 </span>     
                                 {/if}
                             </div>

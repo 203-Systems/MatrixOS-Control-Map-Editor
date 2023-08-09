@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { actions } from "./actionbodies/ActionRegistry";
+    import { actions, effects } from "./actionbodies/ActionRegistry";
+    import type { ActionType } from "$lib/types/ActionType";
     import { createEventDispatcher, SvelteComponent } from 'svelte';
 
     export let show: boolean = false;
-    export let tab: 0 | 1 = 0;
+    export let type:ActionType = "action";
     const dispatch = createEventDispatcher();
 
     function clickOutside(node) {
@@ -31,19 +32,12 @@
 
         show = false;
     }
-
-    function getActionAddable(action): boolean {
-        const actionTypes = ["action", "effect"]
-
-        return action[1].type == actionTypes[tab]
-    }
 </script>
 
 {#if show}
     <div class="menu-container" use:clickOutside on:outclick={() => (show = false)}>
         <div class="menu-action-list">
-            {#each Object.entries(actions) as action}
-                {#if getActionAddable(action)}
+            {#each Object.entries({"action": actions, "effect": effects}[type] ) as action}
                     <div class="menu-action-item" on:click={() => addAction(action[0])}>
                         <div class="icon-section">
                             <svelte:component this={action[1].icon} size={24}/>
@@ -53,7 +47,6 @@
                             <span>{action[1].description}</span>
                         </div>
                     </div>
-                {/if}
             {/each}
         </div>
     </div>

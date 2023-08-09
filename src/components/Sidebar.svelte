@@ -5,6 +5,7 @@
     import type {KeyAction} from '$lib/types/Action';
     import type {KeyID} from "$lib/types/KeyID";
     import type {KeymapEditor} from "$lib/editors/KeymapEditor";
+    import { effects } from "./actionbodies/ActionRegistry";
 
     const dispatch = createEventDispatcher();
 
@@ -13,8 +14,10 @@
     export let editorBackend: KeymapEditor;
     let currentActions: KeyAction | undefined;
     let tabIndex: 0 | 1 = 0;
+    const tabType: TypeAction[] = ["action", "effect"];
     let tabTextElements: HTMLDivElement[] = []
     let pageIndicatorElement: HTMLDivElement
+    let type: TypeAction = "action"
 
     $: {
         updateCount;
@@ -33,7 +36,7 @@
             pageIndicatorElement.style.setProperty("--posX", `${left}px`)
             pageIndicatorElement.style.setProperty("--width", `${width}px`)
         }
-
+        type = tabType[tabIndex];
 
     }
 
@@ -63,14 +66,12 @@
         </div>
 
         {#if currentActions !== undefined}
-            {#each currentActions.actions as action, index}
-                {#if action.constructor.type === ["action", "effect"][tabIndex]}
+            {#each {"action": currentActions.actions, "effect": currentActions.effects}[type] as action, index}
                     <svelte:component
                             this={action.constructor.body}
                             bind:data={action.data}
-                            on:removeAction={() => dispatch('removeAction', { index: index})}
+                            on:removeAction={() => dispatch('removeAction', { type: type, index: index})}
                     />
-                {/if}
             {/each}
         {/if}
 
@@ -82,8 +83,8 @@
 
         <AddActionMenu
                 bind:show={showAddActionMenu}
-                bind:tab={tabIndex}
-                on:addAction={e => dispatch('addAction', { 'actionIdentifier': e.detail.actionIdentifier })}
+                bind:type={type}
+                on:addAction={e => dispatch('addAction', { type: type, actionIdentifier: e.detail.actionIdentifier })}
         />
     {:else}
         <div class="no-key-selected">

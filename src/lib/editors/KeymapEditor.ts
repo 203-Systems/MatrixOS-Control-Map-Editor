@@ -1,7 +1,8 @@
 import type { KeyID } from "$lib/types/KeyID";
-import { actions } from "/src/components/actionbodies/ActionRegistry"
+import { actions, effects } from "/src/components/actionbodies/ActionRegistry"
 import type { Action, Effect, KeyAction } from '$lib/types/Action';
 import type { UniversalActionDesciptor, UniversalActionDesciptorDevice } from '$lib/types/UAD';
+import type { ActionType } from '$lib/types/ActionType';
 import * as cbor from 'cbor-web';
 
 export class KeymapEditor {
@@ -22,23 +23,24 @@ export class KeymapEditor {
         }
     }
 
-    addAction(key: KeyID, actionIdentifier: string): void {
-
-        if(actions[actionIdentifier] === undefined) {
-            console.error("Action not found");
-            return;
-        }
-        
+    addAction(key: KeyID, type: ActionType, actionIdentifier: string): void {
         if(Array.isArray(key)) {
-            this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(new actions[actionIdentifier]);
+            if(type=== "action") {
+                this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(new actions[actionIdentifier]);
+            } else if (type === "effect") {
+                this.data[this.selectedLayer]?.[key[0]]?.[key[1]].effects.push(new effects[actionIdentifier]);
+            }
             this.updateCallback()
         }
-
     }
 
-    removeAction(key: KeyID, actionIndex: number): void {
+    removeAction(key: KeyID, type: ActionType, actionIndex: number): void {
         if(Array.isArray(key)) {
-            this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.splice(actionIndex, 1);
+            if(type === "action") {
+                this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.splice(actionIndex, 1);
+            } else if (type === "effect") {
+                this.data[this.selectedLayer]?.[key[0]]?.[key[1]].effects.splice(actionIndex, 1);
+            }
             this.updateCallback()
         }
     }
@@ -167,7 +169,45 @@ export class KeymapEditor {
         deviceData.actions = this.compressArray(deviceData.actions, true);
         
         // Add Effects
-        deviceData.effects.push(0)
+        for (let layer = 0; layer < this.getLayerCount(); layer++) {
+            deviceData.effects.push([]);
+            for (let x = 0; x < 8; x++) {
+                deviceData.effects[layer].push([]);
+                for (let y = 0; y < 8; y++) {
+                    deviceData.effects[layer][x].push([]);
+        
+                    if (!this.data[layer]?.[x]?.[y]?.effects) {
+                        continue;
+                    }
+        
+                    for (let action = 0; action < this.data[layer][x][y].effects.length; action++) {
+                        var local_action = this.data[layer][x][y].effects[action];
+                        var local_action_identifier = local_action.constructor.identifier;
+                        var local_action_data = local_action.export();
+        
+                        if (local_action_data === undefined) {
+                            continue;
+                        }
+        
+                        var action_index = uad.action_list.indexOf(local_action_identifier);
+        
+                        if (action_index === -1) {
+                            uad.action_list.push(local_action_identifier);
+                            action_index = uad.action_list.length - 1;
+                        }
+        
+                        deviceData.effects[layer][x][y].push([action_index].concat(local_action_data));
+                    }
+        
+                    if (deviceData.effects[layer][x][y].length === 0) {
+                        deviceData.effects[layer][x][y] = undefined;
+                    }
+                }
+                deviceData.effects[layer][x] = this.compressArray(deviceData.effects[layer][x]);
+            }
+            deviceData.effects[layer] = this.compressArray(deviceData.effects[layer], true);
+        }
+        deviceData.effects = this.compressArray(deviceData.effects, true);
         
         uad.devices.push(deviceData);
 
@@ -201,16 +241,16 @@ export class KeymapEditor {
 
             let actions_to_load = uad.devices[0].actions;
 
-            // iteratur through the array
-            let x_map = this.bitmapToArray(actions_to_load[0], uad.devices[0].size[0]);
+            // iteratur through the array to load actions
+            let x_map = this.bitmapToArray(Number(actions_to_load[0]), uad.devices[0].size[0]);
             for (var [x_index, x] of x_map.entries()) 
             {
                 // console.log(`X: ${x}`)
-                let y_map = this.bitmapToArray(actions_to_load[x_index + 1][0], uad.devices[0].size[1]);
+                let y_map = this.bitmapToArray(Number(actions_to_load[x_index + 1][0]), uad.devices[0].size[1]);
                 for (var [y_index, y] of y_map.entries()) 
                 {
                     // console.log(`X: ${x} Y: ${y}`)
-                    let layer_map = this.bitmapToArray(actions_to_load[x_index + 1][y_index + 1][0], uad.devices[0].layers);
+                    let layer_map = this.bitmapToArray(Number(actions_to_load[x_index + 1][y_index + 1][0]), uad.devices[0].layers);
                     for (var [layer_index, layer] of layer_map.entries())
                     {
                         // console.log(`X: ${x} Y: ${y} Layer: ${layer}`)
@@ -225,6 +265,30 @@ export class KeymapEditor {
                     }
                 }
             }
+
+            let effects_to_load = uad.devices[0].effects;
+
+            // iterate through the array to load effects
+            let layer_map = this.bitmapToArray(Number(effects_to_load[0]), uad.devices[0].layers);
+            for (var [layer_index, layer] of layer_map.entries()) {
+                let x_map = this.bitmapToArray(Number(effects_to_load[layer_index + 1][0]), uad.devices[0].size[0]);
+                for (var [x_index, x] of x_map.entries()) {
+                    // console.log(`Layer: ${layer} X: ${x}`)
+                    let y_map = this.bitmapToArray(Number(effects_to_load[layer_index + 1][x_index + 1][0]), uad.devices[0].size[1]);
+                    for (var [y_index, y] of y_map.entries()) {
+                        // console.log(`Layer: ${layer} X: ${x} Y: ${y}`)
+                        for (var effect of effects_to_load[layer_index + 1][x_index + 1][y_index + 1]) {
+                            var effect_type = uad.action_list[effect[0]];
+
+                            // Create new action
+                            this.data[layer]?.[x]?.[y].actions.push(new actions[effect_type]);
+                            // Import data into action
+                            this.data[layer]?.[x]?.[y].actions[this.data[layer]?.[x]?.[y].effects.length - 1].import(effect.slice(1));
+                        }
+                    }
+                }
+            }
+
         } catch (error) {
             console.error("Failed to load UAD");
             console.error(error);

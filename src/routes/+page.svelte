@@ -4,7 +4,7 @@
     import Sidebar from "../components/Sidebar.svelte";
     import LayerSelector from "../components/LayerSelector.svelte";
     import { KeymapEditor } from "$lib/editors/KeymapEditor";
-    import type { KeyAction } from "$lib/types/Action";
+    import type { ActionType } from "$lib/types/ActionType";
     import type { KeyID } from "$lib/types/KeyID";
 
     import { DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
@@ -23,12 +23,12 @@
         update();
     }
 
-    function addAction(actionIdentifier: string): void {
-        editorBackend.addAction(selectedKey, actionIdentifier);
+    function addAction(actionType:ActionType, actionIdentifier: string): void {
+        editorBackend.addAction(selectedKey, actionType, actionIdentifier);
     }
 
-    function removeAction(actionIndex: number): void {
-        editorBackend.removeAction(selectedKey, actionIndex)
+    function removeAction(actionType:ActionType, actionIndex: number): void {
+        editorBackend.removeAction(selectedKey, actionType, actionIndex)
     }
 
     onMount(() => {
@@ -92,8 +92,8 @@
                 bind:updateCount={updateCount}
                 bind:selectedKey={selectedKey}
                 bind:editorBackend={editorBackend}
-                on:addAction={e => addAction(e.detail.actionIdentifier)}
-                on:removeAction={e => removeAction(e.detail.index)}
+                on:addAction={e => addAction(e.detail.type, e.detail.actionIdentifier)}
+                on:removeAction={e => removeAction(e.detail.type, e.detail.index)}
         />
     </div>
 </main>

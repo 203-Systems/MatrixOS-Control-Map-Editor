@@ -1,10 +1,5 @@
-import type { Action} from "/src/components/actionbodies/ActionRegistry";
+import type { Action, Effect } from "/src/components/actionbodies/ActionRegistry";
 
-// Place Holder for the Effect Data
-export type Effect = {
-    type: string,
-    data:any[]
-}
 
 export type KeyAction = {
     actions:Action[],
