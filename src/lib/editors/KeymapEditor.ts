@@ -13,6 +13,14 @@ export class KeymapEditor {
     constructor(updateCallbackFunc:()=>void) {
         this.updateCallback = updateCallbackFunc;
         
+        this.clear()
+    }
+
+    clear()
+    {
+        // Reset Data
+        this.data = [];
+        this.selectedLayer = 0;
         // Create a default layer
         this.data.push([])
         for (let y = 0; y < 8; y++) {
@@ -229,6 +237,7 @@ export class KeymapEditor {
 
     loadUAD(uad: UniversalActionDesciptor)
     {  
+        this.clear();
         try {
             if (uad === undefined) {
                 console.error("UAD is undefined")
@@ -294,6 +303,7 @@ export class KeymapEditor {
         } catch (error) {
             console.error("Failed to load UAD");
             console.error(error);
+            this.clear();
         }
 
         this.updateCallback();
