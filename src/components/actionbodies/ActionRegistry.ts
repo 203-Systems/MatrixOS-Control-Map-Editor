@@ -6,13 +6,10 @@ import { LayerAction } from "./Layer/LayerAction";
 import { WrapAction } from './Wrap/WrapAction';
 import { ColorEffect } from "./Color/ColorEffect";
 
-import type { ActionType } from '$lib/types/ActionType';
-
 export type ActionInfoType = "Title" | "Subtitle" | "Center" | "Color"
 
 // Both Action and Effects extends on top of this
 export interface Action {
-    static readonly type: ActionType;
     static readonly identifier: string;
     static readonly description: string;
     static readonly icon: SvelteComponent;

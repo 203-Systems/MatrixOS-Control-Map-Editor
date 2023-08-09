@@ -6,7 +6,6 @@ import { Keyboard } from "carbon-icons-svelte";
 import type { KeyboardActionData } from "./KeyboardActionData";
 
 export class KeyboardAction implements Action {
-    static readonly type: string = "action";
     static readonly identifier: string = "keyboard";
     static readonly description: string = "Send a Keyboard Key";
     static readonly icon: SvelteComponent = Keyboard;

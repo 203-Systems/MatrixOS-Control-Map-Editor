@@ -6,7 +6,6 @@ import { ZAxis } from "carbon-icons-svelte";
 import type { WrapActionData} from "./WrapActionData";
 
 export class WrapAction implements Action {
-    static readonly type: string = "action";
     static readonly identifier: string = "wrap";
     static readonly description: string = "Wrap to Another Action Group";
     static readonly icon: SvelteComponent = ZAxis;

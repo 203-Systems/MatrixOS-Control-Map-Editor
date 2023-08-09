@@ -6,7 +6,6 @@ import {ColorPalette} from "carbon-icons-svelte";
 import type {ColorEffectData} from "./ColorEffectData";
 
 export class ColorEffect implements Effect {
-    static readonly type: string = "effect";
     static readonly identifier: string = "color";
     static readonly description: string = "Set a Color for the Key";
     static readonly icon: SvelteComponent = ColorPalette;
