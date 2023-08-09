@@ -1,5 +1,6 @@
 export type ColorEffectData = {
-    red: number,
-    green: number,
-    blue: number,
+    hasDefault:boolean,
+    default:[number, number, number],
+    hasActivated:boolean,
+    activated:[number, number, number],
 }
