@@ -52,8 +52,6 @@ export class ColorEffect implements Effect {
         switch(type)
         {
             case "Color":
-                console.log(this.data.default);
-                console.log("#" + Math.round(this.data.default[0] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[1] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[2] * 255).toString(16).padStart(2, "0"));
                 return "#" + Math.round(this.data.default[0] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[1] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[2] * 255).toString(16).padStart(2, "0");
         }
         return null;

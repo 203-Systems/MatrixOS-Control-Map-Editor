@@ -289,8 +289,6 @@ export class KeymapEditor {
                         for (var effect of effects_to_load[layer_index + 1][x_index + 1][y_index + 1]) {
                             var effect_type = uad.effect_list[effect[0]];
 
-                            console.log(uad.effect_list)
-                            console.log(effect_type)
                             // Create new effect
                             this.data[layer]?.[x]?.[y].effects.push(new effects[effect_type]);
                             // Import data into effect
