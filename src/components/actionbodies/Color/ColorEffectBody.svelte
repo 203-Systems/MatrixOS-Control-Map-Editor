@@ -27,14 +27,14 @@
         if (isMounted) {
             let rgbData = hsl_to_rgb(hslData.hue, hslData.saturation, hslData.lightness)
 
-            data.red = rgbData[0] / 255
-            data.green = rgbData[1] / 255
-            data.blue = rgbData[2] / 255
+            data.default[0] = rgbData[0] / 255
+            data.default[1]= rgbData[1] / 255
+            data.default[2] = rgbData[2] / 255
         }
     }
 
     onMount(() => {
-        let rgbToHSL = rgb_to_hsl(data.red * 255, data.green * 255, data.blue * 255)
+        let rgbToHSL = rgb_to_hsl(data.default[0] * 255, data.default[1] * 255, data.default[2] * 255)
 
         hslData.hue = rgbToHSL[0]
         hslData.saturation = rgbToHSL[1]
@@ -48,9 +48,9 @@
             handleDiameter: 16,
             wheelReflectsSaturation: false,
             onChange: function (color) {
-                data.red = color.rgb[0] / 255
-                data.green = color.rgb[1] / 255
-                data.blue = color.rgb[2] / 255
+                data.default[0] = color.rgb[0] / 255
+                data.default[1] = color.rgb[1] / 255
+                data.default[2] = color.rgb[2] / 255
 
                 hslData.hue = color.hsl[0]
                 hslData.saturation = color.hsl[1]

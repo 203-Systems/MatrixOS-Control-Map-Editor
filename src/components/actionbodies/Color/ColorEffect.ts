@@ -1,11 +1,11 @@
-import type {Action, ActionInfoType} from "../ActionRegistry";
+import type {Effect, ActionInfoType} from "../ActionRegistry";
 import type {SvelteComponent} from 'svelte';
 
 import ColorEffectBody from "./ColorEffectBody.svelte";
 import {ColorPalette} from "carbon-icons-svelte";
 import type {ColorEffectData} from "./ColorEffectData";
 
-export class ColorEffect implements Action {
+export class ColorEffect implements Effect {
     static readonly type: string = "effect";
     static readonly identifier: string = "color";
     static readonly description: string = "Color";
@@ -17,7 +17,7 @@ export class ColorEffect implements Action {
     constructor() {
         this.data = {
             hasDefault: true,
-            hasActivated: true,
+            hasActivated: false,
             default: [1, 0, 0],
             activated: [1, 1, 1]
         }
@@ -52,6 +52,8 @@ export class ColorEffect implements Action {
         switch(type)
         {
             case "Color":
+                console.log(this.data.default);
+                console.log("#" + Math.round(this.data.default[0] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[1] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[2] * 255).toString(16).padStart(2, "0"));
                 return "#" + Math.round(this.data.default[0] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[1] * 255).toString(16).padStart(2, "0") + Math.round(this.data.default[2] * 255).toString(16).padStart(2, "0");
         }
         return null;
