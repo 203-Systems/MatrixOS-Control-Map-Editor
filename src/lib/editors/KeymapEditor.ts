@@ -353,6 +353,21 @@ export class KeymapEditor {
         // Convert to CBOR
         let uad_encoded = cbor.encode(uad);
 
+        // Print to console
+        let string = `static const uint8_t sample_uad[${uad_encoded.length}]  = {\n`
+
+        for(let i = 0; i < uad_encoded.length; i++) {
+            string += `0x${uad_encoded[i].toString(16).padStart(2, "0")}, `
+            if(i % 16 == 15) {
+                string += "\n"
+            }
+        }
+
+        string = string.slice(0, -2);
+        string += "\n};"
+    
+        console.log(string)
+
         // Download binary file
         console.log(uad_encoded)
         var blob = new Blob([uad_encoded], {
