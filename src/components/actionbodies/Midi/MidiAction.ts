@@ -32,7 +32,13 @@ export class MidiAction implements Action {
                 case 0x90:
                     this.data.type = "Note";
                     this.data.data.note = data[1] & 0b01111111;
-                    this.data.data.velocity = data[1] & 0b10000000;
+                    this.data.data.velocity = false;
+                    this.data.data.channel = (data[0] & 0b00001111) + 1;
+                    return true;
+                case 0xA0:
+                    this.data.type = "Note";
+                    this.data.data.note = data[1] & 0b01111111;
+                    this.data.data.velocity = true;
                     this.data.data.channel = (data[0] & 0b00001111) + 1;
                     return true;
                 case 0xB0:
@@ -57,16 +63,22 @@ export class MidiAction implements Action {
     export(): any[] | undefined {
         var data = []
         if(this.data.type == "Note")
-        {
-            data[0] = 0x90;
-            data[1] = this.data.data.note + this.data.data.velocity * 0b10000000; // If first bit is set, then velocity sensitivty is on.
-            if (!this.data.data.velocity) { // If velocity sensitivity is off, then set velocity to the custom velocity output value
-                data[2] = 127; // Custom Velocity, UI todo
+        {   
+            if(!this.data.data.velocity)
+            {
+                data[0] = 0x90 + this.data.data.channel - 1;
+                data[1] = this.data.data.note;
+                data[2] = 127;
+            }
+            else
+            {
+                data[0] = 0xA0 + this.data.data.channel - 1; // AFter Touch
+                data[1] = this.data.data.note;
             }
         }
         else if(this.data.type == "CC")
         {
-            data[0] = 0xB0;
+            data[0] = 0xB0 + this.data.data.channel - 1;
             data[1] = this.data.data.control;
             data[2] = this.data.data.value;
         }
