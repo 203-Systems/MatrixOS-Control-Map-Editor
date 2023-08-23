@@ -5,6 +5,7 @@
     import {createEventDispatcher} from 'svelte';
     import KeyboardActionPopup from "./KeyboardActionPopup.svelte";
     import {KeyboardAction} from "./KeyboardAction";
+    import {KeyboardScanCodeFriendlyName} from "./ScanCode";
 
     const dispatch = createEventDispatcher();
 
@@ -21,10 +22,7 @@
                 <span >No Key Selected</span>
                 {:else}
                 <span style="font-size: 20px;">{
-                        data.key
-                            .replace("VK_", "")
-                            .replace("CONTROL", "CTRL")
-                            .replace("NUMPAD", "NUM ")
+                        KeyboardScanCodeFriendlyName[data.key]
                 }</span>
                 {/if}
             </div>

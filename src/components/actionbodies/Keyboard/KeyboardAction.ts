@@ -4,6 +4,7 @@ import type { SvelteComponent } from 'svelte';
 import KeyboardActionBody from "./KeyboardActionBody.svelte";
 import { Keyboard } from "carbon-icons-svelte";
 import type { KeyboardActionData } from "./KeyboardActionData";
+import {KeyboardScanCodeFriendlyName} from "./ScanCode";
 
 export class KeyboardAction implements Action {
     static readonly identifier: string = "keyboard";
@@ -37,10 +38,7 @@ export class KeyboardAction implements Action {
                 return "Key"
             case "Subtitle":
                 if (this.data.key !== undefined) {
-                    return this.data.key
-                        .replace("VK_", "")
-                        .replace("CONTROL", "CTRL")
-                        .replace("NUMPAD", "NUM ")
+                    return KeyboardScanCodeFriendlyName[this.data.key]
                 }
                 return "None"
         }

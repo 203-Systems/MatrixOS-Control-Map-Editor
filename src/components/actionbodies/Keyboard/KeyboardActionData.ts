@@ -1,5 +1,5 @@
-import type { VirtualKey } from "./VirtualKeys";
+import type { KeyboardScanCode } from "./ScanCode";
 
 export type KeyboardActionData = {
-    key: VirtualKey|undefined
+    key: KeyboardScanCode|undefined
 }

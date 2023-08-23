@@ -1,36 +1,25 @@
 <script lang="ts">
     import Popup from "../../common/Popup.svelte";
-    import {VirtualKey} from "./VirtualKeys";
+    import {KeyboardScanCode, KeyboardScanCodeFriendlyName} from "./ScanCode";
     import Button from "../../common/Button.svelte";
 
     export let show: boolean
+    export let selectedKey: KeyboardScanCode
 
-    export let selectedKey: VirtualKey
-
-    function getAllKeysByRegex(regex: RegExp): VirtualKey[] {
-        let virtualKeys = Object.keys(VirtualKey).filter(virtualKey => {
-            if(virtualKey.startsWith("VK")) {
-                return virtualKey
-            }
-        })
-
-        return virtualKeys.map(virtualKey => {
-            if(regex.test(virtualKey)) {
-                return VirtualKey[virtualKey]
-            }
-        }).filter(virtualKeys => virtualKeys !== undefined)
+    function createNumberArray(start: number, end: number) {
+        return Array.from({ length: end - start + 1 }, (_, index) => start + index);
     }
 
     let keyPages = [
         {
             title: "Basic",
             keyCollections: [
-                { title: "Letters", keys: getAllKeysByRegex(/^VK_[A-Z]$/) },
-                { title: "Numbers", keys: getAllKeysByRegex(/^VK_[0-9]$/) },
-                { title: "Mods", keys: getAllKeysByRegex(/^VK_(SHIFT|CONTROL|MENU|LWIN|RWIN|APPS)$/) },
-                { title: "Edit", keys: getAllKeysByRegex(/^VK_(INSERT|DELETE|BACK|CLEAR|RETURN|ESCAPE)$/) },
-                { title: "Move", keys: getAllKeysByRegex(/^VK_(PRIOR|NEXT|HOME|END|LEFT|UP|RIGHT|DOWN)$/) },
-                { title: "Numpad", keys: getAllKeysByRegex(/^VK_(NUMPAD[0-9]|(DECIMAL|ADD|SUBTRACT|MULTIPLY|DIVIDE))$/) }
+                { title: "Letters", keys: createNumberArray(KeyboardScanCode.KEY_A, KeyboardScanCode.KEY_Z) },
+                { title: "Numbers", keys: createNumberArray(KeyboardScanCode.KEY_1, KeyboardScanCode.KEY_0)  },
+                { title: "Mods", keys: createNumberArray(KeyboardScanCode.KEY_LEFT_CTRL, KeyboardScanCode.KEY_RIGHT_GUI) },
+                { title: "Edit", keys: [KeyboardScanCode.KEY_INSERT, KeyboardScanCode.KEY_DELETE, KeyboardScanCode.KEY_BACKSPACE, KeyboardScanCode.KEY_CLEAR, KeyboardScanCode.KEY_RETURN, KeyboardScanCode.KEY_ESC]},
+                { title: "Move", keys: [KeyboardScanCode.KEY_HOME, KeyboardScanCode.KEY_END, KeyboardScanCode.KEY_LEFT, KeyboardScanCode.KEY_UP, KeyboardScanCode.KEY_RIGHT, KeyboardScanCode.KEY_DOWN]},
+                { title: "Numpad", keys: createNumberArray(KeyboardScanCode.KEYPAD_1, KeyboardScanCode.KEYPAD_DOT).concat(createNumberArray(KeyboardScanCode.KEYPAD_DIVIDE, KeyboardScanCode.KEYPAD_ENTER))}
             ]
         }
     ]
@@ -48,12 +37,9 @@
 
                 <div class="key-collection-container">
                     {#each keyCollection.keys as key}
-                        <div class="keyboard-key" on:click={() => {selectedKey = VirtualKey[key]; show = false}} class:selected-key={selectedKey === VirtualKey[key]}>
+                        <div class="keyboard-key" on:click={() => {selectedKey = key; show = false}} class:selected-key={selectedKey === key}>
                             <span>{
-                                VirtualKey[key]
-                                    .replace("VK_", "")
-                                    .replace("CONTROL", "CTRL")
-                                    .replace("NUMPAD", "NUM ")
+                                KeyboardScanCodeFriendlyName[key]
                             }</span>
                         </div>
                     {/each}
