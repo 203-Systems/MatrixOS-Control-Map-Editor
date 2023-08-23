@@ -16,7 +16,7 @@ export class ColorEffect implements Effect {
     constructor() {
         this.data = {
             hasDefault: true,
-            hasActivated: false,
+            hasActivated: true,
             default: [1, 0, 0],
             activated: [1, 1, 1]
         }
