@@ -62,10 +62,12 @@
                 
             </div>
         {/each}
-
+        
+        {#if layerCount < 16}
         <div class="layer-add-button" on:click={() => createLayer()}>
             <Add size={24}/>
         </div>
+        {/if}
     </div>
 
     <div class="layer-control" on:click={() => selectOffsetLayer(1)}>
