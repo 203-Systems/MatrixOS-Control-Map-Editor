@@ -7,7 +7,7 @@
     import type { ActionType } from "$lib/types/ActionType";
     import type { KeyID } from "$lib/types/KeyID";
 
-    import { DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
+    import { Usb, DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
     import { onMount } from "svelte";
 
     let updateCount: number = 0; //Cause all components to update
@@ -52,16 +52,19 @@
             </div>
 
             <div class="controls">
-                <div class="control" on:click={() => editorBackend.importUADA()}>
+                <div class="control" title="Connect" on:click={() => editorBackend.connect()}>
+                    <Usb size={24}/>
+                </div>
+                <div class="control" title="Import from a file" on:click={() => editorBackend.importUADA()}>
                     <DocumentImport size={24}/>
                 </div>
-                <div class="control" on:click={() => editorBackend.exportUADA()}>
+                <div class="control" title="Export to a file" on:click={() => editorBackend.exportUADA()}>
                     <DocumentExport size={24}/>
                 </div>
-                <div class="control" on:click={() => editorBackend.importFromDevice()}>
+                <div class="control" title="Import from Device" on:click={() => editorBackend.importFromDevice()}>
                     <Download size={24}/>
                 </div>
-                <div class="control" on:click={() => editorBackend.uploadToDevice()}>
+                <div class="control" title="Upload to Device" on:click={() => editorBackend.uploadToDevice()}>
                     <Upload size={24}/>
                 </div>
                 <div class="control">
