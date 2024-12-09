@@ -75,8 +75,13 @@
             {/each}
         {/if}
 
+        
         <div class="add-action-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
-            <span>Add Action</span>
+            {#if type === "action"}
+                <span>Add Action</span>
+            {:else}
+                <span>Add Effect</span>
+            {/if}
 
             <Add size={24}></Add>
         </div>

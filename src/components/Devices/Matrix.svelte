@@ -71,11 +71,13 @@
                                     {activeActions[x][y].actions[0].info("Title")}
                                 </span>
 
-                                <div class="subtitle-container">
-                                    <span class="action-subtitle">
-                                        {activeActions[x][y].actions[0].info("Subtitle")}
-                                    </span>
-                                </div>
+                                    {#if activeActions[x][y].actions[0].info("Subtitle") != null}
+                                    <div class="subtitle-container">
+                                        <span class="action-subtitle">
+                                            {activeActions[x][y].actions[0].info("Subtitle")}
+                                        </span>
+                                    </div>
+                                    {/if}
                                 {:else if activeActions[x][y].actions.length > 1}
                                 <span class="action-title">
                                     ({activeActions[x][y].actions.length})
@@ -176,7 +178,7 @@
                     box-sizing: border-box;
                     overflow: hidden;
                     white-space: nowrap;
-                    text-overflow: ellipsis;
+                    text-overflow: clip;
                     text-align: center;
 
                     span.action-subtitle {

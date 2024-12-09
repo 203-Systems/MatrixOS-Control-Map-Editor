@@ -6,7 +6,7 @@
     import {createEventDispatcher} from 'svelte';
     import NumericUpDown from "../../common/NumericUpDown.svelte";
     import CheckBox from "../../common/CheckBox.svelte";
-    import {LayerAction} from "./LayerAction";
+    import {MultiAction} from "./MultiAction";
     import '../Action.css';
 
     const dispatch = createEventDispatcher();
@@ -22,7 +22,7 @@
     }
 </script>
 
-<ActionTemplate actionTitle={LayerAction.description} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={MultiAction.description} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="action-setting-slot">
             <span>Layer Action Mode</span>

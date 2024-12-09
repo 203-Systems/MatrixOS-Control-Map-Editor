@@ -21,43 +21,43 @@
 </script>
 
 <ActionTemplate actionTitle={WrapAction.description} on:removeAction={() => dispatch('removeAction')}>
-    <div class="layer-action-body">
-        <div class="setting-slot">
+    <div class="action-settings">
+        <div class="action-setting-slot">
             <span>Relative Layer</span>
 
-            <CheckBox bind:toggled={data.relativeLayer} on:changed={e => changeWrapLayerMode(e.detail.toggled)}/>
+            <CheckBox bind:checked={data.relativeLayer} on:changed={e => changeWrapLayerMode(e.detail.checked)}/>
         </div>
         {#if data.relativeLayer === false}
-            <div class="setting-slot">
+            <div class="action-setting-slot">
                 <span>Layer</span>
                 <NumericUpDown bind:value={data.layer} min={1} max={16}/> 
             </div>
         {:else}
-            <div class="setting-slot">
+            <div class="action-setting-slot">
                 <span>Layer offset</span>
                 <NumericUpDown bind:value={data.layer} min={-15} max={15}/> 
             </div>
         {/if}
-        <div class="setting-slot">
+        <div class="action-setting-slot">
             <span>Relative Position</span>
 
-            <CheckBox bind:toggled={data.relativePos} on:changed={e => changeWrapPosMode(e.detail.toggled)}/>
+            <CheckBox bind:checked={data.relativePos} on:changed={e => changeWrapPosMode(e.detail.checked)}/>
         </div>
         {#if data.relativePos === false}
-            <div class="setting-slot">
+            <div class="action-setting-slot">
                 <span>X</span>
                 <NumericUpDown bind:value={data.x} min={0} max={8}/> 
             </div>
-            <div class="setting-slot">
+            <div class="action-setting-slot">
                 <span>Y</span>
                 <NumericUpDown bind:value={data.y} min={0} max={8}/> 
             </div>
         {:else}
-            <div class="setting-slot">
+            <div class="action-setting-slot">
                 <span>X offset</span>
                 <NumericUpDown bind:value={data.x} min={-7} max={7}/> 
             </div>
-            <div class="setting-slot">
+            <div class="action-setting-slot">
                 <span>Y offset</span>
                 <NumericUpDown bind:value={data.y} min={-7} max={7}/> 
             </div>
@@ -66,23 +66,15 @@
 </ActionTemplate>
 
 <style lang="scss">
-    .layer-action-body {
-        width: 100%;
-        padding: 4px 0;
+    .action-setting-slot {
+        height: 40px;
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 0 12px;
 
-        .setting-slot {
-            height: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 0 12px;
-
-            font-family: Roboto, sans-serif;
-            font-size: 14px;
-        }
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
     }
 </style>

@@ -4,7 +4,7 @@ import type { SvelteComponent } from 'svelte';
 import KeyboardActionBody from "./KeyboardActionBody.svelte";
 import { Keyboard } from "carbon-icons-svelte";
 import type { KeyboardActionData } from "./KeyboardActionData";
-import {KeyboardScanCodeFriendlyName} from "./ScanCode";
+import {KeyboardScanCode, KeyboardScanCodeFriendlyName} from "./ScanCode";
 
 export class KeyboardAction implements Action {
     static readonly identifier: string = "keyboard";
@@ -16,7 +16,8 @@ export class KeyboardAction implements Action {
 
     constructor() {
         this.data = {
-            key: undefined
+            key: undefined,
+            user_keycode: 0
         }
     }
 

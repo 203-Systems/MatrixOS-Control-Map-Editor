@@ -4,18 +4,18 @@
 
     const dispatch = createEventDispatcher();
 
-    export let toggled: boolean
+    export let checked: boolean
     export let text: string = ""
 
     function changed(): void {
-        toggled = !toggled
-        dispatch('changed', { toggled: toggled })
+        checked = !checked
+        dispatch('changed', { checked: checked })
     }
 </script>
 
 <div class="checkbox-body">
     <div class="checkbox" on:click={() => changed()}>
-        <div class="inner-checkbox" class:toggled={toggled}>
+        <div class="inner-checkbox" class:checked={checked}>
             <Checkmark size={16}/>
         </div>
     </div>
@@ -61,7 +61,7 @@
 
                 transition: scale 0.2s ease, opacity 0.2s ease;
 
-                &.toggled {
+                &.checked {
                     scale: 1;
                     opacity: 1;
                 }

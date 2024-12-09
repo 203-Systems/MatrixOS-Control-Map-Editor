@@ -4,7 +4,13 @@ import { MidiAction } from "./Midi/MidiAction";
 import { KeyboardAction } from "./Keyboard/KeyboardAction";
 import { LayerAction } from "./Layer/LayerAction";
 import { WrapAction } from './Wrap/WrapAction';
+import { MacroAction } from './Macro/MacroAction';
+import { GamepadAction } from "./Gamepad/GamepadAction";
+import { MultiAction } from "./Multi/MultiAction";
+
 import { ColorEffect } from "./Color/ColorEffect";
+import { ActionColorEffect } from "./ActionColor/ActionColorEffect";
+import { MidiColorEffect } from "./MidiColor/MidiColorEffect";
 
 export type ActionInfoType = "Title" | "Subtitle" | "Center" | "Color"
 
@@ -26,10 +32,15 @@ export type { Action as Effect}
 export const actions : {[actionIdentifier:string]: Action} = {
     "midi": MidiAction,
     "keyboard":  KeyboardAction,
+    "game":  GamepadAction,
     "layer":  LayerAction,
     "wrap":  WrapAction,
+    "multi":  MultiAction,
+    "macro":  MacroAction,
 };
 
 export const effects : {[actionIdentifier:string]: Effect} = {
-    "color": ColorEffect
+    "color": ColorEffect,
+    "actioncolor": ActionColorEffect,
+    // "midicolor": MidiColorEffect,
 }

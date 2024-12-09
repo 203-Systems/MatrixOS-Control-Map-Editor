@@ -1,10 +1,10 @@
 <script lang="ts">
     import Popup from "../../common/Popup.svelte";
-    import {KeyboardScanCode, KeyboardScanCodeFriendlyName} from "./ScanCode";
+    import {GamepadKeycode, GamepadKeycodeFriendlyName} from "./GamepadActionData";
     import Button from "../../common/Button.svelte";
 
     export let show: boolean
-    export let selectedKey: KeyboardScanCode
+    export let selectedKey: GamepadKeycode
 
     function createNumberArray(start: number, end: number) {
         return Array.from({ length: end - start + 1 }, (_, index) => start + index);
@@ -14,19 +14,19 @@
         {
             title: "Basic",
             keyCollections: [
-                { title: "Letters", keys: createNumberArray(KeyboardScanCode.KEY_A, KeyboardScanCode.KEY_Z) },
-                { title: "Numbers", keys: createNumberArray(KeyboardScanCode.KEY_1, KeyboardScanCode.KEY_0)  },
-                { title: "Mods", keys: createNumberArray(KeyboardScanCode.KEY_LEFT_CTRL, KeyboardScanCode.KEY_RIGHT_GUI) },
-                { title: "Edit", keys: [KeyboardScanCode.KEY_INSERT, KeyboardScanCode.KEY_DELETE, KeyboardScanCode.KEY_BACKSPACE, KeyboardScanCode.KEY_CLEAR, KeyboardScanCode.KEY_RETURN, KeyboardScanCode.KEY_ESC]},
-                { title: "Move", keys: [KeyboardScanCode.KEY_HOME, KeyboardScanCode.KEY_END, KeyboardScanCode.KEY_LEFT, KeyboardScanCode.KEY_UP, KeyboardScanCode.KEY_RIGHT, KeyboardScanCode.KEY_DOWN]},
-                { title: "Numpad", keys: createNumberArray(KeyboardScanCode.KEYPAD_1, KeyboardScanCode.KEYPAD_DOT).concat(createNumberArray(KeyboardScanCode.KEYPAD_DIVIDE, KeyboardScanCode.KEYPAD_ENTER))},
-                { title: "Custom", keys: [KeyboardScanCode.KEY_USER_DEFINED]}
-            ]
+                { title: "Action", keys: createNumberArray(GamepadKeycode.GAMEPAD_A, GamepadKeycode.GAMEPAD_Z) },
+                { title: "DPad", keys: [GamepadKeycode.GAMEPAD_DPAD]},
+                { title: "Function", keys: createNumberArray(GamepadKeycode.GAMEPAD_SELECT, GamepadKeycode.GAMEPAD_MODE) },
+                { title: "Shoulder", keys: createNumberArray(GamepadKeycode.GAMEPAD_L1, GamepadKeycode.GAMEPAD_R2) },
+                { title: "Trigger", keys: [GamepadKeycode.GAMEPAD_LEFT_TRIGGER_AXIS, GamepadKeycode.GAMEPAD_RIGHT_TRIGGER_AXIS] },
+                { title: "Joystick", keys: [GamepadKeycode.GAMEPAD_LEFT_STICK_X_AXIS, GamepadKeycode.GAMEPAD_LEFT_STICK_Y_AXIS, GamepadKeycode.GAMEPAD_L3, GamepadKeycode.GAMEPAD_RIGHT_STICK_X_AXIS, GamepadKeycode.GAMEPAD_RIGHT_STICK_Y_AXIS, GamepadKeycode.GAMEPAD_R3] },
+                { title: "Generic", keys: createNumberArray(GamepadKeycode.GAMEPAD_1, GamepadKeycode.GAMEPAD_32) }
+           ]
         }
     ]
 </script>
 
-<Popup title="Select a Keyboard Key" bind:show={show}>
+<Popup title="Select a Gamepad Control" bind:show={show}>
     <div class="key-selector-popup">
         <div class="key-view-grid">
             {#each keyPages[0].keyCollections as keyCollection}
@@ -38,9 +38,9 @@
 
                 <div class="key-collection-container">
                     {#each keyCollection.keys as key}
-                        <div class="keyboard-key" on:click={() => {selectedKey = key; show = false}} class:selected-key={selectedKey === key}>
+                        <div class="gamepad-key" on:click={() => {selectedKey = key; show = false}} class:selected-key={selectedKey === key}>
                             <span>{
-                                KeyboardScanCodeFriendlyName[key]
+                                GamepadKeycodeFriendlyName[key]
                             }</span>
                         </div>
                     {/each}
@@ -89,7 +89,7 @@
                 gap: 10px;
                 padding-right: 8px;
 
-                .keyboard-key {
+                .gamepad-key {
                     width: 60px;
                     height: 60px;
                     padding: 4px;

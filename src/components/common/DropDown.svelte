@@ -4,18 +4,20 @@
 
     const dispatch = createEventDispatcher();
 
-    export let options: string[]
-    export let value: string
+    export let options: 
+        | Array<string | { key: string; value: string }>
+        | { [key: string]: string }
+        | Map<string|number, string>;
+    export let value: any;
 
-    let dropdownMain: HTMLDivElement
+    let dropdownMain: HTMLDivElement;
     let expanded: boolean = false;
 
     function clickOutside(node) {
         const handleClick = (event) => {
             if (!node.contains(event.target)) {
                 node.dispatchEvent(new CustomEvent("outclick"));
-
-                setTimeout(() => expanded = false, 0)
+                setTimeout(() => expanded = false, 0);
             }
         };
 
@@ -28,19 +30,62 @@
         };
     }
 
-    function selectOption(option: string): void {
-        value = option
-
+    function selectOption(selectedOption: any) {
+        value = selectedOption;
         expanded = false;
-
-        dispatch('selectionChanged', { option: option })
+        dispatch('selectionChanged', { option: selectedOption });
     }
+
+    let parsedOptions: { key: number | string; value: string }[] = [];
+
+$: {
+    if (options instanceof Map) {
+        // For a Map, just keep keys as they are. If they are numeric, they remain numbers.
+        parsedOptions = Array.from(options.entries()).map(([k, v]) => ({ key: k, value: v }));
+    } else if (Array.isArray(options)) {
+        // If it's an array, it can be strings or {key,value} objects
+        parsedOptions = options.map((opt) => {
+            if (typeof opt === 'string') {
+                return { key: opt, value: opt };
+            } else {
+                // Assuming opt is { key: string|number; value: string }
+                return opt;
+            }
+        });
+    } else if (options && typeof options === 'object') {
+        // If it's a plain object/dictionary:
+        // Attempt to convert keys to numbers if possible to maintain numeric keys.
+        parsedOptions = Object.entries(options).map(([k, v]) => {
+            const numericKey = Number(k);
+            return !isNaN(numericKey) ? { key: numericKey, value: v } : { key: k, value: v };
+        });
+    } else {
+        parsedOptions = [];
+    }
+}
+    function getDisplayValue(selectedValue: any): string {
+    if (!parsedOptions || parsedOptions.length === 0) return String(selectedValue);
+
+    const found = parsedOptions.find(option => {
+        if (typeof option === 'object') {
+            return option.key === selectedValue;
+        } else {
+            return option === selectedValue;
+        }
+    });
+
+    if (!found) return String(selectedValue);
+
+    return typeof found === 'object' ? found.value : found;
+}
+
+
 </script>
 
 <div class="dropdown-body">
     <div class="dropdown-main" bind:this={dropdownMain} on:click={() => expanded = !expanded}>
         <div class="dropdown-selection-display">
-            <span>{value}</span>
+            <span>{getDisplayValue(value)}</span>
         </div>
 
         <div class="dropdown-button">
@@ -53,10 +98,10 @@
     </div>
 
     {#if expanded}
-        <div class="option-selector" style="width: {dropdownMain.clientWidth + 20}px" use:clickOutside on:outclick={() => expanded = false}>
-            {#each options as option}
-                <div class="selectable-option" on:click={() => selectOption(option)}>
-                    <span>{option}</span>
+        <div class="option-selector" style="width: {dropdownMain?.clientWidth + 20 || 140}px" use:clickOutside on:outclick={() => expanded = false}>
+            {#each parsedOptions as option}
+                <div class="selectable-option" on:click={() => selectOption(option.key)}>
+                    <span>{option.value}</span>
                 </div>
             {/each}
         </div>
@@ -67,15 +112,10 @@
     .dropdown-body {
         min-width: 120px;
         height: 32px;
-
         background: white;
         border: 1px solid gray;
         border-radius: 6px;
-
         user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
 
         .dropdown-main {
             height: 32px;
@@ -87,15 +127,13 @@
             .dropdown-selection-display {
                 display: flex;
                 align-items: center;
-                text-indent: 8px;
-
+                padding: 8px 8px; /* Add 8px padding to the left and right */
                 font-family: Inter, sans-serif;
                 font-size: 14px;
             }
 
             .dropdown-button {
                 background: lightgray;
-
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -113,15 +151,12 @@
             padding: 6px 0;
             max-height: 200px;
             overflow-y: auto;
-
             background: white;
             border: 1px solid gray;
             border-radius: 6px;
-
             display: flex;
             flex-direction: column;
             gap: 0.2rem;
-
             filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
             .selectable-option {
@@ -129,9 +164,7 @@
                 display: flex;
                 align-items: center;
                 text-indent: 8px;
-
                 background-color: #efefef;
-
                 cursor: pointer;
 
                 span {
@@ -144,17 +177,14 @@
                 }
             }
 
-            /* width */
             &::-webkit-scrollbar {
                 width: 10px;
             }
 
-            /* Track */
             &::-webkit-scrollbar-track {
                 background: #ffffff;
             }
 
-            /* Handle */
             &::-webkit-scrollbar-thumb {
                 padding: 2px;
                 background: #b9b9b9;
@@ -162,7 +192,6 @@
                 border-radius: 8px;
             }
 
-            /* Handle on hover */
             &::-webkit-scrollbar-thumb:hover {
                 background: #8c8c8c;
             }

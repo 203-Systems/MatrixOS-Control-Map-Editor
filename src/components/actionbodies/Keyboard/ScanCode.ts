@@ -1,5 +1,5 @@
 export enum KeyboardScanCode {
-    KEY_RESERVED        =  0,
+    KEY_USER_DEFINED    =  0,
     KEY_ERROR_ROLLOVER  =  1,
     KEY_POST_FAIL       =  2,
     KEY_ERROR_UNDEFINED =  3,
@@ -236,7 +236,7 @@ export enum KeyboardScanCode {
 };
 
 export const KeyboardScanCodeFriendlyName: {[key in KeyboardScanCode]: string}= {
-    [KeyboardScanCode.KEY_RESERVED]: "RESERVED",
+    [KeyboardScanCode.KEY_USER_DEFINED]: "User Defined",
     [KeyboardScanCode.KEY_ERROR_ROLLOVER]: "ROLLOVER ERROR",
     [KeyboardScanCode.KEY_POST_FAIL]: "POST FAIL",
     [KeyboardScanCode.KEY_ERROR_UNDEFINED]: "UNDEFINED ERROR",
