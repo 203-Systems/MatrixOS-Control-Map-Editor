@@ -14,13 +14,16 @@
         {
             title: "Basic",
             keyCollections: [
-                { title: "Letters", keys: createNumberArray(KeyboardScanCode.KEY_A, KeyboardScanCode.KEY_Z) },
-                { title: "Numbers", keys: createNumberArray(KeyboardScanCode.KEY_1, KeyboardScanCode.KEY_0)  },
-                { title: "Mods", keys: createNumberArray(KeyboardScanCode.KEY_LEFT_CTRL, KeyboardScanCode.KEY_RIGHT_GUI) },
-                { title: "Edit", keys: [KeyboardScanCode.KEY_INSERT, KeyboardScanCode.KEY_DELETE, KeyboardScanCode.KEY_BACKSPACE, KeyboardScanCode.KEY_CLEAR, KeyboardScanCode.KEY_RETURN, KeyboardScanCode.KEY_ESC]},
-                { title: "Move", keys: [KeyboardScanCode.KEY_HOME, KeyboardScanCode.KEY_END, KeyboardScanCode.KEY_LEFT, KeyboardScanCode.KEY_UP, KeyboardScanCode.KEY_RIGHT, KeyboardScanCode.KEY_DOWN]},
-                { title: "Numpad", keys: createNumberArray(KeyboardScanCode.KEYPAD_1, KeyboardScanCode.KEYPAD_DOT).concat(createNumberArray(KeyboardScanCode.KEYPAD_DIVIDE, KeyboardScanCode.KEYPAD_ENTER))},
-                { title: "Custom", keys: [KeyboardScanCode.KEY_USER_DEFINED]}
+                { title: "Alphabet", keys: createNumberArray(KeyboardScanCode.KEY_A, KeyboardScanCode.KEY_Z) },
+                { title: "Numeric", keys: createNumberArray(KeyboardScanCode.KEY_1, KeyboardScanCode.KEY_0) },
+                { title: "Control",  keys: [ KeyboardScanCode.KEY_ENTER, KeyboardScanCode.KEY_ESC, KeyboardScanCode.KEY_BACKSPACE, KeyboardScanCode.KEY_TAB, KeyboardScanCode.KEY_CAPS_LOCK, KeyboardScanCode.KEY_NUM_LOCK, KeyboardScanCode.KEY_SCROLL_LOCK, KeyboardScanCode.KEY_PAUSE, KeyboardScanCode.KEY_DELETE, KeyboardScanCode.KEY_INSERT, KeyboardScanCode.KEY_HOME, KeyboardScanCode.KEY_END, KeyboardScanCode.KEY_PAGE_UP, KeyboardScanCode.KEY_PAGE_DOWN] },
+                { title: "Navigation", keys: [KeyboardScanCode.KEY_UP_ARROW, KeyboardScanCode.KEY_DOWN_ARROW, KeyboardScanCode.KEY_LEFT_ARROW, KeyboardScanCode.KEY_RIGHT_ARROW] },
+                { title: "Function", keys: createNumberArray(KeyboardScanCode.KEY_F1, KeyboardScanCode.KEY_F12) },
+                { title: "Character", keys: [ KeyboardScanCode.KEY_SPACE, KeyboardScanCode.KEY_MINUS, KeyboardScanCode.KEY_EQUAL, KeyboardScanCode.KEY_LEFT_BRACE, KeyboardScanCode.KEY_RIGHT_BRACE, KeyboardScanCode.KEY_BACKSLASH, KeyboardScanCode.KEY_SEMICOLON, KeyboardScanCode.KEY_QUOTE, KeyboardScanCode.KEY_TILDE, KeyboardScanCode.KEY_COMMA, KeyboardScanCode.KEY_PERIOD, KeyboardScanCode.KEY_SLASH] },
+                { title: "Keypad", keys: createNumberArray(KeyboardScanCode.KEYPAD_1, KeyboardScanCode.KEYPAD_0).concat(createNumberArray(KeyboardScanCode.KEYPAD_DIVIDE, KeyboardScanCode.KEYPAD_ENTER)).concat([KeyboardScanCode.KEYPAD_DOT]) },
+                { title: "System", keys: [KeyboardScanCode.KEY_PRINT, KeyboardScanCode.KEY_APPLICATION] },
+                { title: "Modifier", keys: [KeyboardScanCode.KEY_LEFT_CTRL, KeyboardScanCode.KEY_LEFT_SHIFT, KeyboardScanCode.KEY_LEFT_ALT, KeyboardScanCode.KEY_LEFT_GUI, KeyboardScanCode.KEY_RIGHT_CTRL, KeyboardScanCode.KEY_RIGHT_SHIFT, KeyboardScanCode.KEY_RIGHT_ALT, KeyboardScanCode.KEY_RIGHT_GUI] },
+                { title: "Custom", keys: [KeyboardScanCode.KEY_USER_DEFINED] }
             ]
         }
     ]

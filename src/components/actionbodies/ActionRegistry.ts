@@ -30,17 +30,17 @@ export interface Action {
 export type { Action as Effect}
 
 export const actions : {[actionIdentifier:string]: Action} = {
-    "midi": MidiAction,
-    "keyboard":  KeyboardAction,
-    "game":  GamepadAction,
-    "layer":  LayerAction,
-    "wrap":  WrapAction,
-    "multi":  MultiAction,
-    "macro":  MacroAction,
+    [MidiAction.identifier]: MidiAction,
+    [KeyboardAction.identifier]:  KeyboardAction,
+    [GamepadAction.identifier]:  GamepadAction,
+    [LayerAction.identifier]:  LayerAction,
+    [WrapAction.identifier]:  WrapAction,
+    // [MultiAction.identifier]:  MultiAction,
+    // [MacroAction.identifier]:  MacroAction,
 };
 
 export const effects : {[actionIdentifier:string]: Effect} = {
-    "color": ColorEffect,
-    "actioncolor": ActionColorEffect,
-    // "midicolor": MidiColorEffect,
+    [ColorEffect.identifier]: ColorEffect,
+    [ActionColorEffect.identifier]: ActionColorEffect,
+    // [MidiColorEffect.identifier]: MidiColorEffect,
 }

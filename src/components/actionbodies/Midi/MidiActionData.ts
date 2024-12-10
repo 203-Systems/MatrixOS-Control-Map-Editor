@@ -6,8 +6,8 @@ export enum MidiType {
     PitchBend = 0xE0,
     Sysex = 0xF0,
     // Out of MIDI Spec, but I think for our case it's fine
-    RPN = 0x00,
-    NRPN = 0x10,
+    RPN = 0xF4,
+    NRPN = 0xF5,
     Start = 0xFA,
     Continue = 0xFB,
     Stop = 0xFC,
@@ -55,66 +55,10 @@ export const AnalogSourceMap = new Map([
     [AnalogSource.Momentary, "Momentary"],
     [AnalogSource.Persistent, "Persistent"],
     [AnalogSource.Toggle, "Toggle"],
-    [AnalogSource.KeyForce, "Key force"],
+    [AnalogSource.KeyForce, "Key Force"],
 ]);
 
-export type MidiNoteData = {
-    channel: number
-    note: number,
-    source: AnalogSource
-    begin: number
-    end: number
-}
-
-export type MidiCCData = {
-    channel: number
-    control: number,
-    source: AnalogSource
-    begin: number
-    end: number
-}
-
-export type MidiPCData = {
-    channel: number
-    control: number,
-}
-
-export type MidiCPData = {
-    channel: number
-    source: AnalogSource
-    begin: number
-    end: number
-}
-
-export type MidiPitchbendData = {
-    channel: number
-    source: AnalogSource
-    begin: number
-    end: number
-}
-
-
-export type MidiRPNData = {
-    channel: number
-    control: number
-    source: AnalogSource
-    begin: number
-    end: number
-}
-
-
-export type MidiNRPNData = {
-    channel: number
-    control: number
-    source: AnalogSource
-    begin: number
-    end: number
-    
-}
-
-export type MidiSysexData = {
-    sysex: string
-}
+ 
 
 export type MidiActionData = {
     type: MidiType,

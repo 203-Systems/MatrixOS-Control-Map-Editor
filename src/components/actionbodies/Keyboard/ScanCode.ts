@@ -1,8 +1,5 @@
 export enum KeyboardScanCode {
     KEY_USER_DEFINED    =  0,
-    KEY_ERROR_ROLLOVER  =  1,
-    KEY_POST_FAIL       =  2,
-    KEY_ERROR_UNDEFINED =  3,
     KEY_A               =  4,
     KEY_B               =  5,
     KEY_C               =  6,
@@ -109,119 +106,6 @@ export enum KeyboardScanCode {
     KEY_APPLICATION     = 0x65, // Context menu/right click
     KEY_MENU            = 0x65, // Alias
 
-    // Most of the following keys will only work with Linux or not at all.
-    // F13+ keys are mostly used for laptop functions like ECO key.
-    KEY_POWER           = 0x66, // PowerOff (Ubuntu)
-    KEY_PAD_EQUALS      = 0x67, // Dont confuse with KEYPAD_EQUAL_SIGN
-    KEY_F13             = 0x68, // Tools (Ubunutu)
-    KEY_F14             = 0x69, // Launch5 (Ubuntu)
-    KEY_F15             = 0x6A, // Launch6 (Ubuntu)
-    KEY_F16             = 0x6B, // Launch7 (Ubuntu)
-    KEY_F17             = 0x6C, // Launch8 (Ubuntu)
-    KEY_F18             = 0x6D, // Launch9 (Ubuntu)
-    KEY_F19             = 0x6E, // Disabled (Ubuntu)
-    KEY_F20             = 0x6F, // AudioMicMute (Ubuntu)
-    KEY_F21             = 0x70, // Touchpad toggle (Ubuntu)
-    KEY_F22             = 0x71, // TouchpadOn (Ubuntu)
-    KEY_F23             = 0x72, // TouchpadOff Ubuntu)
-    KEY_F24             = 0x73, // Disabled (Ubuntu)
-    KEY_EXECUTE         = 0x74, // Open (Ubuntu)
-    KEY_HELP            = 0x75, // Help (Ubuntu)
-    KEY_MENU2           = 0x76, // Disabled (Ubuntu)
-    KEY_SELECT          = 0x77, // Disabled (Ubuntu)
-    KEY_STOP            = 0x78, // Cancel (Ubuntu)
-    KEY_AGAIN           = 0x79, // Redo (Ubuntu)
-    KEY_UNDO            = 0x7A, // Undo (Ubuntu)
-    KEY_CUT             = 0x7B, // Cut (Ubuntu)
-    KEY_COPY            = 0x7C, // Copy (Ubuntu)
-    KEY_PASTE           = 0x7D, // Paste (Ubuntu)
-    KEY_FIND            = 0x7E, // Find (Ubuntu)
-    KEY_MUTE            = 0x7F,
-    KEY_VOLUME_MUTE     = 0x7F, // Alias
-    KEY_VOLUME_UP       = 0x80,
-    KEY_VOLUME_DOWN     = 0x81,
-    KEY_LOCKING_CAPS_LOCK   = 0x82, // Disabled (Ubuntu)
-    KEY_LOCKING_NUM_LOCK    = 0x83, // Disabled (Ubuntu)
-    KEY_LOCKING_SCROLL_LOCK = 0x84, // Disabled (Ubuntu)
-    KEYPAD_COMMA            = 0x85, // .
-    KEYPAD_EQUAL_SIGN       = 0x86, // Disabled (Ubuntu), Dont confuse with KEYPAD_EQUAL
-    KEY_INTERNATIONAL1      = 0x87, // Disabled (Ubuntu)
-    KEY_INTERNATIONAL2      = 0x88, // Hiragana Katakana (Ubuntu)
-    KEY_INTERNATIONAL3      = 0x89, // Disabled (Ubuntu)
-    KEY_INTERNATIONAL4      = 0x8A, // Henkan (Ubuntu)
-    KEY_INTERNATIONAL5      = 0x8B, // Muhenkan (Ubuntu)
-    KEY_INTERNATIONAL6      = 0x8C, // Disabled (Ubuntu)
-    KEY_INTERNATIONAL7      = 0x8D, // Disabled (Ubuntu)
-    KEY_INTERNATIONAL8      = 0x8E, // Disabled (Ubuntu)
-    KEY_INTERNATIONAL9      = 0x8F, // Disabled (Ubuntu)
-    KEY_LANG1               = 0x90, // Disabled (Ubuntu)
-    KEY_LANG2               = 0x91, // Disabled (Ubuntu)
-    KEY_LANG3               = 0x92, // Katakana (Ubuntu)
-    KEY_LANG4               = 0x93, // Hiragana (Ubuntu)
-    KEY_LANG5               = 0x94, // Disabled (Ubuntu)
-    KEY_LANG6               = 0x95, // Disabled (Ubuntu)
-    KEY_LANG7               = 0x96, // Disabled (Ubuntu)
-    KEY_LANG8               = 0x97, // Disabled (Ubuntu)
-    KEY_LANG9               = 0x98, // Disabled (Ubuntu)
-    KEY_ALTERNATE_ERASE     = 0x99, // Disabled (Ubuntu)
-    KEY_SYSREQ_ATTENTION    = 0x9A, // Disabled (Ubuntu)
-    KEY_CANCEL              = 0x9B, // Disabled (Ubuntu)
-    KEY_CLEAR               = 0x9C, // Delete (Ubuntu)
-    KEY_PRIOR               = 0x9D, // Disabled (Ubuntu)
-    KEY_RETURN2             = 0x9E, // Disabled (Ubuntu), Do not confuse this with KEY_ENTER
-    KEY_SEPARATOR           = 0x9F, // Disabled (Ubuntu)
-    KEY_OUT                 = 0xA0, // Disabled (Ubuntu)
-    KEY_OPER                = 0xA1, // Disabled (Ubuntu)
-    KEY_CLEAR_AGAIN         = 0xA2, // Disabled (Ubuntu)
-    KEY_CRSEL_PROPS         = 0xA3, // Disabled (Ubuntu)
-    KEY_EXSEL               = 0xA4, // Disabled (Ubuntu)
-
-    KEY_PAD_00                  = 0xB0, // Disabled (Ubuntu)
-    KEY_PAD_000                 = 0xB1, // Disabled (Ubuntu)
-    KEY_THOUSANDS_SEPARATOR     = 0xB2, // Disabled (Ubuntu)
-    KEY_DECIMAL_SEPARATOR       = 0xB3, // Disabled (Ubuntu)
-    KEY_CURRENCY_UNIT           = 0xB4, // Disabled (Ubuntu)
-    KEY_CURRENCY_SUB_UNIT       = 0xB5, // Disabled (Ubuntu)
-    KEYPAD_LEFT_BRACE           = 0xB6, // (
-    KEYPAD_RIGHT_BRACE          = 0xB7, // )
-    KEYPAD_LEFT_CURLY_BRACE     = 0xB8, // Disabled (Ubuntu)
-    KEYPAD_RIGHT_CURLY_BRACE    = 0xB9, // Disabled (Ubuntu)
-    KEYPAD_TAB                  = 0xBA, // Disabled (Ubuntu)
-    KEYPAD_BACKSPACE            = 0xBB, // Disabled (Ubuntu)
-    KEYPAD_A                    = 0xBC, // Disabled (Ubuntu)
-    KEYPAD_B                    = 0xBD, // Disabled (Ubuntu)
-    KEYPAD_C                    = 0xBE, // Disabled (Ubuntu)
-    KEYPAD_D                    = 0xBF, // Disabled (Ubuntu)
-    KEYPAD_E                    = 0xC0, // Disabled (Ubuntu)
-    KEYPAD_F                    = 0xC1, // Disabled (Ubuntu)
-    KEYPAD_XOR                  = 0xC2, // Disabled (Ubuntu)
-    KEYPAD_CARET                = 0xC3, // Disabled (Ubuntu)
-    KEYPAD_PERCENT              = 0xC4, // Disabled (Ubuntu)
-    KEYPAD_LESS_THAN            = 0xC5, // Disabled (Ubuntu)
-    KEYPAD_GREATER_THAN         = 0xC6, // Disabled (Ubuntu)
-    KEYPAD_AMPERSAND            = 0xC7, // Disabled (Ubuntu)
-    KEYPAD_DOUBLEAMPERSAND      = 0xC8, // Disabled (Ubuntu)
-    KEYPAD_PIPE                 = 0xC9, // Disabled (Ubuntu)
-    KEYPAD_DOUBLEPIPE           = 0xCA, // Disabled (Ubuntu)
-    KEYPAD_COLON                = 0xCB, // Disabled (Ubuntu)
-    KEYPAD_POUND_SIGN           = 0xCC, // Disabled (Ubuntu)
-    KEYPAD_SPACE                = 0xCD, // Disabled (Ubuntu)
-    KEYPAD_AT_SIGN              = 0xCE, // Disabled (Ubuntu)
-    KEYPAD_EXCLAMATION_POINT    = 0xCF, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_STORE         = 0xD0, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_RECALL        = 0xD1, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_CLEAR         = 0xD2, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_ADD           = 0xD3, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_SUBTRACT      = 0xD4, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_MULTIPLY      = 0xD5, // Disabled (Ubuntu)
-    KEYPAD_MEMORY_DIVIDE        = 0xD6, // Disabled (Ubuntu)
-    KEYPAD_PLUS_MINUS           = 0xD7, // Disabled (Ubuntu)
-    KEYPAD_CLEAR                = 0xD8, // Delete (Ubuntu)
-    KEYPAD_CLEAR_ENTRY          = 0xD9, // Disabled (Ubuntu)
-    KEYPAD_BINARY               = 0xDA, // Disabled (Ubuntu)
-    KEYPAD_OCTAL                = 0xDB, // Disabled (Ubuntu)
-    KEYPAD_DECIMAL              = 0xDC, // Disabled (Ubuntu)
-    KEYPAD_HEXADECIMAL          = 0xDD, // Disabled (Ubuntu)
 
     KEY_LEFT_CTRL           = 0xE0,
     KEY_LEFT_SHIFT          = 0xE1,
@@ -236,7 +120,7 @@ export enum KeyboardScanCode {
 };
 
 export const KeyboardScanCodeFriendlyName: {[key in KeyboardScanCode]: string}= {
-    [KeyboardScanCode.KEY_USER_DEFINED]: "User Defined",
+    [KeyboardScanCode.KEY_USER_DEFINED]: "Custom",
     [KeyboardScanCode.KEY_ERROR_ROLLOVER]: "ROLLOVER ERROR",
     [KeyboardScanCode.KEY_POST_FAIL]: "POST FAIL",
     [KeyboardScanCode.KEY_ERROR_UNDEFINED]: "UNDEFINED ERROR",
@@ -455,4 +339,227 @@ export const KeyboardScanCodeFriendlyName: {[key in KeyboardScanCode]: string}= 
     [KeyboardScanCode.KEY_RIGHT_SHIFT]: "RIGHT SHIFT",
     [KeyboardScanCode.KEY_RIGHT_ALT]: "RIGHT ALT",
     [KeyboardScanCode.KEY_RIGHT_GUI]: "RIGHT GUI",
+};
+
+export const KeyboardScanCodeShortName: {[key in KeyboardScanCode]: string}= {
+    [KeyboardScanCode.KEY_USER_DEFINED]: "USER",
+    [KeyboardScanCode.KEY_ERROR_ROLLOVER]: "ROLVR",
+    [KeyboardScanCode.KEY_POST_FAIL]: "PFAIL",
+    [KeyboardScanCode.KEY_ERROR_UNDEFINED]: "ERRUN",
+    [KeyboardScanCode.KEY_A]: "A",
+    [KeyboardScanCode.KEY_B]: "B",
+    [KeyboardScanCode.KEY_C]: "C",
+    [KeyboardScanCode.KEY_D]: "D",
+    [KeyboardScanCode.KEY_E]: "E",
+    [KeyboardScanCode.KEY_F]: "F",
+    [KeyboardScanCode.KEY_G]: "G",
+    [KeyboardScanCode.KEY_H]: "H",
+    [KeyboardScanCode.KEY_I]: "I",
+    [KeyboardScanCode.KEY_J]: "J",
+    [KeyboardScanCode.KEY_K]: "K",
+    [KeyboardScanCode.KEY_L]: "L",
+    [KeyboardScanCode.KEY_M]: "M",
+    [KeyboardScanCode.KEY_N]: "N",
+    [KeyboardScanCode.KEY_O]: "O",
+    [KeyboardScanCode.KEY_P]: "P",
+    [KeyboardScanCode.KEY_Q]: "Q",
+    [KeyboardScanCode.KEY_R]: "R",
+    [KeyboardScanCode.KEY_S]: "S",
+    [KeyboardScanCode.KEY_T]: "T",
+    [KeyboardScanCode.KEY_U]: "U",
+    [KeyboardScanCode.KEY_V]: "V",
+    [KeyboardScanCode.KEY_W]: "W",
+    [KeyboardScanCode.KEY_X]: "X",
+    [KeyboardScanCode.KEY_Y]: "Y",
+    [KeyboardScanCode.KEY_Z]: "Z",
+    [KeyboardScanCode.KEY_1]: "1",
+    [KeyboardScanCode.KEY_2]: "2",
+    [KeyboardScanCode.KEY_3]: "3",
+    [KeyboardScanCode.KEY_4]: "4",
+    [KeyboardScanCode.KEY_5]: "5",
+    [KeyboardScanCode.KEY_6]: "6",
+    [KeyboardScanCode.KEY_7]: "7",
+    [KeyboardScanCode.KEY_8]: "8",
+    [KeyboardScanCode.KEY_9]: "9",
+    [KeyboardScanCode.KEY_0]: "0",
+    [KeyboardScanCode.KEY_ENTER]: "ENTER",
+    [KeyboardScanCode.KEY_ESC]: "ESC",
+    [KeyboardScanCode.KEY_BACKSPACE]: "BKSP",
+    [KeyboardScanCode.KEY_TAB]: "TAB",
+    [KeyboardScanCode.KEY_SPACE]: "SPACE",
+    [KeyboardScanCode.KEY_MINUS]: "-",
+    [KeyboardScanCode.KEY_EQUAL]: "=",
+    [KeyboardScanCode.KEY_LEFT_BRACE]: "[",
+    [KeyboardScanCode.KEY_RIGHT_BRACE]: "]",
+    [KeyboardScanCode.KEY_BACKSLASH]: "\\",
+    [KeyboardScanCode.KEY_NON_US_NUM]: "NONU",
+    [KeyboardScanCode.KEY_SEMICOLON]: ";",
+    [KeyboardScanCode.KEY_QUOTE]: "\"",	
+    [KeyboardScanCode.KEY_TILDE]: "~",
+    [KeyboardScanCode.KEY_COMMA]: ",",
+    [KeyboardScanCode.KEY_PERIOD]: ".",
+    [KeyboardScanCode.KEY_SLASH]: "/",
+    [KeyboardScanCode.KEY_CAPS_LOCK]: "CAPS",
+    [KeyboardScanCode.KEY_F1]: "F1",
+    [KeyboardScanCode.KEY_F2]: "F2",
+    [KeyboardScanCode.KEY_F3]: "F3",
+    [KeyboardScanCode.KEY_F4]: "F4",
+    [KeyboardScanCode.KEY_F5]: "F5",
+    [KeyboardScanCode.KEY_F6]: "F6",
+    [KeyboardScanCode.KEY_F7]: "F7",
+    [KeyboardScanCode.KEY_F8]: "F8",
+    [KeyboardScanCode.KEY_F9]: "F9",
+    [KeyboardScanCode.KEY_F10]: "F10",
+    [KeyboardScanCode.KEY_F11]: "F11",
+    [KeyboardScanCode.KEY_F12]: "F12",
+    [KeyboardScanCode.KEY_PRINT]: "PRNT",
+    [KeyboardScanCode.KEY_SCROLL_LOCK]: "SCRL",
+    [KeyboardScanCode.KEY_PAUSE]: "PAUSE",
+    [KeyboardScanCode.KEY_INSERT]: "INSRT",
+    [KeyboardScanCode.KEY_HOME]: "HOME",
+    [KeyboardScanCode.KEY_PAGE_UP]: "PGUP",
+    [KeyboardScanCode.KEY_DELETE]: "DEL",
+    [KeyboardScanCode.KEY_END]: "END",
+    [KeyboardScanCode.KEY_PAGE_DOWN]: "PGDN",
+    [KeyboardScanCode.KEY_RIGHT_ARROW]: "RGHT",
+    [KeyboardScanCode.KEY_LEFT_ARROW]: "LEFT",
+    [KeyboardScanCode.KEY_DOWN_ARROW]: "DOWN",
+    [KeyboardScanCode.KEY_UP_ARROW]: "UP",
+    [KeyboardScanCode.KEY_NUM_LOCK]: "NUMLK",
+    [KeyboardScanCode.KEYPAD_DIVIDE]: "NUM /",
+    [KeyboardScanCode.KEYPAD_MULTIPLY]: "NUM *",
+    [KeyboardScanCode.KEYPAD_SUBTRACT]: "NUM -",
+    [KeyboardScanCode.KEYPAD_ADD]: "NUM +",
+    [KeyboardScanCode.KEYPAD_ENTER]: "N ENT",
+    [KeyboardScanCode.KEYPAD_1]: "NUM 1",
+    [KeyboardScanCode.KEYPAD_2]: "NUM 2",
+    [KeyboardScanCode.KEYPAD_3]: "NUM 3",
+    [KeyboardScanCode.KEYPAD_4]: "NUM 4",
+    [KeyboardScanCode.KEYPAD_5]: "NUM 5",
+    [KeyboardScanCode.KEYPAD_6]: "NUM 6",
+    [KeyboardScanCode.KEYPAD_7]: "NUM 7",
+    [KeyboardScanCode.KEYPAD_8]: "NUM 8",
+    [KeyboardScanCode.KEYPAD_9]: "NUM 9",
+    [KeyboardScanCode.KEYPAD_0]: "NUM 0",
+    [KeyboardScanCode.KEYPAD_DOT]: "NUM .",
+    [KeyboardScanCode.KEY_NON_US]: "NUS",
+    [KeyboardScanCode.KEY_MENU]: "MENU",
+    [KeyboardScanCode.KEY_POWER]: "PWR",
+    [KeyboardScanCode.KEY_PAD_EQUALS]: "PDEQ",
+    [KeyboardScanCode.KEY_F13]: "F13",
+    [KeyboardScanCode.KEY_F14]: "F14",
+    [KeyboardScanCode.KEY_F15]: "F15",
+    [KeyboardScanCode.KEY_F16]: "F16",
+    [KeyboardScanCode.KEY_F17]: "F17",
+    [KeyboardScanCode.KEY_F18]: "F18",
+    [KeyboardScanCode.KEY_F19]: "F19",
+    [KeyboardScanCode.KEY_F20]: "F20",
+    [KeyboardScanCode.KEY_F21]: "F21",
+    [KeyboardScanCode.KEY_F22]: "F22",
+    [KeyboardScanCode.KEY_F23]: "F23",
+    [KeyboardScanCode.KEY_F24]: "F24",
+    [KeyboardScanCode.KEY_EXECUTE]: "EXEC",
+    [KeyboardScanCode.KEY_HELP]: "HELP",
+    [KeyboardScanCode.KEY_MENU2]: "MNU2",
+    [KeyboardScanCode.KEY_SELECT]: "SELE",
+    [KeyboardScanCode.KEY_STOP]: "STOP",
+    [KeyboardScanCode.KEY_AGAIN]: "AGN",
+    [KeyboardScanCode.KEY_UNDO]: "UNDO",
+    [KeyboardScanCode.KEY_CUT]: "CUT",
+    [KeyboardScanCode.KEY_COPY]: "COPY",
+    [KeyboardScanCode.KEY_PASTE]: "PASTE",
+    [KeyboardScanCode.KEY_FIND]: "FIND",
+    [KeyboardScanCode.KEY_VOLUME_MUTE]: "MUTE",
+    [KeyboardScanCode.KEY_VOLUME_UP]: "VOL +",
+    [KeyboardScanCode.KEY_VOLUME_DOWN]: "VOL -",
+    [KeyboardScanCode.KEY_LOCKING_CAPS_LOCK]: "LCP",
+    [KeyboardScanCode.KEY_LOCKING_NUM_LOCK]: "LNUM",
+    [KeyboardScanCode.KEY_LOCKING_SCROLL_LOCK]: "LSCR",
+    [KeyboardScanCode.KEYPAD_COMMA]: "KP,",
+    [KeyboardScanCode.KEYPAD_EQUAL_SIGN]: "KPEQ",
+    [KeyboardScanCode.KEY_INTERNATIONAL1]: "INT1",
+    [KeyboardScanCode.KEY_INTERNATIONAL2]: "INT2",
+    [KeyboardScanCode.KEY_INTERNATIONAL3]: "INT3",
+    [KeyboardScanCode.KEY_INTERNATIONAL4]: "INT4",
+    [KeyboardScanCode.KEY_INTERNATIONAL5]: "INT5",
+    [KeyboardScanCode.KEY_INTERNATIONAL6]: "INT6",
+    [KeyboardScanCode.KEY_INTERNATIONAL7]: "INT7",
+    [KeyboardScanCode.KEY_INTERNATIONAL8]: "INT8",
+    [KeyboardScanCode.KEY_INTERNATIONAL9]: "INT9",
+    [KeyboardScanCode.KEY_LANG1]: "LG1",
+    [KeyboardScanCode.KEY_LANG2]: "LG2",
+    [KeyboardScanCode.KEY_LANG3]: "LG3",
+    [KeyboardScanCode.KEY_LANG4]: "LG4",
+    [KeyboardScanCode.KEY_LANG5]: "LG5",
+    [KeyboardScanCode.KEY_LANG6]: "LG6",
+    [KeyboardScanCode.KEY_LANG7]: "LG7",
+    [KeyboardScanCode.KEY_LANG8]: "LG8",
+    [KeyboardScanCode.KEY_LANG9]: "LG9",
+    [KeyboardScanCode.KEY_ALTERNATE_ERASE]: "AER",
+    [KeyboardScanCode.KEY_SYSREQ_ATTENTION]: "SRAT",
+    [KeyboardScanCode.KEY_CANCEL]: "CANC",
+    [KeyboardScanCode.KEY_CLEAR]: "CLR",
+    [KeyboardScanCode.KEY_PRIOR]: "PRIO",
+    [KeyboardScanCode.KEY_RETURN2]: "RET2",
+    [KeyboardScanCode.KEY_SEPARATOR]: "SEPA",
+    [KeyboardScanCode.KEY_OUT]: "OUT",
+    [KeyboardScanCode.KEY_OPER]: "OPER",
+    [KeyboardScanCode.KEY_CLEAR_AGAIN]: "CLAG",
+    [KeyboardScanCode.KEY_CRSEL_PROPS]: "CRSL",
+    [KeyboardScanCode.KEY_EXSEL]: "EXSL",
+    [KeyboardScanCode.KEY_PAD_00]: "P00",
+    [KeyboardScanCode.KEY_PAD_000]: "P000",
+    [KeyboardScanCode.KEY_THOUSANDS_SEPARATOR]: "TSEP",
+    [KeyboardScanCode.KEY_DECIMAL_SEPARATOR]: "DSEP",
+    [KeyboardScanCode.KEY_CURRENCY_UNIT]: "CURU",
+    [KeyboardScanCode.KEY_CURRENCY_SUB_UNIT]: "CSUB",
+    [KeyboardScanCode.KEYPAD_LEFT_BRACE]: "KP(",
+    [KeyboardScanCode.KEYPAD_RIGHT_BRACE]: "KP)",
+    [KeyboardScanCode.KEYPAD_LEFT_CURLY_BRACE]: "KP{",
+    [KeyboardScanCode.KEYPAD_RIGHT_CURLY_BRACE]: "KP}",
+    [KeyboardScanCode.KEYPAD_TAB]: "KPTB",
+    [KeyboardScanCode.KEYPAD_BACKSPACE]: "KPBS",
+    [KeyboardScanCode.KEYPAD_A]: "KPA",
+    [KeyboardScanCode.KEYPAD_B]: "KPB",
+    [KeyboardScanCode.KEYPAD_C]: "KPC",
+    [KeyboardScanCode.KEYPAD_D]: "KPD",
+    [KeyboardScanCode.KEYPAD_E]: "KPE",
+    [KeyboardScanCode.KEYPAD_F]: "KPF",
+    [KeyboardScanCode.KEYPAD_XOR]: "XOR",
+    [KeyboardScanCode.KEYPAD_CARET]: "KPC^",
+    [KeyboardScanCode.KEYPAD_PERCENT]: "KP%",
+    [KeyboardScanCode.KEYPAD_LESS_THAN]: "KP<",
+    [KeyboardScanCode.KEYPAD_GREATER_THAN]: "KP>",
+    [KeyboardScanCode.KEYPAD_AMPERSAND]: "KP&",
+    [KeyboardScanCode.KEYPAD_DOUBLEAMPERSAND]: "K&&",
+    [KeyboardScanCode.KEYPAD_PIPE]: "KP|",
+    [KeyboardScanCode.KEYPAD_DOUBLEPIPE]: "KP||",
+    [KeyboardScanCode.KEYPAD_COLON]: "KP:",
+    [KeyboardScanCode.KEYPAD_POUND_SIGN]: "KP#",
+    [KeyboardScanCode.KEYPAD_SPACE]: "KP_",
+    [KeyboardScanCode.KEYPAD_AT_SIGN]: "KP@",
+    [KeyboardScanCode.KEYPAD_EXCLAMATION_POINT]: "KP!",
+    [KeyboardScanCode.KEYPAD_MEMORY_STORE]: "KMS",
+    [KeyboardScanCode.KEYPAD_MEMORY_RECALL]: "KMR",
+    [KeyboardScanCode.KEYPAD_MEMORY_CLEAR]: "KMC",
+    [KeyboardScanCode.KEYPAD_MEMORY_ADD]: "KMA",
+    [KeyboardScanCode.KEYPAD_MEMORY_SUBTRACT]: "KMS-",
+    [KeyboardScanCode.KEYPAD_MEMORY_MULTIPLY]: "KMX",
+    [KeyboardScanCode.KEYPAD_MEMORY_DIVIDE]: "KMD",
+    [KeyboardScanCode.KEYPAD_PLUS_MINUS]: "KP+-",
+    [KeyboardScanCode.KEYPAD_CLEAR]: "KPCL",
+    [KeyboardScanCode.KEYPAD_CLEAR_ENTRY]: "KPE",
+    [KeyboardScanCode.KEYPAD_BINARY]: "KP2",
+    [KeyboardScanCode.KEYPAD_OCTAL]: "KP8",
+    [KeyboardScanCode.KEYPAD_DECIMAL]: "KP10",
+    [KeyboardScanCode.KEYPAD_HEXADECIMAL]: "KP16",
+    [KeyboardScanCode.KEY_LEFT_CTRL]: "LCTR",
+    [KeyboardScanCode.KEY_LEFT_SHIFT]: "LSHF",
+    [KeyboardScanCode.KEY_LEFT_ALT]: "LALT",
+    [KeyboardScanCode.KEY_LEFT_GUI]: "LGUI",
+    [KeyboardScanCode.KEY_RIGHT_CTRL]: "RCTR",
+    [KeyboardScanCode.KEY_RIGHT_SHIFT]: "RSHF",
+    [KeyboardScanCode.KEY_RIGHT_ALT]: "RALT",
+    [KeyboardScanCode.KEY_RIGHT_GUI]: "RGUI",
+    [KeyboardScanCode.KEY_RIGHT_WINDOWS]: "RWND",
 };

@@ -19,6 +19,7 @@
         } else if (value < min) {
             value = min;
         }
+        value = roundToTwo(value);
     }
 
     function increment() {
@@ -31,7 +32,12 @@
 
     // Whenever value changes, update the input display to show two decimals
     $: if (inputRef && !isNaN(value)) {
-        inputRef.value = value.toFixed(2);
+        try{ // For some reason type "-" breaks the input
+            inputRef.value = value.toFixed(2);
+        }
+        catch(e){
+            console.error(e);
+        }
     }
 </script>
 

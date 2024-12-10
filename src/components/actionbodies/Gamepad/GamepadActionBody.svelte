@@ -30,7 +30,7 @@
                 {/if}
             </div>
         </div>
-        {#if data.key >= GamepadKeycode.GAMEPAD_LEFT_STICK_X_AXIS && data.key <= GamepadKeycode.GAMEPAD_RIGHT_STICK_Y_AXIS}
+        {#if data.key >= GamepadKeycode.GAMEPAD_X_AXIS && data.key <= GamepadKeycode.GAMEPAD_RZ_AXIS}
         <div class="action-setting-slot">
             <span>Analog Source</span>
 
@@ -40,17 +40,6 @@
             <span>Range</span>
             <FloatUpDown bind:value={data.begin} min={-1.0} max={1.0}/>
             <FloatUpDown bind:value={data.end} min={-1.0} max={1.0}/>
-        </div>
-        {:else if data.key === GamepadKeycode.GAMEPAD_LEFT_TRIGGER_AXIS || data.key === GamepadKeycode.GAMEPAD_RIGHT_TRIGGER_AXIS}
-        <div class="action-setting-slot">
-            <span>Analog Source</span>
-
-            <DropDown options={AnalogSourceFriendlyName} bind:value={data.analog}/>
-        </div>
-        <div class="action-setting-slot">
-            <span>Range</span>
-            <FloatUpDown bind:value={data.begin} min={0.0} max={1.0}/>
-            <FloatUpDown bind:value={data.end} min={0.0} max={1.0}/>
         </div>
         {:else if data.key === GamepadKeycode.GAMEPAD_DPAD}
         <div class="action-setting-slot">

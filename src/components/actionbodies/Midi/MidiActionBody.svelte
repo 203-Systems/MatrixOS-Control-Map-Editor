@@ -88,7 +88,7 @@
 
             case MidiType.Sysex:
                 data.data = {
-                    sysex: "240 ... 247",
+                    sysex: "0xF0 0xF7",
                 }
                 break;
 

@@ -6,7 +6,7 @@ import {WatsonHealthSpineLabel} from "carbon-icons-svelte";
 import type {ActionEffectData} from "./ActionColorEffectData";
 
 export class ActionColorEffect implements Effect {
-    static readonly identifier: string = "color";
+    static readonly identifier: string = "actioncolor";
     static readonly description: string = "Action Driven Color";
     static readonly icon: SvelteComponent = WatsonHealthSpineLabel;
     static readonly body: SvelteComponent = ActionColorEffectBody;
@@ -24,28 +24,39 @@ export class ActionColorEffect implements Effect {
     }
 
     import(data: any[]): boolean {
-        // try
-        // {
-        //     this.data.hasDefault = (data[0] & 0b1) > 0;
-        //     this.data.hasActivated = (data[0] & 0b10) > 0;
-        //     this.data.default = [((data[1] >> 16) & 0xFF) / 255, ((data[1] >> 8) & 0xFF) / 255, (data[1] & 0xFF) / 255];
-        //     this.data.activated = [((data[2] >> 16) & 0xFF) / 255, ((data[2] >> 8) & 0xFF) / 255, (data[2] & 0xFF) / 255];
-        //     return true
-        // }
-        // catch (error)
-        // {
-        //     console.error("ActionColorEffect: Import Failed");
-        //     return false;
-        // }
+        try
+        {
+            this.data.enabled = []
+            for (let i = 0; i < 16; i++) {
+                this.data.enabled[i] = (data[0] & (1 << i)) > 0;
+            }
+            var ptr = 1;
+            for (let i = 0; i < 16; i++) {
+                if (this.data.enabled[i]) {
+                    this.data.color[i] = [(data[ptr] >> 16) & 0xFF, (data[ptr] >> 8) & 0xFF, data[ptr] & 0xFF].map(x => x / 255);
+                    ptr++;
+                }
+            }
+            return true;
+        }
+        catch (error)
+        {
+            console.error("ActionColorEffect: Import Failed");
+            return false;
+        }
     }
 
     export(): any[] | undefined {
-        // var data = []
-        // data[0] = Number(this.data.hasDefault);
-        // data[0] += Number(this.data.hasActivated) << 1;
-        // data[1] = (Math.round(this.data.default[0] * 255) << 16) + (Math.round(this.data.default[1] * 255) << 8) + Math.round(this.data.default[2] * 255);
-        // data[2] = (Math.round(this.data.activated[0] * 255) << 16) + (Math.round(this.data.activated[1] * 255) << 8) + Math.round(this.data.activated[2] * 255);
-        // return data;
+        var data:number[] = []
+        for (let i = 0; i < 16; i++) {
+            data[0] = (data[0] | 0) + (Number(this.data.enabled[i]) << i);
+        }
+        for (let i = 0; i < 16; i++) {
+            if (this.data.enabled[i]) {
+                data.push((Math.round(this.data.color[i][0] * 255) << 16) + (Math.round(this.data.color[i][1] * 255) << 8) + Math.round(this.data.color[i][2] * 255));
+            }
+        }
+        return data;
     }
 
     info(type: ActionInfoType): string | null{

@@ -14,13 +14,9 @@
         {
             title: "Basic",
             keyCollections: [
-                { title: "Action", keys: createNumberArray(GamepadKeycode.GAMEPAD_A, GamepadKeycode.GAMEPAD_Z) },
-                { title: "DPad", keys: [GamepadKeycode.GAMEPAD_DPAD]},
-                { title: "Function", keys: createNumberArray(GamepadKeycode.GAMEPAD_SELECT, GamepadKeycode.GAMEPAD_MODE) },
-                { title: "Shoulder", keys: createNumberArray(GamepadKeycode.GAMEPAD_L1, GamepadKeycode.GAMEPAD_R2) },
-                { title: "Trigger", keys: [GamepadKeycode.GAMEPAD_LEFT_TRIGGER_AXIS, GamepadKeycode.GAMEPAD_RIGHT_TRIGGER_AXIS] },
-                { title: "Joystick", keys: [GamepadKeycode.GAMEPAD_LEFT_STICK_X_AXIS, GamepadKeycode.GAMEPAD_LEFT_STICK_Y_AXIS, GamepadKeycode.GAMEPAD_L3, GamepadKeycode.GAMEPAD_RIGHT_STICK_X_AXIS, GamepadKeycode.GAMEPAD_RIGHT_STICK_Y_AXIS, GamepadKeycode.GAMEPAD_R3] },
-                { title: "Generic", keys: createNumberArray(GamepadKeycode.GAMEPAD_1, GamepadKeycode.GAMEPAD_32) }
+                { title: "Buttons", keys: createNumberArray(GamepadKeycode.GAMEPAD_1, GamepadKeycode.GAMEPAD_32) },
+                { title: "DPad", keys: [GamepadKeycode.GAMEPAD_DPAD] },
+                { title: "Axes", keys: createNumberArray(GamepadKeycode.GAMEPAD_X_AXIS, GamepadKeycode.GAMEPAD_RZ_AXIS) },
            ]
         }
     ]

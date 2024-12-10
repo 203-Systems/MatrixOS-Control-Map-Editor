@@ -9,11 +9,12 @@
     export let data: ActionColorEffectData;
 
     function updateColor(color: string, target: number){
+        console.log(`Color ${target} updated to ${color}`);
         const rgb = hexToRgb(color);
         if (rgb) {
-            data[target][0] = rgb.r / 255;
-            data[target][1] = rgb.g / 255;
-            data[target][2] = rgb.b / 255;
+            data.color[target][0] = rgb.r / 255;
+            data.color[target][1] = rgb.g / 255;
+            data.color[target][2] = rgb.b / 255;
         }
     }
 
