@@ -177,6 +177,7 @@ export class KeymapEditor {
                     }
                 }
                 deviceData.actions[x][y] = this.compressArray(deviceData.actions[x][y]);
+                deviceData.actions[x][y] = [deviceData.actions[x][y][0], ...deviceData.actions[x][y].slice(1).reverse()]; // Reverse the array to enable passthrough serial reading
             }
             deviceData.actions[x] = this.compressArray(deviceData.actions[x], true);
         }
@@ -265,7 +266,8 @@ export class KeymapEditor {
                     let layer_map = this.bitmapToArray(Number(actions_to_load[x_index + 1][y_index + 1][0]), uad.devices[0].layers);
                     for (var [layer_index, layer] of layer_map.entries()) {
                         // console.log(`X: ${x} Y: ${y} Layer: ${layer}`)
-                        for (var action of actions_to_load[x_index + 1][y_index + 1][layer_index + 1]) {
+                        var layer_array_len = actions_to_load[x_index + 1][y_index + 1].length;
+                        for (var action of actions_to_load[x_index + 1][y_index + 1][layer_array_len - layer_index - 1]) {
                             var action_type = uad.action_list[action[0]];
 
                             // Create new action
