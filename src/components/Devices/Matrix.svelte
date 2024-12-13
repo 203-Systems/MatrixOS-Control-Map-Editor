@@ -64,7 +64,7 @@
             <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
                 <div class="matrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
-                        <div class="button-action-display" style="background-color: {activeActions[x]?.[y]?.effects?.length > 0 ? activeActions[x]?.[y]?.effects[0].info("Color") : "#898989"}"> 
+                        <div class="button-action-display" style="background-color: {activeActions[x]?.[y]?.effects?.length > 0 ? activeActions[x]?.[y]?.effects[0].info("Color") : "#C0C0C0"}"> 
                         <!-- I don't like this since the color is hard coded in. TODO fix this -->
                         {#if activeActions[x]?.[y]?.actions?.length > 0}
                             <div class="action-display-container" in:fade="{{duration: 100}}" out:fade="{{duration: 100}}">
@@ -133,7 +133,7 @@
         width: 100%;
         height: 100%;
         border-radius: 8%;
-        background-color: rgb(120, 120, 120);
+        background-color: rgb(150, 150, 150);
         overflow: hidden;
 
         transition: background-color 0.1s ease;
