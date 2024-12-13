@@ -3,7 +3,7 @@
     import Matrix from "../components/Devices/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import Popup from "../components/common/Popup.svelte";
-    import Dropdown from "../components/common/Dropdown.svelte";
+    import DropDown from "../components/common/DropDown.svelte";
 
     import LayerSelector from "../components/LayerSelector.svelte";
     import { KeymapEditor, EditorState} from "$lib/editors/KeymapEditor";
@@ -224,7 +224,7 @@
                     <span>{$t("setting.language") + ":"}</span>
                 </div>
                 <div class="setting-option">
-                    <Dropdown
+                    <DropDown
                         options={new Map($locales.map(key => [key, `lang.${key}`]))}
                         bind:value={settings.language}
                         on:changed={(e) => {
