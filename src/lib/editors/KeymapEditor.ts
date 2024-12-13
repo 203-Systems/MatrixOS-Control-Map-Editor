@@ -25,8 +25,10 @@ export enum EditorState {
     DEVICE_SAVING_UAD,
     DEVICE_LOADING_UAD,
 
-    IMPORT_FROM_DEVICE_COMPLETED,
+    UADA_EXPORT_COMPLETED,
     UPLOAD_TO_DEVICE_COMPLETED,
+    IMPORT_FROM_UADA_COMPLETED,
+    IMPORT_FROM_DEVICE_COMPLETED,
 
     // USER_SELECTING_FILE,
     GENERATING_UAD,
@@ -174,29 +176,20 @@ export class KeymapEditor {
     updateEditorState(state: EditorState) {
         this.editorState = state;
         
-        if(state >= EditorState.USER_SELECTING_DEVICE && state <= EditorState.DEVICE_LOADING_UAD) 
-        {
-            console.log("Viewer On State")
-            this.editorStateViewer = true;
-        }
-        else if (state >= EditorState.UPLOAD_TO_DEVICE_COMPLETED)
-        {
-            this.editorStateViewer = true;
-        }
-        else if (state >= EditorState.IMPORT_FROM_DEVICE_COMPLETED) 
+        if (state == EditorState.IMPORT_FROM_DEVICE_COMPLETED || state == EditorState.IMPORT_FROM_UADA_COMPLETED)
         {
             this.editorStateViewer = false;
         }
+        else if(state >= EditorState.USER_SELECTING_DEVICE)
+        {
+            this.editorStateViewer = true;
+        } 
 
         if(state >= EditorState.BROWSER_NOT_SUPPORTED && state <= EditorState.PARSING_UAD_ERROR) 
         {
             this.editorStateViewerCloseable = true;
         }
-        else if (state >= EditorState.UPLOAD_TO_DEVICE_COMPLETED)
-        {
-            this.editorStateViewerCloseable = true;
-        }
-        else if (state >= EditorState.IMPORT_FROM_DEVICE_COMPLETED) 
+        else if (state >= EditorState.UADA_EXPORT_COMPLETED && state <= EditorState.DEVICE_LOADING_UAD_ERROR)
         {
             this.editorStateViewerCloseable = true;
         }
@@ -395,6 +388,7 @@ export class KeymapEditor {
 
 
     importUADA() {
+        console.log("Import UADA")
         // Open File Dialog
         var input = document.createElement('input');
 
@@ -409,6 +403,7 @@ export class KeymapEditor {
                 this.updateEditorState(EditorState.PARSING_UAD);
                 try {
                     this.loadUAD(uad);
+                    this.updateEditorState(EditorState.IMPORT_FROM_UADA_COMPLETED);
                 } catch (error) {
                     this.updateEditorState(EditorState.PARSING_UAD_ERROR);
                     console.error("Failed to parse UAD");
@@ -432,11 +427,14 @@ export class KeymapEditor {
             return;
         }
 
+        this.updateEditorState(EditorState.UADA_EXPORT_COMPLETED);
+
         // Download JSON
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(uad));
         var downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "keymap.uada");
+        var time = new Date();
+        downloadAnchorNode.setAttribute("download", `control-map-${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}-${time.getHours()}-${time.getMinutes()}.uada`);
         document.body.appendChild(downloadAnchorNode); // required for firefox
         downloadAnchorNode.click();
         downloadAnchorNode.remove();

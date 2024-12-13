@@ -98,6 +98,7 @@
         [EditorState.DEVICE_SAVING_UAD]: $t('editor_state.device_saving_uad'),
         [EditorState.DEVICE_LOADING_UAD]: $t('editor_state.device_loading_uad'),
 
+        [EditorState.UADA_EXPORT_COMPLETED]: $t('editor_state.uada_exported_completed'),
         [EditorState.UPLOAD_TO_DEVICE_COMPLETED]: $t('editor_state.upload_to_device_completed'),
         [EditorState.IMPORT_FROM_DEVICE_COMPLETED]: $t('editor_state.import_from_device_completed'),
 

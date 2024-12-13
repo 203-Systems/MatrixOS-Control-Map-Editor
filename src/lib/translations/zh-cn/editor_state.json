@@ -10,6 +10,7 @@
     "uploading_to_device": "正在上传控制布局到设备",
     "device_saving_uad": "正在保存控制布局到设备",
     "device_loading_uad": "正在从设备加载控制布局",
+    "uada_exported_completed": "控制布局导出完成",
     "upload_to_device_completed": "上传到设备完成",
     "import_from_device_completed": "从设备导入完成",
     "generating_uad": "正在生成控制布局",
