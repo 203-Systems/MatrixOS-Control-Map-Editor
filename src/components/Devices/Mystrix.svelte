@@ -58,11 +58,11 @@
     })
 </script>
 
-<div class="lp-border">
+<div class="mystrix-border">
     {#each Array(8) as _, y}
         {#each Array(8) as _, x}
-            <div class="matrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
-                <div class="matrix-button" on:click={() => selectKey([x, y])}
+            <div class="mystrix-button-container" class:selected={Array.isArray(selectedKey) && selectedKey[0] === x && selectedKey[1] === y}>
+                <div class="mystrix-button" on:click={() => selectKey([x, y])}
                      style="clip-path: {getCornerRadius(x, y)}">
                         <div class="button-action-display" style="background-color: {activeActions[x]?.[y]?.effects?.length > 0 ? activeActions[x]?.[y]?.effects[0].info("Color") : "#C0C0C0"}"> 
                         <!-- I don't like this since the color is hard coded in. TODO fix this -->
@@ -95,7 +95,7 @@
 </div>
 
 <style lang="scss">
-    .lp-border {
+    .mystrix-border {
         background: rgb(20, 20, 20);
         border: 2px solid rgb(120, 120, 120);
         border-radius: 3%;
@@ -110,7 +110,7 @@
         gap: 1.5%;
     }
 
-    .matrix-button-container {
+    .mystrix-button-container {
         width: 92%;
         height: 92%;
         margin: 4%;
@@ -129,7 +129,7 @@
         }
     }
 
-    .matrix-button {
+    .mystrix-button {
         width: 100%;
         height: 100%;
         border-radius: 8%;

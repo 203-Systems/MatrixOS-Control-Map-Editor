@@ -1,6 +1,6 @@
 <script lang="ts">
     import OverflowMenuHorizontal from "carbon-icons-svelte/lib/OverflowMenuHorizontal.svelte";
-    import Matrix from "../components/Devices/Matrix.svelte";
+    import Mystrix from "../components/Devices/Mystrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import Popup from "../components/common/Popup.svelte";
     import DropDown from "../components/common/DropDown.svelte";
@@ -178,7 +178,7 @@
 
         <div class="device-container">
             <div class="device">
-                <Matrix
+                <Mystrix
                         bind:updateCount={updateCount}
                         bind:selectedKey={selectedKey}
                         bind:editorBackend={editorBackend}
