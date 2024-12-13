@@ -1,0 +1,6 @@
+{
+    "description": "按键驱动的颜色效果",
+    "title": "按键驱动的颜色效果",
+    "idleColor": "静态颜色",
+    "activatedColor": "按下颜色"
+}

@@ -192,13 +192,14 @@
             {#if editorState == EditorState.UPLOADING_TO_DEVICE || editorState == EditorState.IMPORTING_FROM_DEVICE}
                 <progress max="100" value={deviceTransferProgress * 100}></progress>
             {/if}
-            {#if editorStateViewerCloseable}
+            <!-- {#if editorStateViewerCloseable}
                 <button on:click={() => editorStateViewer = false}>{$t('editor.close')}</button>
-            {/if}
+            {/if} -->
+                <button on:click={() => {editorStateViewerCloseable && (editorStateViewer = false)}} style = "opacity: {editorStateViewerCloseable ?  '1'  : '0'}">{$t('editor.close')}</button>
         </div>
     </Popup>
 
-    <Popup title="Settings" bind:show={showSetting}>
+    <Popup title={$t("editor.settings")} bind:show={showSetting}>
         <div class="settings-popup">
             <div class="setting">
                 <div class="setting-name">
@@ -357,11 +358,11 @@
         border: 1px solid red;
     }
 
-    .editor-state-popup {
+    .settings-popup {
         width: 100%;
-        min-width: 500px;
+        // min-width: 500px;
         height: 100%;
-        min-height: 200px;
+        // min-height: 200px;
 
         display: flex;
         flex-direction: column;
@@ -380,7 +381,7 @@
                     display: flex;
                     align-items: center;
 
-                    color: whitesmoke;
+                    color: black;
 
                     font-family: "Roboto Mono", sans-serif;
                     font-weight: 400;
@@ -433,27 +434,34 @@
 
         button {
             margin-top: auto; /* Push the button to the bottom */
+            border-radius: 6px;
+
             width: 80px;
             height: 40px;
+
+            background-color: #dadada;
+            border: 1px solid #cecece;
+
+            transition: background-color 0.2s ease;
+            cursor: pointer;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
-            font-family: Inter, sans-serif;
-            font-size: 1.2rem;
+            flex-shrink: 0;
 
-            box-sizing: border-box;
-            border: 1px solid gray;
-            border-radius: 4px;
+            transition: background-color 0.2s ease, width 0.2s ease, opacity 0.2s ease;
 
-            cursor: pointer;
-
-            overflow-wrap: anywhere;
-            text-align: center;
+            filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
 
             &:hover {
-                background-color: #ececec;
+                background-color: #cecece;
+            }
+
+            &:active  {
+                background-color: #cecece;
+                scale: 0.95;
             }
         }
 

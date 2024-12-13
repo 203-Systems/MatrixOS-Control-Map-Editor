@@ -26,6 +26,11 @@ export const config = {
         },
         {
             locale: 'en',
+            key: 'color',
+            loader: async () => (await import('./en/color.json')).default,
+        },
+        {
+            locale: 'en',
             key: 'actioncolor',
             loader: async () => (await import('./en/actioncolor.json')).default,
         },
@@ -34,7 +39,28 @@ export const config = {
             key: 'midi',
             loader: async () => (await import('./en/midi.json')).default
         },
-        //ZH-CN
+        {
+            locale: 'en',
+            key: 'layer',
+            loader: async () => (await import('./en/layer.json')).default
+        },
+        {
+            locale: 'en',
+            key: 'warp',
+            loader: async () => (await import('./en/warp.json')).default
+        },
+        {
+            locale: 'en',
+            key: 'keyboard',
+            loader: async () => (await import('./en/keyboard.json')).default
+        },
+        {
+            locale: 'en',
+            key: 'gamepad',
+            loader: async () => (await import('./en/gamepad.json')).default
+        },
+
+        // ZH-CN
         {
             locale: 'zh-CN',
             key: 'editor',
@@ -52,6 +78,11 @@ export const config = {
         },
         {
             locale: 'zh-CN',
+            key: 'color',
+            loader: async () => (await import('./zh-cn/color.json')).default,
+        },
+        {
+            locale: 'zh-CN',
             key: 'actioncolor',
             loader: async () => (await import('./zh-cn/actioncolor.json')).default,
         },
@@ -59,6 +90,26 @@ export const config = {
             locale: 'zh-CN',
             key: 'midi',
             loader: async () => (await import('./zh-cn/midi.json')).default
+        },
+        {
+            locale: 'zh-CN',
+            key: 'layer',
+            loader: async () => (await import('./zh-cn/layer.json')).default
+        },
+        {
+            locale: 'zh-CN',
+            key: 'warp',
+            loader: async () => (await import('./zh-cn/warp.json')).default
+        },
+        {
+            locale: 'zh-CN',
+            key: 'keyboard',
+            loader: async () => (await import('./zh-cn/keyboard.json')).default
+        },
+        {
+            locale: 'zh-CN',
+            key: 'gamepad',
+            loader: async () => (await import('./zh-cn/gamepad.json')).default
         }
     ],
 };

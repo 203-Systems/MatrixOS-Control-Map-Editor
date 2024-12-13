@@ -6,6 +6,8 @@
     import CheckBox from "../../common/CheckBox.svelte";
     import {WrapAction} from "./WrapAction";
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
     
     export let data: WrapActionData;
@@ -20,50 +22,51 @@
     }
 </script>
 
-<ActionTemplate actionTitle={WrapAction.description} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t('warp.title')} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="action-setting-slot">
-            <span>Relative Layer</span>
+            <span>{$t('warp.relative_layer')}</span>
 
             <CheckBox bind:checked={data.relativeLayer} on:changed={e => changeWrapLayerMode(e.detail.checked)}/>
         </div>
         {#if data.relativeLayer === false}
             <div class="action-setting-slot">
-                <span>Layer</span>
+                <span>{$t('warp.layer')}</span>
                 <NumericUpDown bind:value={data.layer} min={1} max={16}/> 
             </div>
         {:else}
             <div class="action-setting-slot">
-                <span>Layer offset</span>
+                <span>{$t('warp.layer_offset')}</span>
                 <NumericUpDown bind:value={data.layer} min={-15} max={15}/> 
             </div>
         {/if}
         <div class="action-setting-slot">
-            <span>Relative Position</span>
+            <span>{$t('warp.relative_position')}</span>
 
             <CheckBox bind:checked={data.relativePos} on:changed={e => changeWrapPosMode(e.detail.checked)}/>
         </div>
         {#if data.relativePos === false}
             <div class="action-setting-slot">
-                <span>X</span>
+                <span>{$t('warp.x')}</span>
                 <NumericUpDown bind:value={data.x} min={0} max={8}/> 
             </div>
             <div class="action-setting-slot">
-                <span>Y</span>
+                <span>{$t('warp.y')}</span>
                 <NumericUpDown bind:value={data.y} min={0} max={8}/> 
             </div>
         {:else}
             <div class="action-setting-slot">
-                <span>X offset</span>
+                <span>{$t('warp.x_offset')}</span>
                 <NumericUpDown bind:value={data.x} min={-7} max={7}/> 
             </div>
             <div class="action-setting-slot">
-                <span>Y offset</span>
+                <span>{$t('warp.y_offset')}</span>
                 <NumericUpDown bind:value={data.y} min={-7} max={7}/> 
             </div>
         {/if}
     </div>
 </ActionTemplate>
+
 
 <style lang="scss">
     .action-setting-slot {

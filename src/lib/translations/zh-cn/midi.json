@@ -1,5 +1,6 @@
 {
-    "description": "发送一个 MIDI 消息",
+    "description": "发送MIDI消息",
+    "title": "发送MIDI消息",
     "type.note": "音符",
     "type.control_change": "控制变更 (CC)",
     "type.program_change": "程序变更 (PC)",

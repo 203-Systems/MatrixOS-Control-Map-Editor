@@ -4,6 +4,8 @@
     import { createEventDispatcher } from 'svelte';
     import '../Action.css';
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
     export let data: ColorEffectData;
 
@@ -34,10 +36,10 @@
     }
 </script>
 
-<ActionTemplate actionTitle="Color Effect" on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t("color.title")} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="action-setting-slot">
-            <span>Idle Color</span>
+            <span>{$t(`color.idleColor`)}</span>
             <input
                 type="color"
                 class="color-input"
@@ -47,7 +49,7 @@
         </div>
 
         <div class="action-setting-slot">
-            <span>Pressed Color</span>
+            <span>{$t(`color.activatedColor`)}</span>
 
             <input
             type="color"

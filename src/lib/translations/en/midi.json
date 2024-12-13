@@ -1,5 +1,6 @@
 {
-    "description": "Send a Midi Message",
+    "description": "Send Midi Message",
+    "title": "Send Midi Message",
     "type.note": "Note",
     "type.control_change": "Control Change",
     "type.program_change": "Program Change",

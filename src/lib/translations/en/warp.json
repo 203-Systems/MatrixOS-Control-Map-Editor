@@ -1,0 +1,13 @@
+{
+    "description": "Wrap to Another Action Group",
+    "title": "Wrap to Another Action Group",
+    "previewTitle": "Warp",
+    "relative_layer": "Relative Layer",
+    "layer": "Layer",
+    "layer_offset": "Layer Offset",
+    "relative_position": "Relative Position",
+    "x": "X",
+    "y": "Y",
+    "x_offset": "X Offset",
+    "y_offset": "Y Offset"
+}

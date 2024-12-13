@@ -1,0 +1,18 @@
+{
+    "description": "Control the Map Layers",
+    "title": "Control the Map Layers",
+    "previewTitle": "Layer",
+    "mode.persistence": "Persistence",
+    "mode.momentary": "Momentary",
+    "type.active": "Active",
+    "type.pass_through": "Pass Through",
+    "option.toggle": "Toggle",
+    "option.enable": "Enable",
+    "option.disable": "Disable",
+    "mode": "Layer Action Mode",
+    "type": "Layer Action Type",
+    "option": "Layer Action Option",
+    "relative": "Relative Indexing",
+    "number": "Layer Number",
+    "offset": "Layer Offset"
+}

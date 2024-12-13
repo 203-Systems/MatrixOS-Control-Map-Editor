@@ -9,6 +9,8 @@
     import NumericUpDown from "../../common/NumericUpDown.svelte";
     import '../Action.css';
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
 
     export let data: KeyboardActionData;
@@ -16,22 +18,22 @@
     let showSelectKeyPopup: boolean = false;
 </script>
 
-<ActionTemplate actionTitle={KeyboardAction.description} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t('keyboard.title')} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="preview-key-section" on:click={() => showSelectKeyPopup = true}>
             <div class="key-preview">
                 {#if data.key === undefined}
-                <span >No Key Selected</span>
+                <span >{$t('keyboard.no_key_selected')}</span>
                 {:else}
                 <span style="font-size: 20px;">{
-                        KeyboardScanCodeFriendlyName[data.key]
+                       $t(KeyboardScanCodeFriendlyName[data.key])
                 }</span>
                 {/if}
             </div>
         </div>
         {#if data.key === KeyboardScanCode.KEY_USER_DEFINED}
         <div class="action-setting-slot">
-            <span>Custom Key Code</span>
+            <span>{$t('keyboard.user_keycode')}</span>
             <NumericUpDown bind:value={data.user_keycode} min={0} max={255}/>
         </div>
         {/if}

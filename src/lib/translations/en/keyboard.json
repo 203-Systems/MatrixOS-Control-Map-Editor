@@ -1,0 +1,23 @@
+{
+    "description": "Send Keyboard Key",
+    "title": "Send Keyboard Key",
+    "previewTitle": "Key",
+    "none": "None",
+    "basic": "Basic",
+    "alphabet": "Alphabet",
+    "numeric": "Numeric",
+    "control": "Control",
+    "navigation": "Navigation",
+    "function": "Function",
+    "character": "Character",
+    "keypad": "Keypad",
+    "system": "System",
+    "modifier": "Modifier",
+    "custom": "Custom",
+    "close": "Close",
+    "no_key_selected": "No Key Selected",
+    "select_a_key": "Select a Keyboard Key",
+    "user_keycode": "Custom Keycode",
+    "code.user": "Custom",
+    "shortcode.user": "USER"
+}

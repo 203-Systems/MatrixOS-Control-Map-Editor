@@ -93,7 +93,7 @@
     }
 </script>
 
-<ActionTemplate actionTitle={$t('midi.description')} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t('midi.title')} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="action-setting-slot">
             <span>{$t('midi.body.message_type')}</span>

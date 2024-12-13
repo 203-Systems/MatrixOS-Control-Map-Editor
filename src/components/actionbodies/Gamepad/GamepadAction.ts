@@ -10,7 +10,7 @@ import { GamepadDpadDirectionFriendlyName } from "./GamepadActionData";
 
 export class GamepadAction implements Action {
     static readonly identifier: string = "gamepad";
-    static readonly description: string = "Send a Gamepad Key";
+    static readonly description: string = "gamepad.description";
     static readonly icon: SvelteComponent = GameConsole;
     static readonly body: SvelteComponent = GamepadActionBody;
 
@@ -75,12 +75,12 @@ export class GamepadAction implements Action {
         switch(type)
         {
             case "Title":
-                return "Game"
+                return "gamepad.previewTitle";
             case "Subtitle":
                 if (this.data.key !== undefined) {
                     return GamepadKeycodeFriendlyName[this.data.key]
                 }
-                return "None"
+                return "gamepad.none";
         }
         return null;
     }

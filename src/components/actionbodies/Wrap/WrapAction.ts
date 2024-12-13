@@ -7,7 +7,7 @@ import type { WrapActionData} from "./WrapActionData";
 
 export class WrapAction implements Action {
     static readonly identifier: string = "wrap";
-    static readonly description: string = "Wrap to Another Action Group";
+    static readonly description: string = "warp.description";
     static readonly icon: SvelteComponent = ZAxis;
     static readonly body: SvelteComponent = WrapActionBody;
 
@@ -64,7 +64,7 @@ export class WrapAction implements Action {
         switch(type)
         {
             case "Title":
-                return "Wrap"
+                return "warp.previewTitle";
             case "Subtitle":
                 if(this.data.relativeLayer)
                 {

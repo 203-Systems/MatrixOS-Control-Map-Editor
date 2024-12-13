@@ -76,14 +76,14 @@ export enum GamepadKeycode {
     [GamepadKeycode.GAMEPAD_31]: "31",
     [GamepadKeycode.GAMEPAD_32]: "32",
 
-    [GamepadKeycode.GAMEPAD_DPAD]: "D-Pad",
+    [GamepadKeycode.GAMEPAD_DPAD]: "gamepad.key.dpad",
 
-    [GamepadKeycode.GAMEPAD_X_AXIS]: "X Axis",
-    [GamepadKeycode.GAMEPAD_Y_AXIS]: "Y Axis",
-    [GamepadKeycode.GAMEPAD_Z_AXIS]: "Z Axis",
-    [GamepadKeycode.GAMEPAD_RX_AXIS]: "RX Axis",
-    [GamepadKeycode.GAMEPAD_RY_AXIS]: "RY Axis",
-    [GamepadKeycode.GAMEPAD_RZ_AXIS]: "RZ Axis",
+    [GamepadKeycode.GAMEPAD_X_AXIS]: "gamepad.key.x_axis",
+    [GamepadKeycode.GAMEPAD_Y_AXIS]: "gamepad.key.y_axis",
+    [GamepadKeycode.GAMEPAD_Z_AXIS]: "gamepad.key.z_axis",
+    [GamepadKeycode.GAMEPAD_RX_AXIS]: "gamepad.key.rx_axis",
+    [GamepadKeycode.GAMEPAD_RY_AXIS]: "gamepad.key.ry_axis",
+    [GamepadKeycode.GAMEPAD_RZ_AXIS]: "gamepad.key.rz_axis"
 };
 
 
@@ -101,15 +101,15 @@ export enum GamepadDpadDirection {
 }
 
 export const GamepadDpadDirectionFriendlyName: {[key in GamepadDpadDirection]: string} = {
-  [GamepadDpadDirection.GAMEPAD_DPAD_CENTERED]: "Centered",
-  [GamepadDpadDirection.GAMEPAD_DPAD_UP]: "Up",
-  [GamepadDpadDirection.GAMEPAD_DPAD_UP_RIGHT]: "Up right",
-  [GamepadDpadDirection.GAMEPAD_DPAD_RIGHT]: "Right",
-  [GamepadDpadDirection.GAMEPAD_DPAD_DOWN_RIGHT]: "Down right",
-  [GamepadDpadDirection.GAMEPAD_DPAD_DOWN]: "Down",
-  [GamepadDpadDirection.GAMEPAD_DPAD_DOWN_LEFT]: "Down left",
-  [GamepadDpadDirection.GAMEPAD_DPAD_LEFT]: "Left",
-  [GamepadDpadDirection.GAMEPAD_DPAD_UP_LEFT]: "Up left"
+  [GamepadDpadDirection.GAMEPAD_DPAD_CENTERED]: "gamepad.dpad.centered",
+  [GamepadDpadDirection.GAMEPAD_DPAD_UP]: "gamepad.dpad.up",
+  [GamepadDpadDirection.GAMEPAD_DPAD_UP_RIGHT]: "gamepad.dpad.up_right",
+  [GamepadDpadDirection.GAMEPAD_DPAD_RIGHT]: "gamepad.dpad.right",
+  [GamepadDpadDirection.GAMEPAD_DPAD_DOWN_RIGHT]: "gamepad.dpad.down_right",
+  [GamepadDpadDirection.GAMEPAD_DPAD_DOWN]: "gamepad.dpad.down",
+  [GamepadDpadDirection.GAMEPAD_DPAD_DOWN_LEFT]: "gamepad.dpad.down_left",
+  [GamepadDpadDirection.GAMEPAD_DPAD_LEFT]: "gamepad.dpad.left",
+  [GamepadDpadDirection.GAMEPAD_DPAD_UP_LEFT]: "gamepad.dpad.up_left",
 }
 
 export enum AnalogSource {
@@ -118,8 +118,8 @@ export enum AnalogSource {
 }
 
 export const AnalogSourceFriendlyName = new Map([
-  [AnalogSource.Binary, "Binary"],
-  [AnalogSource.KeyForce, "Key Force"],
+  [AnalogSource.Binary, "gamepad.analog.binary"],
+  [AnalogSource.KeyForce, "gamepad.analog.key_force"]
 ]);
 
 

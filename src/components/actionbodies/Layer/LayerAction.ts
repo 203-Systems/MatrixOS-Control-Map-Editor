@@ -8,7 +8,7 @@ import {LayerActionMode, LayerActionType, LayerActionOption} from "./LayerAction
 
 export class LayerAction implements Action {
     static readonly identifier: string = "layer";
-    static readonly description: string = "Layer Control";
+    static readonly description: string = "layer.description";
     static readonly icon: SvelteComponent = Layers;
     static readonly body: SvelteComponent = LayerActionBody;
 
@@ -66,7 +66,7 @@ export class LayerAction implements Action {
         switch(type)
         {
             case "Title":
-                return "Layer"
+                return "layer.previewTitle"
             case "Subtitle":
                 if(this.data.relative)
                 {

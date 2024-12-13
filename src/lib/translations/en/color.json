@@ -1,0 +1,6 @@
+{
+    "description": "Button Driven Color Effect",
+    "title": "Button Driven Color Effect",
+    "idleColor": "Idle Color",
+    "activatedColor": "Pressed Color"
+}

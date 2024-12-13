@@ -6,9 +6,11 @@ import { Keyboard } from "carbon-icons-svelte";
 import type { KeyboardActionData } from "./KeyboardActionData";
 import {KeyboardScanCode, KeyboardScanCodeShortName} from "./ScanCode";
 
+import {t} from "$lib/translations";
+
 export class KeyboardAction implements Action {
     static readonly identifier: string = "keyboard";
-    static readonly description: string = "Send a Keyboard Key";
+    static readonly description: string = "keyboard.description";
     static readonly icon: SvelteComponent = Keyboard;
     static readonly body: SvelteComponent = KeyboardActionBody;
 
@@ -45,12 +47,12 @@ export class KeyboardAction implements Action {
         switch(type)
         {
             case "Title":
-                return "Key"
+                return "keyboard.previewTitle";
             case "Subtitle":
                 if (this.data.key !== undefined) {
                     return KeyboardScanCodeShortName[this.data.key]
                 }
-                return "None"
+                return "keyboard.none";
         }
         return null;
     }

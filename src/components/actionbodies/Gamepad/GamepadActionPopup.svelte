@@ -3,6 +3,8 @@
     import {GamepadKeycode, GamepadKeycodeFriendlyName} from "./GamepadActionData";
     import Button from "../../common/Button.svelte";
 
+    import {t} from "$lib/translations";
+
     export let show: boolean
     export let selectedKey: GamepadKeycode
 
@@ -14,21 +16,21 @@
         {
             title: "Basic",
             keyCollections: [
-                { title: "Buttons", keys: createNumberArray(GamepadKeycode.GAMEPAD_1, GamepadKeycode.GAMEPAD_32) },
-                { title: "DPad", keys: [GamepadKeycode.GAMEPAD_DPAD] },
-                { title: "Axes", keys: createNumberArray(GamepadKeycode.GAMEPAD_X_AXIS, GamepadKeycode.GAMEPAD_RZ_AXIS) },
+                { title: "gamepad.buttons", keys: createNumberArray(GamepadKeycode.GAMEPAD_1, GamepadKeycode.GAMEPAD_32) },
+                { title: "gamepad.dpad", keys: [GamepadKeycode.GAMEPAD_DPAD] },
+                { title: "gamepad.axes", keys: createNumberArray(GamepadKeycode.GAMEPAD_X_AXIS, GamepadKeycode.GAMEPAD_RZ_AXIS) },
            ]
         }
     ]
 </script>
 
-<Popup title="Select a Gamepad Control" bind:show={show}>
+<Popup title={$t("gamepad.select_a_key")} bind:show={show}>
     <div class="key-selector-popup">
         <div class="key-view-grid">
             {#each keyPages[0].keyCollections as keyCollection}
                 <div class="key-collection-title-container">
                     <div style="height: 58px; line-height: 58px;">
-                        <span>{keyCollection.title}</span>
+                        <span>{$t(keyCollection.title)}</span>
                     </div>
                 </div>
 
@@ -36,7 +38,7 @@
                     {#each keyCollection.keys as key}
                         <div class="gamepad-key" on:click={() => {selectedKey = key; show = false}} class:selected-key={selectedKey === key}>
                             <span>{
-                                GamepadKeycodeFriendlyName[key]
+                                $t(GamepadKeycodeFriendlyName[key])
                             }</span>
                         </div>
                     {/each}
@@ -45,7 +47,7 @@
         </div>
 
         <div class="bottom-bar">
-            <Button text="Close" on:click={() => show = false}/>
+            <Button text={$t("gamepad.close")} on:click={() => show = false}/>
         </div>
     </div>
 </Popup>

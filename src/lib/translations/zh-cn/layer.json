@@ -1,0 +1,18 @@
+{
+    "description": "控制界面的层级",
+    "title": "控制界面的层级",
+    "previewTitle": "层面",
+    "mode.persistence": "持久",
+    "mode.momentary": "瞬时",
+    "type.active": "激活",
+    "type.pass_through": "透传",
+    "option.toggle": "切换",
+    "option.enable": "启用",
+    "option.disable": "禁用",
+    "mode": "层面动作模式",
+    "type": "层面动作类型",
+    "option": "层面动作选项",
+    "relative": "相对索引",
+    "number": "层面编号",
+    "offset": "层面偏移"
+}

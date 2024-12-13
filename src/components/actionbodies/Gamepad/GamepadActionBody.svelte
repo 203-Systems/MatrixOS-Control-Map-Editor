@@ -9,6 +9,8 @@
     import DropDown from "../../common/DropDown.svelte";
     import FloatUpDown from "../../common/FloatUpDown.svelte";
     import '../Action.css';
+    
+    import {t} from "$lib/translations";
 
     const dispatch = createEventDispatcher();
 
@@ -17,33 +19,33 @@
     let showSelectKeyPopup: boolean = false;
 </script>
 
-<ActionTemplate actionTitle={GamepadAction.description} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t('gamepad.description')} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="preview-key-section" on:click={() => showSelectKeyPopup = true}>
             <div class="key-preview">
                 {#if data.key === undefined}
-                <span >No Key Selected</span>
+                <span>{$t('gamepad.no_key_selected')}</span>
                 {:else}
                 <span style="font-size: 20px;">{
-                        GamepadKeycodeFriendlyName[data.key]
+                        $t(GamepadKeycodeFriendlyName[data.key])
                 }</span>
                 {/if}
             </div>
         </div>
         {#if data.key >= GamepadKeycode.GAMEPAD_X_AXIS && data.key <= GamepadKeycode.GAMEPAD_RZ_AXIS}
         <div class="action-setting-slot">
-            <span>Analog Source</span>
+            <span>{$t('gamepad.analog_source')}</span>
 
             <DropDown options={AnalogSourceFriendlyName} bind:value={data.analog}/>
         </div>
         <div class="action-setting-slot">
-            <span>Range</span>
+            <span>{$t('gamepad.range')}</span>
             <FloatUpDown bind:value={data.begin} min={-1.0} max={1.0}/>
             <FloatUpDown bind:value={data.end} min={-1.0} max={1.0}/>
         </div>
         {:else if data.key === GamepadKeycode.GAMEPAD_DPAD}
         <div class="action-setting-slot">
-            <span>D-Pad Direction</span>
+            <span>{$t('gamepad.dpad_direction')}</span>
 
             <DropDown options={GamepadDpadDirectionFriendlyName} bind:value={data.dpad}/>
         </div>

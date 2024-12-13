@@ -42,7 +42,7 @@
     }
 </script>
 
-<ActionTemplate actionTitle="Action  Color Effect" on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t(`actioncolor.title`)} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="action-settings">
             {#each Array(16) as _, index}

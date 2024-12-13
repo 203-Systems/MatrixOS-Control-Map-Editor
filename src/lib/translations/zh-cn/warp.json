@@ -1,0 +1,13 @@
+    {
+        "description": "跳转到另一个动作组",
+        "title": "跳转到另一个动作组",
+        "previewTitle": "跳转",
+        "relative_layer": "相对层",
+        "layer": "层",
+        "layer_offset": "层偏移",
+        "relative_position": "相对位置",
+        "x": "X",
+        "y": "Y",
+        "x_offset": "X 偏移",
+        "y_offset": "Y 偏移"
+    }

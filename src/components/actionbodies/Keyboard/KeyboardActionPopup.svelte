@@ -3,6 +3,8 @@
     import {KeyboardScanCode, KeyboardScanCodeFriendlyName} from "./ScanCode";
     import Button from "../../common/Button.svelte";
 
+    import {t} from "$lib/translations";
+
     export let show: boolean
     export let selectedKey: KeyboardScanCode
 
@@ -12,30 +14,30 @@
 
     let keyPages = [
         {
-            title: "Basic",
+            title: $t("keyboard.basic"),
             keyCollections: [
-                { title: "Alphabet", keys: createNumberArray(KeyboardScanCode.KEY_A, KeyboardScanCode.KEY_Z) },
-                { title: "Numeric", keys: createNumberArray(KeyboardScanCode.KEY_1, KeyboardScanCode.KEY_0) },
-                { title: "Control",  keys: [ KeyboardScanCode.KEY_ENTER, KeyboardScanCode.KEY_ESC, KeyboardScanCode.KEY_BACKSPACE, KeyboardScanCode.KEY_TAB, KeyboardScanCode.KEY_CAPS_LOCK, KeyboardScanCode.KEY_NUM_LOCK, KeyboardScanCode.KEY_SCROLL_LOCK, KeyboardScanCode.KEY_PAUSE, KeyboardScanCode.KEY_DELETE, KeyboardScanCode.KEY_INSERT, KeyboardScanCode.KEY_HOME, KeyboardScanCode.KEY_END, KeyboardScanCode.KEY_PAGE_UP, KeyboardScanCode.KEY_PAGE_DOWN] },
-                { title: "Navigation", keys: [KeyboardScanCode.KEY_UP_ARROW, KeyboardScanCode.KEY_DOWN_ARROW, KeyboardScanCode.KEY_LEFT_ARROW, KeyboardScanCode.KEY_RIGHT_ARROW] },
-                { title: "Function", keys: createNumberArray(KeyboardScanCode.KEY_F1, KeyboardScanCode.KEY_F12) },
-                { title: "Character", keys: [ KeyboardScanCode.KEY_SPACE, KeyboardScanCode.KEY_MINUS, KeyboardScanCode.KEY_EQUAL, KeyboardScanCode.KEY_LEFT_BRACE, KeyboardScanCode.KEY_RIGHT_BRACE, KeyboardScanCode.KEY_BACKSLASH, KeyboardScanCode.KEY_SEMICOLON, KeyboardScanCode.KEY_QUOTE, KeyboardScanCode.KEY_TILDE, KeyboardScanCode.KEY_COMMA, KeyboardScanCode.KEY_PERIOD, KeyboardScanCode.KEY_SLASH] },
-                { title: "Keypad", keys: createNumberArray(KeyboardScanCode.KEYPAD_1, KeyboardScanCode.KEYPAD_0).concat(createNumberArray(KeyboardScanCode.KEYPAD_DIVIDE, KeyboardScanCode.KEYPAD_ENTER)).concat([KeyboardScanCode.KEYPAD_DOT]) },
-                { title: "System", keys: [KeyboardScanCode.KEY_PRINT, KeyboardScanCode.KEY_APPLICATION] },
-                { title: "Modifier", keys: [KeyboardScanCode.KEY_LEFT_CTRL, KeyboardScanCode.KEY_LEFT_SHIFT, KeyboardScanCode.KEY_LEFT_ALT, KeyboardScanCode.KEY_LEFT_GUI, KeyboardScanCode.KEY_RIGHT_CTRL, KeyboardScanCode.KEY_RIGHT_SHIFT, KeyboardScanCode.KEY_RIGHT_ALT, KeyboardScanCode.KEY_RIGHT_GUI] },
-                { title: "Custom", keys: [KeyboardScanCode.KEY_USER_DEFINED] }
+                { title: "keyboard.alphabet", keys: createNumberArray(KeyboardScanCode.KEY_A, KeyboardScanCode.KEY_Z) },
+                { title: "keyboard.numeric", keys: createNumberArray(KeyboardScanCode.KEY_1, KeyboardScanCode.KEY_0) },
+                { title: "keyboard.control",  keys: [ KeyboardScanCode.KEY_ENTER, KeyboardScanCode.KEY_ESC, KeyboardScanCode.KEY_BACKSPACE, KeyboardScanCode.KEY_TAB, KeyboardScanCode.KEY_CAPS_LOCK, KeyboardScanCode.KEY_NUM_LOCK, KeyboardScanCode.KEY_SCROLL_LOCK, KeyboardScanCode.KEY_PAUSE, KeyboardScanCode.KEY_DELETE, KeyboardScanCode.KEY_INSERT, KeyboardScanCode.KEY_HOME, KeyboardScanCode.KEY_END, KeyboardScanCode.KEY_PAGE_UP, KeyboardScanCode.KEY_PAGE_DOWN] },
+                { title: "keyboard.navigation", keys: [KeyboardScanCode.KEY_UP_ARROW, KeyboardScanCode.KEY_DOWN_ARROW, KeyboardScanCode.KEY_LEFT_ARROW, KeyboardScanCode.KEY_RIGHT_ARROW] },
+                { title: "keyboard.function", keys: createNumberArray(KeyboardScanCode.KEY_F1, KeyboardScanCode.KEY_F12) },
+                { title: "keyboard.character", keys: [ KeyboardScanCode.KEY_SPACE, KeyboardScanCode.KEY_MINUS, KeyboardScanCode.KEY_EQUAL, KeyboardScanCode.KEY_LEFT_BRACE, KeyboardScanCode.KEY_RIGHT_BRACE, KeyboardScanCode.KEY_BACKSLASH, KeyboardScanCode.KEY_SEMICOLON, KeyboardScanCode.KEY_QUOTE, KeyboardScanCode.KEY_TILDE, KeyboardScanCode.KEY_COMMA, KeyboardScanCode.KEY_PERIOD, KeyboardScanCode.KEY_SLASH] },
+                { title: "keyboard.keypad", keys: createNumberArray(KeyboardScanCode.KEYPAD_1, KeyboardScanCode.KEYPAD_0).concat(createNumberArray(KeyboardScanCode.KEYPAD_DIVIDE, KeyboardScanCode.KEYPAD_ENTER)).concat([KeyboardScanCode.KEYPAD_DOT]) },
+                { title: "keyboard.system", keys: [KeyboardScanCode.KEY_PRINT, KeyboardScanCode.KEY_APPLICATION] },
+                { title: "keyboard.modifier", keys: [KeyboardScanCode.KEY_LEFT_CTRL, KeyboardScanCode.KEY_LEFT_SHIFT, KeyboardScanCode.KEY_LEFT_ALT, KeyboardScanCode.KEY_LEFT_GUI, KeyboardScanCode.KEY_RIGHT_CTRL, KeyboardScanCode.KEY_RIGHT_SHIFT, KeyboardScanCode.KEY_RIGHT_ALT, KeyboardScanCode.KEY_RIGHT_GUI] },
+                { title: "keyboard.custom", keys: [KeyboardScanCode.KEY_USER_DEFINED] }
             ]
         }
     ]
 </script>
 
-<Popup title="Select a Keyboard Key" bind:show={show}>
+<Popup title={$t("keyboard.select_a_key")} bind:show={show}>
     <div class="key-selector-popup">
         <div class="key-view-grid">
             {#each keyPages[0].keyCollections as keyCollection}
                 <div class="key-collection-title-container">
                     <div style="height: 58px; line-height: 58px;">
-                        <span>{keyCollection.title}</span>
+                        <span>{$t(keyCollection.title)}</span>
                     </div>
                 </div>
 
@@ -43,7 +45,7 @@
                     {#each keyCollection.keys as key}
                         <div class="keyboard-key" on:click={() => {selectedKey = key; show = false}} class:selected-key={selectedKey === key}>
                             <span>{
-                                KeyboardScanCodeFriendlyName[key]
+                                $t(KeyboardScanCodeFriendlyName[key])
                             }</span>
                         </div>
                     {/each}
@@ -52,7 +54,7 @@
         </div>
 
         <div class="bottom-bar">
-            <Button text="Close" on:click={() => show = false}/>
+            <Button text={$t("keyboard.close")} on:click={() => show = false}/>
         </div>
     </div>
 </Popup>

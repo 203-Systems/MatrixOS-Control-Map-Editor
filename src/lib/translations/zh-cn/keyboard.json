@@ -1,0 +1,23 @@
+{
+    "description": "发送键盘按键",
+    "title": "发送键盘按键",
+    "previewTitle": "按键",
+    "none": "无",
+    "basic": "基础",
+    "alphabet": "字母",
+    "numeric": "数字",
+    "control": "控制",
+    "navigation": "导航",
+    "function": "功能",
+    "character": "字符",
+    "keypad": "小键盘",
+    "system": "系统",
+    "modifier": "修饰键",
+    "custom": "自定义",
+    "close": "关闭",
+    "no_key_selected": "未选择按键",
+    "select_a_key": "选择一个按键",
+    "user_keycode": "自定义按键代码",
+    "code.user": "自定义",
+    "shortcode.user": "自定义"
+}
