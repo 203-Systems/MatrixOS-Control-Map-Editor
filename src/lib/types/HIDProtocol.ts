@@ -13,12 +13,13 @@ export const HIDResponse = 0x80;
 
 export type DeviceDescriptor = {
     uadVersion: [number, number];
+    vendorId: number;
+    deviceId: number;
     xSize: number;
     ySize: number;
     maxLayers: number;
     maxUADSize: number;
-    vendorId: number;
-    deviceId: number;
+    maxHIDPayloadSize: number;
 }
 
 export type UADStatus = {

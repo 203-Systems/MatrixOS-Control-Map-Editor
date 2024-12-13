@@ -10,12 +10,56 @@ import { Connect } from "carbon-icons-svelte";
 
 const DEVICE_TIMEOUT_DURATION = 1000;
 
+export enum EditorState {
+    DISCONNECTED,
+    CONNECTED,
+
+    USER_SELECTING_DEVICE,
+
+    CHECKING_IN_APP,
+    FETCHING_DEVICE_DESCRIPTOR,
+    FETCHING_UAD_STATUS,
+    SENDING_NEW_UAD_META,
+    IMPORTING_FROM_DEVICE,
+    UPLOADING_TO_DEVICE,
+    DEVICE_SAVING_UAD,
+    DEVICE_LOADING_UAD,
+
+    IMPORT_FROM_DEVICE_COMPLETED,
+    UPLOAD_TO_DEVICE_COMPLETED,
+
+    // USER_SELECTING_FILE,
+    GENERATING_UAD,
+    PARSING_UAD,
+
+    BROWSER_NOT_SUPPORTED,  
+    NO_DEVICE_SELECTED,
+    DEVICE_NOT_IN_APP,
+    FETCHING_DEVICE_DESCRIPTOR_ERROR,
+    FETCHING_UAD_STATUS_ERROR,
+    DEVICE_UAD_NOT_LOADED,
+    SENDING_NEW_UAD_META_ERROR,
+    IMPORT_ERROR,
+    UPLOAD_ERROR,
+    DEVICE_SAVING_UAD_ERROR,
+    DEVICE_LOADING_UAD_ERROR,
+
+    // INVALID_FILE_SELECTED,
+    GENERATING_UAD_ERROR,
+    PARSING_UAD_ERROR,
+}
+
 export class KeymapEditor {
     private data: KeyAction[][][] = []; //Layer, X, Y
     private selectedLayer: number = 0;
     private updateCallback: () => void;
     private device: HIDDevice | undefined;
     private deviceDesc: DeviceDescriptor | undefined;
+
+    public editorState:EditorState = EditorState.DISCONNECTED;
+    public editorStateViewer:boolean = false;
+    public editorStateViewerCloseable:boolean = true;
+    public deviceTransferProgress:number = 0;
 
     constructor(updateCallbackFunc: () => void) {
         this.updateCallback = updateCallbackFunc;
@@ -125,6 +169,43 @@ export class KeymapEditor {
         array = [bitmap].concat(array);
 
         return array
+    }
+
+    updateEditorState(state: EditorState) {
+        this.editorState = state;
+        
+        if(state >= EditorState.USER_SELECTING_DEVICE && state <= EditorState.DEVICE_LOADING_UAD) 
+        {
+            console.log("Viewer On State")
+            this.editorStateViewer = true;
+        }
+        else if (state >= EditorState.UPLOAD_TO_DEVICE_COMPLETED)
+        {
+            this.editorStateViewer = true;
+        }
+        else if (state >= EditorState.IMPORT_FROM_DEVICE_COMPLETED) 
+        {
+            this.editorStateViewer = false;
+        }
+
+        if(state >= EditorState.BROWSER_NOT_SUPPORTED && state <= EditorState.PARSING_UAD_ERROR) 
+        {
+            this.editorStateViewerCloseable = true;
+        }
+        else if (state >= EditorState.UPLOAD_TO_DEVICE_COMPLETED)
+        {
+            this.editorStateViewerCloseable = true;
+        }
+        else if (state >= EditorState.IMPORT_FROM_DEVICE_COMPLETED) 
+        {
+            this.editorStateViewerCloseable = true;
+        }
+        else
+        {
+            this.editorStateViewerCloseable = false;
+        }
+
+        this.updateCallback();
     }
 
     generateUAD() {
@@ -325,7 +406,14 @@ export class KeymapEditor {
             reader.onload = readerEvent => {
                 var content = (readerEvent.target as any).result; // this is the content!
                 var uad: UniversalActionDesciptor = JSON.parse(content);
-                this.loadUAD(uad);
+                this.updateEditorState(EditorState.PARSING_UAD);
+                try {
+                    this.loadUAD(uad);
+                } catch (error) {
+                    this.updateEditorState(EditorState.PARSING_UAD_ERROR);
+                    console.error("Failed to parse UAD");
+                    return;
+                }
             }
         }
         input.click();
@@ -334,7 +422,15 @@ export class KeymapEditor {
     exportUADA() {
         console.log("Export UADA")
 
-        let uad = this.generateUAD();
+        this.updateEditorState(EditorState.GENERATING_UAD);
+        let uad = undefined
+        try {
+            uad = this.generateUAD();
+        } catch (error) {
+            this.updateEditorState(EditorState.GENERATING_UAD_ERROR);
+            console.error("Failed to generate UAD");
+            return;
+        }
 
         // Download JSON
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(uad));
@@ -346,17 +442,37 @@ export class KeymapEditor {
         downloadAnchorNode.remove();
     }
 
-    async SendReportToDevice(device: HIDDevice, payload: Uint8Array, retry: number = 3): Promise<boolean> {
+    async checkDeviceInAPP(device: HIDDevice): Promise<boolean> {
+        if (!device || !device.opened) {
+            console.log("Device is not connected or opened");
+            return false; // Indicate failure
+        }
+        
+        console.log("Checking if device is in Custom Control Map APP");
+
+        var data  = await this.requestReportToDevice(device, new Uint8Array([0x10]), true);
+
+        if(data === undefined) {return false;}
+
+        console.log(data);
+        if(data[0] === 0x90 && data[1] === 0x47 && data[2] === 0x31 && data[3] === 0xAD && data[4] === 0x43) { return true; }
+
+        return false;  
+    }
+
+    async sendReportToDevice(device: HIDDevice, payload: Uint8Array, system: boolean  = false, retry: number = 3): Promise<boolean> {
         if (!device || !device.opened) {
             console.log("Device is not connected or opened");
             return false; // Indicate failure
         }
     
-        console.log("Sending Report to Device");
+        console.log("Sending Report to Device - Size: " + payload.length);
+
+        var report_id = system ? 0xCB : 0xFF;
     
         while (retry > 0) {
             try {
-                await device.sendReport(0xFF, payload);
+                await device.sendReport(report_id, payload);
                 console.log("Report sent successfully");
                 return true; // Indicate success
             } catch (error) {
@@ -369,9 +485,9 @@ export class KeymapEditor {
         return false; // Indicate failure after all retries
     }
 
-    async RequestReportToDevice(device: HIDDevice, payload: Uint8Array, retry: number = 3): Promise<Uint8Array> {
-        // Ensure SendReportToDevice is successful before proceeding
-        const sendSuccess = await this.SendReportToDevice(device, payload, retry);
+    async requestReportToDevice(device: HIDDevice, payload: Uint8Array, system: boolean  = false, retry: number = 3): Promise<Uint8Array | undefined> {
+        // Ensure sendReportToDevice is successful before proceeding
+        const sendSuccess = await this.sendReportToDevice(device, payload, system, retry);
         if (!sendSuccess) {
             throw new Error('Failed to send report to device');
         }
@@ -399,21 +515,25 @@ export class KeymapEditor {
 
     
 
-    async connect() {
+    async connect() : Promise<bool> {
         // Check if HID is supported
         if (!("hid" in navigator)) {
+            this.updateEditorState(EditorState.BROWSER_NOT_SUPPORTED);
             console.log("HID is not supported");
-            return;
+            // alert("HID is not supported in this browser");
+            return false;
         }
 
         // Check if existing connect is open. If so close
         if (this.device !== undefined) {
             this.device.close();
+            this.updateEditorState(EditorState.DISCONNECTED);
             this.device = undefined;
         }
 
         // Get valid HID device
         try {
+            this.updateEditorState(EditorState.USER_SELECTING_DEVICE);
             const devices = await navigator.hid.requestDevice({
                 filters: [
                     {
@@ -423,13 +543,15 @@ export class KeymapEditor {
             });
             this.device = devices[0];
         } catch (error) {
+            this.updateEditorState(EditorState.NO_DEVICE_SELECTED);
             console.log("No device was selected.");
-            return;
+            return false;
         }
 
         // Remove device if disconnected
         navigator.hid.addEventListener("disconnect", (event) => {
             if (event.device === this.device) {
+                this.updateEditorState(EditorState.DISCONNECTED);
                 console.log("Device disconnected");
                 this.device = undefined;
             }
@@ -437,7 +559,10 @@ export class KeymapEditor {
 
         // Log device name
         if (this.device === undefined) {
+            this.updateEditorState(EditorState.NO_DEVICE_SELECTED);
             console.log("No device was selected.");
+            // alert("No device was selected.");
+            return false;
         } else {
             console.log(`HID: ${this.device.productName}`);
         }
@@ -447,43 +572,32 @@ export class KeymapEditor {
             await this.device.open();
         }
 
-        // let report;
-        // Check if MatrixOS device is in Custom keymap mode
-        // try {
-            // for (let i = 3; i > 0; i--) {
-            //     console.log(`Checking if Matrix OS device is in custom keymap mode. ${i} attempts remaining`);
-            //     report = await this.device.receiveFeatureReport(0);
+        this.updateEditorState(EditorState.CHECKING_IN_APP);
+        var deviceInAPP = await this.checkDeviceInAPP(this.device);
 
-            //     if (report.getUint32(0) === 0x2ccba780) { // "203 Electronics-Custom Keymap" App ID
-            //         console.log("Matrix OS device is in custom keymap mode");
-            //     }
-            //     else if (i > 1) // Still got attempts left
-            //     {
-            //         console.log(`Matrix OS device is not in custom keymap mode. Attempting to put device into custom keymap mode. ${i} attempts remaining`);
-            //         this.device.sendFeatureReport(0, new Uint32Array([0x2ccba780]));
-            //         await new Promise(r => setTimeout(r, 1000));
-            //         continue
-            //     }
-            //     break;
-            // }
-        // } catch (error) {
-        //     console.log("Failed to get Matrix OS device into custom keymap mode");
-        //     return;
-        // }
-
+        if(!deviceInAPP) {
+            this.updateEditorState(EditorState.DEVICE_NOT_IN_APP);
+            console.log("Device is not in Custom Control Map APP");
+            // alert("Device is not in Custom Control Map APP");
+            return false;
+        }
 
         // Get Device Descriptor
         // TODO Check if version is supported
+        this.updateEditorState(EditorState.FETCHING_DEVICE_DESCRIPTOR);
         this.deviceDesc = await this.getDeviceDescriptor(this.device);
 
         if (this.deviceDesc === undefined) {
+            this.updateEditorState(EditorState.FETCHING_DEVICE_DESCRIPTOR_ERROR);
             console.log("Failed to get device descriptor");
-            alert("Failed to get device descriptor");
-            return;
+            // alert("Failed to get device descriptor");
+            return false;
         } else {
             console.log("Device Descriptor fetched");
             console.log(this.deviceDesc);
         }
+
+        return true;
     }
 
     getDevice(): Promise<HIDDevice | undefined> {
@@ -502,41 +616,19 @@ export class KeymapEditor {
             }
         });
     }
-
-    // async waitForDeviceReport(device: HIDDevice) {
-    //     const TIMEOUT_DURATION = 1000;
-    //     return new Promise((resolve, reject) => {
-    //         const timeout = setTimeout(() => {
-    //             device.removeEventListener('inputreport', onInputReport);
-    //             reject(new Error('Timeout waiting for device report'));
-    //         }, TIMEOUT_DURATION);
-    
-    //         function onInputReport(event: HIDInputReportEvent) {
-    //             console.log("Received Input Report");
-    //             console.log(event);
-    //             clearTimeout(timeout);
-    //             device.removeEventListener('inputreport', onInputReport);
-    //             resolve(new Uint8Array(event.data.buffer, event.data.byteOffset, event.data.byteLength));
-    //         }
-    
-    //         device.addEventListener('inputreport', onInputReport);
-    //     });
-    // }
     
     async getDeviceDescriptor(device: HIDDevice)
     {   
-        if(!device || !device.opened) {return null;}
-
         console.log("Fetching Device Descriptor");
 
         var command = new Uint8Array([HIDCommand.DEVICE_DESCRIPTOR]);
 
-        var data = await this.RequestReportToDevice(device, command);
+        var data = await this.requestReportToDevice(device, command);
 
         console.log(data);
         
-        if(data === undefined) {return undefined;}
-        if(data[0] !== HIDCommand.DEVICE_DESCRIPTOR + HIDResponse) {return undefined;}
+        if(data === undefined) {  return undefined; }
+        if(data[0] !== HIDCommand.DEVICE_DESCRIPTOR + HIDResponse) { return undefined; }
 
         var deviceDesc: DeviceDescriptor = {
             uadVersion: [data[1], data[2]],
@@ -546,6 +638,7 @@ export class KeymapEditor {
             ySize: data[10],
             maxLayers: data[11],
             maxUADSize: (data[12] << 24) | (data[13] << 16) | (data[14] << 8) | data[15],
+            maxHIDPayloadSize: data[16],
         }
 
         return deviceDesc;
@@ -557,12 +650,12 @@ export class KeymapEditor {
 
         var command = new Uint8Array([HIDCommand.UAD_STATUS]);
 
-        var data = await this.RequestReportToDevice(device, command);
+        var data = await this.requestReportToDevice(device, command);
 
         console.log(data);
         
-        if(data === undefined) {return undefined;}
-        if(data[0] !== HIDCommand.UAD_STATUS +  HIDResponse) {return undefined;}
+        if(data === undefined) { return undefined; }
+        if(data[0] !== HIDCommand.UAD_STATUS +  HIDResponse) { return undefined; }
 
         var deviceUADStatus : UADStatus = {
             loaded: data[1] === 1,
@@ -581,7 +674,7 @@ export class KeymapEditor {
 
         var command = new Uint8Array([HIDCommand.UAD_DATA, (section >> 8) & 0xFF, section & 0xFF]);
 
-        var data = await this.RequestReportToDevice(device, command);
+        var data = await this.requestReportToDevice(device, command);
 
         console.log(data);
         
@@ -600,189 +693,197 @@ export class KeymapEditor {
     }
 
     async uploadToDevice() {
-        console.log("Upload to Device")
+        try
+        {
+            console.log("Upload to Device")
 
-        if (this.device === undefined || !this.device.opened || this.deviceDesc === undefined) {
-            await this.connect();
-        }
-        
-        // Generate UAD
-        let uad = this.generateUAD();
-
-        let uad_encoded = cbor.encode(uad);
-        
-
-        // Tell device to expect new UAD
-        var command = new Uint8Array([
-            HIDCommand.UAD_STATUS | HIDWrite, 
-            0, 
-            (uad_encoded.length >> 24) & 0xFF, 
-            (uad_encoded.length >> 16) & 0xFF, 
-            (uad_encoded.length >> 8) & 0xFF,  
-            uad_encoded.length & 0xFF
-        ]);
-
-        console.log("Command");
-        console.log(command);
-
-        var reponse = await this.RequestReportToDevice(this.device, command);
-
-        if(reponse[0] !== HIDCommand.ACK || reponse[1] !== HIDCommand.UAD_STATUS + HIDResponse) {
-            throw new Error("Failed to send UAD Status");
-            return;
-        }
-
-        // Send UAD Data
-        const totalSections = Math.ceil(uad_encoded.length / 8);
-        for (let section = 0; section < totalSections; section++) {
-            for (let retry = 0; retry < 3; retry++) {
-                        const start = section * 8;
-                        const end = Math.min(uad_encoded.length, (section + 1) * 8);
-                        const data = uad_encoded.slice(start, end);
-                        var command = new Uint8Array([HIDCommand.UAD_DATA | HIDWrite, (section >> 8) & 0xFF, section & 0xFF, data.length].concat(Array.from(data)));
-
-                        var reponse = await this.RequestReportToDevice(this.device, command);
-
-                       if(reponse[0] === HIDCommand.ACK && reponse[1] === HIDCommand.UAD_DATA + HIDResponse && reponse[2] === (section & 0xFF)) {
-                            console.log(`Sent UAD Data section ${section + 1} / ${totalSections}`);
-                            continue;
-                        } else {
-                            console.log(`Failed to send UAD Data section ${section + 1} / ${totalSections}`);
-                            throw new Error("Failed to send UAD Data");
-                        }
+            if (await this.connect() === false) {
+                console.log("Device is not connected");
+                return;
             }
-        }
 
-        // Tell device to save UAD
-        var command = new Uint8Array([HIDCommand.UAD_SAVE | HIDWrite]);
+            // Generate UAD
+            this.updateEditorState(EditorState.GENERATING_UAD);
+            let uad = undefined
+            try {
+                uad = this.generateUAD();
+            } catch (error) {
+                this.updateEditorState(EditorState.GENERATING_UAD_ERROR);
+                console.error("Failed to generate UAD");
+                return;
+            }
 
-        var reponse = await this.RequestReportToDevice(this.device, command);
+            let uad_encoded = cbor.encode(uad);
+            
 
-        if(reponse[0] !== HIDCommand.ACK || reponse[1] !== HIDCommand.UAD_SAVE + HIDWrite) {
-            throw new Error("Device failed to save UAD");
-            return;
-        }
+            // Tell device to expect new UAD
+            this.updateEditorState(EditorState.SENDING_NEW_UAD_META);
+            var command = new Uint8Array([
+                HIDCommand.UAD_STATUS | HIDWrite, 
+                0, 
+                (uad_encoded.length >> 24) & 0xFF, 
+                (uad_encoded.length >> 16) & 0xFF, 
+                (uad_encoded.length >> 8) & 0xFF,  
+                uad_encoded.length & 0xFF
+            ]);
 
-        console.log("UAD Saved Successfully");
+            console.log("Command");
+            console.log(command);
 
-        // Tell device to load UAD
-        var command = new Uint8Array([HIDCommand.UAD_LOAD | HIDWrite]);
+            var reponse = await this.requestReportToDevice(this.device, command);
 
-        var reponse = await this.RequestReportToDevice(this.device, command);
+            if(reponse[0] !== HIDCommand.ACK || reponse[1] !== HIDCommand.UAD_STATUS + HIDResponse) {
+                this.updateEditorState(EditorState.SENDING_NEW_UAD_META_ERROR);
+                throw new Error("Failed to send UAD Status");
+                return;
+            }
 
-        if(reponse[0] !== HIDCommand.ACK || reponse[1] !== HIDCommand.UAD_LOAD + HIDWrite) {
-            throw new Error("Device failed to load UAD");
-            return;
+            // Send UAD Data
+            this.deviceTransferProgress = 0;
+            this.updateEditorState(EditorState.UPLOADING_TO_DEVICE);
+            const totalSections = Math.ceil(uad_encoded.length / this.deviceDesc.maxHIDPayloadSize);
+            for (let section = 0; section < totalSections; section++) {
+                const start = section * this.deviceDesc.maxHIDPayloadSize;
+                const end = Math.min(uad_encoded.length, (section + 1) * this.deviceDesc.maxHIDPayloadSize);
+                const data = uad_encoded.slice(start, end);
+                var command = new Uint8Array([HIDCommand.UAD_DATA | HIDWrite, (section >> 8) & 0xFF, section & 0xFF, data.length].concat(Array.from(data)));
+
+                var reponse = await this.requestReportToDevice(this.device, command);
+
+                if(reponse[0] === HIDCommand.ACK && reponse[1] === HIDCommand.UAD_DATA + HIDResponse && reponse[2] === (section & 0xFF)) {
+                    this.deviceTransferProgress = (section + 1) / totalSections;
+                    console.log(`Sent UAD Data section ${section + 1} / ${totalSections}`);
+                    continue;
+                } else {
+                    this.updateEditorState(EditorState.UPLOAD_ERROR);
+                    console.log(`Failed to send UAD Data section ${section + 1} / ${totalSections}`);
+                    throw new Error("Failed to send UAD Data");
+                }
+            }
+
+            // Tell device to save UAD
+            this.updateEditorState(EditorState.DEVICE_SAVING_UAD);
+            var command = new Uint8Array([HIDCommand.UAD_SAVE | HIDWrite]);
+
+            var reponse = await this.requestReportToDevice(this.device, command);
+
+            if(reponse[0] !== HIDCommand.ACK || reponse[1] !== HIDCommand.UAD_SAVE + HIDWrite) {
+                this.updateEditorState(EditorState.DEVICE_SAVING_UAD_ERROR);
+                throw new Error("Device failed to save UAD");
+                return;
+            }
+
+            console.log("UAD Saved Successfully");
+
+            // Tell device to load UAD
+            this.updateEditorState(EditorState.DEVICE_LOADING_UAD);
+            var command = new Uint8Array([HIDCommand.UAD_LOAD | HIDWrite]);
+
+            var reponse = await this.requestReportToDevice(this.device, command);
+
+            if(reponse[0] !== HIDCommand.ACK || reponse[1] !== HIDCommand.UAD_LOAD + HIDWrite) {
+                this.updateEditorState(EditorState.DEVICE_LOADING_UAD_ERROR);
+                throw new Error("Device failed to load UAD");
+                return;
+            }
+
+            this.updateEditorState(EditorState.UPLOAD_TO_DEVICE_COMPLETED);
+            console.log("Device UAD Loaded Successfully");
+        } catch (error) {
+            this.updateEditorState(EditorState.UPLOAD_ERROR);
+            console.error(error);
         }
     }
 
-
-
-
-    // uploadToDevice() {
-    //     console.log("Upload to Device")
-
-    //     // Check if device is connected
-
-    //     let uad = this.generateUAD();
-
-    //     // Convert to CBOR
-    //     let uad_encoded = cbor.encode(uad);
-
-    //     // Print to console
-    //     let string = `static const uint8_t sample_uad[${uad_encoded.length}]  = {\n`
-
-    //     for (let i = 0; i < uad_encoded.length; i++) {
-    //         string += `0x${uad_encoded[i].toString(16).padStart(2, "0")}, `
-    //         if (i % 16 == 15) {
-    //             string += "\n"
-    //         }
-    //     }
-
-    //     string = string.slice(0, -2);
-    //     string += "\n};"
-
-    //     console.log(string)
-
-    //     // Download binary file
-    //     console.log(uad_encoded)
-    //     var blob = new Blob([uad_encoded], {
-    //         type: "application/octet-stream"
-    //     });
-    //     var downloadAnchorNode = document.createElement('a');
-    //     downloadAnchorNode.setAttribute("href", window.URL.createObjectURL(blob));
-    //     downloadAnchorNode.setAttribute("download", "keymap.uad");
-    //     document.body.appendChild(downloadAnchorNode); // required for firefox
-    //     downloadAnchorNode.click();
-    //     downloadAnchorNode.remove();
-    // }
-
     async importFromDevice() {
-        console.log("Import From Device")
-        
-        if (this.device === undefined || !this.device.opened || this.deviceDesc === undefined) {
-            await this.connect();
-        }
+        try {
+            console.log("Import From Device")
+            
+            if (await this.connect() === false) {
+                console.log("Device is not connected");
+                return;
+            }
 
-        let deviceUADStatus = await this.getDeviceUADStatus(this.device);
+            this.updateEditorState(EditorState.IMPORTING_FROM_DEVICE);
+            let deviceUADStatus = await this.getDeviceUADStatus(this.device);
+            
+            if (deviceUADStatus === undefined) {
+                this.updateEditorState(EditorState.FETCHING_UAD_STATUS_ERROR);
+                console.log("Failed to get device UAD Status");
+                // alert("Failed to get device UAD Status");
+                return;
+            } else {
+                console.log("Device UAD Status fetched");
+                console.log(deviceUADStatus);
+            }
 
-        if (deviceUADStatus === undefined) {
-            console.log("Failed to get device UAD Status");
-            alert("Failed to get device UAD Status");
-            return;
-        } else {
-            console.log("Device UAD Status fetched");
-            console.log(deviceUADStatus);
-        }
+            if(!deviceUADStatus.loaded) {
+                // alert("Device does not have a keymap loaded");
+                this.updateEditorState(EditorState.DEVICE_UAD_NOT_LOADED);
+                console.log("Device UAD is not loaded");
+                return;
+            }
 
-        if(!deviceUADStatus.loaded) {
-            alert("Device does not have a keymap loaded");
-            console.log("Device UAD is not loaded");
-            return;
-        }
+            const uad_encoded = new Uint8Array(deviceUADStatus?.uadSize);
 
-        const uad_encoded = new Uint8Array(deviceUADStatus?.uadSize);
+            const totalSections = Math.ceil(deviceUADStatus?.uadSize / this.deviceDesc.maxHIDPayloadSize);
+            
+            this.deviceTransferProgress = 0;
+            this.updateEditorState(EditorState.IMPORTING_FROM_DEVICE);
+            for (let section = 0; section < totalSections; section++) {
+                const deviceUADData = await this.getDeviceUADData(this.device, section);
 
-        const totalSections = Math.ceil(deviceUADStatus?.uadSize / 8);
-        
-        for (let section = 0; section < totalSections; section++) {
-            for (let retry = 0; retry < 3; retry++) {
-                try {
-                    const deviceUADData = await this.getDeviceUADData(this.device, section);
-        
-                    if (deviceUADData === undefined) {
-                        console.log(`Failed to get device UAD Data section ${section + 1} / ${totalSections}`);
-                        return;
-                    } else {
-                        console.log(`Device UAD Data fetched for section ${section + 1} / ${totalSections}`);
-                    }
-        
-                    if (deviceUADData.section === section) {
-                        // Ensure data is a Uint8Array and add it to the correct position in uad_encoded
-                        const data = new Uint8Array(deviceUADData.data); // Convert to Uint8Array if needed
-                        const start = section * 8;
-                        uad_encoded.set(data, start);
-                        break;
-                    }
-                } catch (error) {
-                    console.log(`Error fetching UAD Data for section ${section + 1} / ${totalSections}:`, error);
+                if (deviceUADData === undefined) {
+                    this.updateEditorState(EditorState.IMPORT_ERROR);
+                    console.log(`Failed to get device UAD Data section ${section + 1} / ${totalSections}`);
+                    return;
+                } else {
+                    this.deviceTransferProgress = (section + 1) / totalSections;
+                    console.log(`Device UAD Data fetched for section ${section + 1} / ${totalSections}`);
                 }
+
+                if (deviceUADData.section === section) {
+                    // Ensure data is a Uint8Array and add it to the correct position in uad_encoded
+                    const data = new Uint8Array(deviceUADData.data); // Convert to Uint8Array if needed
+                    const start = section * this.deviceDesc.maxHIDPayloadSize;
+                    uad_encoded.set(data, start);
+                }
+                else
+                {
+                    this.updateEditorState(EditorState.IMPORT_ERROR);
+                    console.log(`Failed to get device UAD Data section ${section + 1} / ${totalSections}`);
+                    return;
+                }
+
             }
-        }
-        var uad = cbor.decode(uad_encoded);
-
-        this.loadUAD(uad);
-
-        function getLeftMostBitPosition(value) {
-            let position = -1;
-            while (value > 0) {
-                position++;
-                value >>= 1; // Right shift the value
+            var uad = cbor.decode(uad_encoded);
+            
+            this.updateEditorState(EditorState.PARSING_UAD);
+            try {
+                this.loadUAD(uad);
+            } catch (error) {
+                this.updateEditorState(EditorState.PARSING_UAD_ERROR);
+                console.error("Failed to parse UAD");
+                return;
             }
-            return position;
-        }
 
-        var layer = getLeftMostBitPosition(deviceUADStatus.layerEnabled);
-        this.selectLayer(layer);
+            function getLeftMostBitPosition(value) {
+                let position = -1;
+                while (value > 0) {
+                    position++;
+                    value >>= 1; // Right shift the value
+                }
+                return position;
+            }
+
+            var layer = getLeftMostBitPosition(deviceUADStatus.layerEnabled);
+            this.selectLayer(layer);
+
+            this.updateEditorState(EditorState.IMPORT_FROM_DEVICE_COMPLETED);
+            console.log("Import Completed");
+        } catch (error) {
+            this.updateEditorState(EditorState.IMPORT_ERROR);
+            console.error(error);
+        }
     }
 }
