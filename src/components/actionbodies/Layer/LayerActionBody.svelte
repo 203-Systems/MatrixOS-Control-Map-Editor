@@ -27,17 +27,17 @@
         <div class="action-setting-slot">
             <span>Layer Action Mode</span>
 
-            <DropDown options={Object.keys(LayerActionMode)} bind:value={data.mode} on:selectionChanged={e => changeLayerActionMode(e.detail.option)}/>
+            <DropDown options={Object.keys(LayerActionMode)} bind:value={data.mode} on:changed={e => changeLayerActionMode(e.detail.option)}/>
         </div>
         <div class="action-setting-slot">
             <span>Layer Action Type</span>
 
-            <DropDown options={Object.keys(LayerActionType)} bind:value={data.type} on:selectionChanged={e => changeLayerActionMode(e.detail.option)}/>
+            <DropDown options={Object.keys(LayerActionType)} bind:value={data.type} on:changed={e => changeLayerActionMode(e.detail.option)}/>
         </div>
         <div class="action-setting-slot">
             <span>Layer Action Option</span>
 
-            <DropDown options={Object.keys(LayerActionOption)} bind:value={data.option} on:selectionChanged={e => changeLayerActionMode(e.detail.option)}/>
+            <DropDown options={Object.keys(LayerActionOption)} bind:value={data.option} on:changed={e => changeLayerActionMode(e.detail.option)}/>
         </div>
         <div class="action-setting-slot">
             <span>Relative Indexing</span>

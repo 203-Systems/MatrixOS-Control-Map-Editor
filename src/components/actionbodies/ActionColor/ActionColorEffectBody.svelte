@@ -5,6 +5,8 @@
     import '../Action.css';
     import CheckBox from "../../common/CheckBox.svelte";
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
     export let data: ActionColorEffectData;
 
@@ -46,11 +48,11 @@
             {#each Array(16) as _, index}
                 <div class="action-setting-slot">
                     {#if index === 0}
-                        <span style="flex-grow: 1;">Idle Color</span>
+                        <span style="flex-grow: 1;">{$t(`actioncolor.idleColor`)}</span>
                     {:else}
-                        <span style="flex-grow: 1;">Color {index}</span>
+                        <span style="flex-grow: 1;">{$t(`actioncolor.color`)} {index}</span>
                     {/if}
-                    <span >Enable </span>
+                    <span >{$t(`actioncolor.enable`)}</span>
                     <input 
                         type="checkbox" 
                         

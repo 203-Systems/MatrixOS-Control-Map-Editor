@@ -39,7 +39,7 @@ export function SysexToByteArray(sysex: string): Uint8Array | Error {
 
 export class MidiAction implements Action {
     static readonly identifier: string = "midi";
-    static readonly description: string = "Send a Midi Message";
+    static readonly description: string = "midi.description";
     static readonly icon: SvelteComponent = Music;
     static readonly body: SvelteComponent = MidiActionBody;
 

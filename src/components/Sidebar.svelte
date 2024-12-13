@@ -6,6 +6,8 @@
     import type {KeyID} from "$lib/types/KeyID";
     import type {KeymapEditor} from "$lib/editors/KeymapEditor";
     import { effects } from "./actionbodies/ActionRegistry";
+    
+    import {t} from "$lib/translations";
 
     const dispatch = createEventDispatcher();
 
@@ -44,58 +46,57 @@
 </script>
 
 <div class="sidebar-body">
-    {#if selectedKey !== undefined}
-        <div class="sidebar-topbar">
-            <div
-                    class="tab-button"
-                    class:selected={tabIndex === 0}
-                    on:click={() => tabIndex = 0}>
+    {#if selectedKey === undefined}
+    <div class="no-key-selected">
+        <span>{$t(`editor.selectKeyToBegin`)}</span>
+    </div>
+    {/if}
+    <div class="sidebar-topbar" style = "visibility: {selectedKey === undefined ? 'hidden' : 'visible'}">
+        <div
+                class="tab-button"
+                class:selected={tabIndex === 0}
+                on:click={() => tabIndex = 0}>
 
-                <span bind:this={tabTextElements[0]}>Actions</span>
-            </div>
-
-            <div
-                    class="tab-button"
-                    class:selected={tabIndex === 1}
-                    on:click={() => tabIndex = 1}>
-
-                <span bind:this={tabTextElements[1]}>Effects</span>
-            </div>
-
-            <div class="sidebar-page-indicator" bind:this={pageIndicatorElement}></div>
+            <span bind:this={tabTextElements[0]}>{$t(`editor.actions`)}</span>
         </div>
 
-        {#if currentActions !== undefined}
-            {#each {"action": currentActions.actions, "effect": currentActions.effects}[type] as action, index}
-                    <svelte:component
-                            this={action.constructor.body}
-                            bind:data={action.data}
-                            on:removeAction={() => dispatch('removeAction', { type: type, index: index})}
-                    />
-            {/each}
+        <div
+                class="tab-button"
+                class:selected={tabIndex === 1}
+                on:click={() => tabIndex = 1}>
+
+            <span bind:this={tabTextElements[1]}>{$t(`editor.effects`)}</span>
+        </div>
+
+        <div class="sidebar-page-indicator" bind:this={pageIndicatorElement}></div>
+    </div>
+
+    {#if currentActions !== undefined}
+        {#each {"action": currentActions.actions, "effect": currentActions.effects}[type] as action, index}
+                <svelte:component
+                        this={action.constructor.body}
+                        bind:data={action.data}
+                        on:removeAction={() => dispatch('removeAction', { type: type, index: index})}
+                />
+        {/each}
+    {/if}
+
+    
+    <div class="add-action-button" on:click={() => showAddActionMenu = !showAddActionMenu} style = "visibility: {selectedKey === undefined ? 'hidden' : 'visible'}">
+        {#if type === "action"}
+            <span>{$t(`editor.addAction`)}</span>
+        {:else}
+            <span>{$t(`editor.addEffect`)}</span>
         {/if}
 
-        
-        <div class="add-action-button" on:click={() => showAddActionMenu = !showAddActionMenu}>
-            {#if type === "action"}
-                <span>Add Action</span>
-            {:else}
-                <span>Add Effect</span>
-            {/if}
+        <Add size={24}></Add>
+    </div>
 
-            <Add size={24}></Add>
-        </div>
-
-        <AddActionMenu
-                bind:show={showAddActionMenu}
-                bind:type={type}
-                on:addAction={e => dispatch('addAction', { type: type, actionIdentifier: e.detail.actionIdentifier })}
-        />
-    {:else}
-        <div class="no-key-selected">
-            <span>Please Select a Key to begin</span>
-        </div>
-    {/if}
+    <AddActionMenu
+            bind:show={showAddActionMenu}
+            bind:type={type}
+            on:addAction={e => dispatch('addAction', { type: type, actionIdentifier: e.detail.actionIdentifier })}
+    />
 </div>
 
 <style lang="scss">

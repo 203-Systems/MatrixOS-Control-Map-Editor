@@ -24,6 +24,7 @@
 		"carbon-icons-svelte": "^12.13.0",
 		"cbor-web": "^8.1.0",
 		"reinvented-color-wheel": "^0.4.0",
-		"sass": "^1.57.0"
+		"sass": "^1.57.0",
+		"sveltekit-i18n": "^2.4.2"
 	}
 }

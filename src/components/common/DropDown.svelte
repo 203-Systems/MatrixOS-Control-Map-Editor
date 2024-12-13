@@ -2,6 +2,8 @@
     import { ChevronLeft, ChevronDown } from "carbon-icons-svelte";
     import { createEventDispatcher } from 'svelte';
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
 
     export let options: 
@@ -33,7 +35,7 @@
     function selectOption(selectedOption: any) {
         value = selectedOption;
         expanded = false;
-        dispatch('selectionChanged', { option: selectedOption });
+        dispatch('changed', { option: selectedOption });
     }
 
     let parsedOptions: { key: number | string; value: string }[] = [];
@@ -76,7 +78,7 @@ $: {
 
     if (!found) return String(selectedValue);
 
-    return typeof found === 'object' ? found.value : found;
+    return typeof found === 'object' ? $t(found.value) : $t(found);
 }
 
 
@@ -101,7 +103,7 @@ $: {
         <div class="option-selector" style="width: {dropdownMain?.clientWidth + 20 || 140}px" use:clickOutside on:outclick={() => expanded = false}>
             {#each parsedOptions as option}
                 <div class="selectable-option" on:click={() => selectOption(option.key)}>
-                    <span>{option.value}</span>
+                    <span>{$t(option.value)}</span>
                 </div>
             {/each}
         </div>

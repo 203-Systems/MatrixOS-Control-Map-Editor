@@ -1,0 +1,14 @@
+{
+    "connect_device": "连接设备",
+    "import_from_file": "从文件导入",
+    "export_to_file": "导出到文件",
+    "import_from_device": "从设备导入",
+    "upload_to_device": "上传到设备",
+    "settings": "设置",
+    "close": "关闭",
+    "actions": "动作",
+    "effects": "效果",
+    "addAction": "添加动作",
+    "addEffect": "添加效果",
+    "selectKeyToBegin" : "请选择一个按键来开始编辑"
+}

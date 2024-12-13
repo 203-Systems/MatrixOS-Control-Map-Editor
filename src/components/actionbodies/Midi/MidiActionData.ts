@@ -15,33 +15,33 @@ export enum MidiType {
 }
 
 export const MidiTypeMap = new Map([
-    [MidiType.Note, "Note"],
-    [MidiType.ControlChange, "Control Change"],
-    [MidiType.ProgramChange, "Program Change"],
-    [MidiType.ChannelPressure, "Channel Pressure"],
-    [MidiType.PitchBend, "Pitch Bend"],
-    [MidiType.Sysex, "SysEx"],
-    [MidiType.RPN, "RPN"],
-    [MidiType.NRPN, "NRPN"],
-    [MidiType.Start, "Start"],
-    [MidiType.Continue, "Continue"],
-    [MidiType.Stop, "Stop"],
-    [MidiType.Reset, "Reset"],
+    [MidiType.Note,'midi.type.note'],
+    [MidiType.ControlChange,'midi.type.control_change'],
+    [MidiType.ProgramChange,'midi.type.program_change'],
+    [MidiType.ChannelPressure,'midi.type.channel_pressure'],
+    [MidiType.PitchBend,'midi.type.pitch_bend'],
+    [MidiType.Sysex,'midi.type.sysex'],
+    [MidiType.RPN,'midi.type.rpn'],
+    [MidiType.NRPN,'midi.type.nrpn'],
+    [MidiType.Start,'midi.type.start'],
+    [MidiType.Continue,'midi.type.continue'],
+    [MidiType.Stop,'midi.type.stop'],
+    [MidiType.Reset,'midi.type.reset'],
 ]);
 
 export const MidiTypeMapShort = new Map([
-    [MidiType.Note, "Note"],
-    [MidiType.ControlChange, "CC"],
-    [MidiType.ProgramChange, "PC"],
-    [MidiType.ChannelPressure, "CP"],
-    [MidiType.PitchBend, "Pitch"],
-    [MidiType.Sysex, "SysEx"],
-    [MidiType.RPN, "RPN"],
-    [MidiType.NRPN, "NRPN"],
-    [MidiType.Start, "Start"],
-    [MidiType.Continue, "Cont"],
-    [MidiType.Stop, "Stop"],
-    [MidiType.Reset, "Reset"],
+    [MidiType.Note,'midi.short.note'],
+    [MidiType.ControlChange,'midi.short.cc'],
+    [MidiType.ProgramChange,'midi.short.pc'],
+    [MidiType.ChannelPressure,'midi.short.cp'],
+    [MidiType.PitchBend,'midi.short.pitch'],
+    [MidiType.Sysex,'midi.short.sysex'],
+    [MidiType.RPN,'midi.short.rpn'],
+    [MidiType.NRPN,'midi.short.nrpn'],
+    [MidiType.Start,'midi.short.start'],
+    [MidiType.Continue,'midi.short.cont'],
+    [MidiType.Stop,'midi.short.stop'],
+    [MidiType.Reset,'midi.short.reset'],
 ]);
 
 export enum AnalogSource {
@@ -52,15 +52,13 @@ export enum AnalogSource {
 }
 
 export const AnalogSourceMap = new Map([
-    [AnalogSource.Momentary, "Momentary"],
-    [AnalogSource.Persistent, "Persistent"],
-    [AnalogSource.Toggle, "Toggle"],
-    [AnalogSource.KeyForce, "Key Force"],
+    [AnalogSource.Momentary,'midi.analog.momentary'],
+    [AnalogSource.Persistent,'midi.analog.persistent'],
+    [AnalogSource.Toggle,'midi.analog.toggle'],
+    [AnalogSource.KeyForce,'midi.analog.key_force'],
 ]);
-
- 
 
 export type MidiActionData = {
     type: MidiType,
-    data: MidiNoteData | MidiCCData | MidiPCData | MidiCPData | MidiPitchbendData | MidiRPNData | MidiNRPNData | MidiSysexData | null
+    data: {} | null,
 }

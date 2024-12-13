@@ -5,9 +5,10 @@ import ActionColorEffectBody from "./ActionColorEffectBody.svelte";
 import {WatsonHealthSpineLabel} from "carbon-icons-svelte";
 import type {ActionEffectData} from "./ActionColorEffectData";
 
+
 export class ActionColorEffect implements Effect {
     static readonly identifier: string = "actioncolor";
-    static readonly description: string = "Action Driven Color";
+    static readonly description: string = "actioncolor.description";
     static readonly icon: SvelteComponent = WatsonHealthSpineLabel;
     static readonly body: SvelteComponent = ActionColorEffectBody;
 

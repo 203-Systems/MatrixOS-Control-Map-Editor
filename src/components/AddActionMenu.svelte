@@ -5,6 +5,9 @@
 
     export let show: boolean = false;
     export let type:ActionType = "action";
+
+    import {t} from "$lib/translations";
+    
     const dispatch = createEventDispatcher();
 
     function clickOutside(node) {
@@ -44,7 +47,7 @@
                         </div>
 
                         <div class="label-section">
-                            <span>{action[1].description}</span>
+                            <span>{$t(action[1].description)}</span>
                         </div>
                     </div>
             {/each}

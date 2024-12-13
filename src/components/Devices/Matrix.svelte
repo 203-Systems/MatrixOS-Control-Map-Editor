@@ -5,6 +5,8 @@
     import type { KeyID } from '$lib/types/KeyID';
     import { fade } from 'svelte/transition';
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
 
     export let editorBackend: KeymapEditor
@@ -68,13 +70,13 @@
                             <div class="action-display-container" in:fade="{{duration: 100}}" out:fade="{{duration: 100}}">
                                 {#if activeActions[x][y].actions.length === 1}
                                 <span class="action-title">
-                                    {activeActions[x][y].actions[0].info("Title")}
+                                    {$t(activeActions[x][y].actions[0].info("Title"))}
                                 </span>
 
                                     {#if activeActions[x][y].actions[0].info("Subtitle") != null}
                                     <div class="subtitle-container">
                                         <span class="action-subtitle">
-                                            {activeActions[x][y].actions[0].info("Subtitle")}
+                                            {$t(activeActions[x][y].actions[0].info("Subtitle"))}
                                         </span>
                                     </div>
                                     {/if}

@@ -10,25 +10,14 @@
     import {MidiAction} from "./MidiAction";
     import '../Action.css';
 
+    import {t} from "$lib/translations";
+
     const dispatch = createEventDispatcher();
     
     export let data: MidiActionData;
 
     function changeMidiActionType(type: MidiType): void {
-        console.log(data.type);
-        console.log(typeof data.type);
-        // if (MidiTypeMap.has(type))
-        // {
-        //     console.log("Setting type to " + type);
-        //     data.type = type;
-        // }
-        // else
-        // {
-        //     console.log("Setting type to Default Note" + type);
-        //     data.type = MidiType.Note;
-        // }
-
-        // data.type = MidiTypeMap.has(type) ? type : MidiType.Note;
+        console.log("Changing type to " + type);
         switch (data.type) {
             case MidiType.Note:
                 data.data = {
@@ -104,174 +93,174 @@
     }
 </script>
 
-<ActionTemplate actionTitle={MidiAction.description} on:removeAction={() => dispatch('removeAction')}>
+<ActionTemplate actionTitle={$t('midi.description')} on:removeAction={() => dispatch('removeAction')}>
     <div class="action-settings">
         <div class="action-setting-slot">
-            <span>Message Type</span>
+            <span>{$t('midi.body.message_type')}</span>
 
-            <DropDown options={MidiTypeMap} bind:value={data.type} on:selectionChanged={e => changeMidiActionType(e.detail.option)}/>
+            <DropDown options={MidiTypeMap} bind:value={data.type} on:changed={e => changeMidiActionType(e.detail.option)}/>
         </div>
 
         {#if data.type === MidiType.Note}
             <div class="action-setting-slot">
-                <span>Channel</span>
+                <span>{$t('midi.body.channel')}</span>
                 <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Note</span>
+                <span>{$t('midi.body.note')}</span>
 
                 <NumericUpDown bind:value={data.data.note} min={0} max={127}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Velocity Source</span>
+                <span>{$t('midi.body.velocity_source')}</span>
 
                 <DropDown options={AnalogSourceMap} bind:value={data.data.source}/>
             </div>
 
             {#if data.data.source === AnalogSource.KeyForce || data.data.source === AnalogSource.Momentary || data.data.source === AnalogSource.Toggle}
                 <div class="action-setting-slot">
-                    <span>Velocity Range</span>
+                    <span>{$t('midi.body.velocity_range')}</span>
 
                     <NumericUpDown bind:value={data.data.begin} min={0} max={127}/>
                     <NumericUpDown bind:value={data.data.end} min={0} max={127}/>
                 </div>
             {:else if data.data.source === AnalogSource.Persistent}
                 <div class="action-setting-slot">
-                    <span>Velocity Value</span>
+                    <span>{$t('midi.body.velocity_value')}</span>
                     <NumericUpDown bind:value={data.data.end} min={0} max={127}/>
                 </div>
             {/if}
             
         {:else if data.type === MidiType.ControlChange}
             <div class="action-setting-slot">
-                <span>Channel</span>
+                <span>{$t('midi.body.channel')}</span>
                 <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
             </div>
             
             <div class="action-setting-slot">
-                <span>Control</span>
+                <span>{$t('midi.body.control')}</span>
 
                 <NumericUpDown bind:value={data.data.control} min={0} max={127}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Value Source</span>
+                <span>{$t('midi.body.value_source')}</span>
 
                 <DropDown options={AnalogSourceMap} bind:value={data.data.source}/>
             </div>
 
             {#if data.data.source === AnalogSource.KeyForce || data.data.source === AnalogSource.Momentary || data.data.source === AnalogSource.Toggle}
                 <div class="action-setting-slot">
-                    <span>Value Range</span>
+                    <span>{$t('midi.body.value_range')}</span>
 
                     <NumericUpDown bind:value={data.data.begin} min={0} max={127}/>
                     <NumericUpDown bind:value={data.data.end} min={0} max={127}/>
                 </div>
             {:else if data.data.source === AnalogSource.Persistent}
                 <div class="action-setting-slot">
-                    <span>Value</span>
+                    <span>{$t('midi.body.value')}</span>
                     <NumericUpDown bind:value={data.data.end} min={0} max={127}/>
                 </div>
             {/if}
 
         {:else if data.type === MidiType.ProgramChange}
             <div class="action-setting-slot">
-                <span>Channel</span>
+                <span>{$t('midi.body.channel')}</span>
                 <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
             </div>
             
             <div class="action-setting-slot">
-                <span>Control</span>
+                <span>{$t('midi.body.control')}</span>
 
                 <NumericUpDown bind:value={data.data.control} min={0} max={127}/>
             </div>
 
         {:else if data.type === MidiType.ChannelPressure}
             <div class="action-setting-slot">
-                <span>Channel</span>
+                <span>{$t('midi.body.channel')}</span>
                 <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Velocity Source</span>
+                <span>{$t('midi.body.velocity_source')}</span>
 
                 <DropDown options={AnalogSourceMap} bind:value={data.data.source}/>
             </div>
 
             {#if data.data.source === AnalogSource.KeyForce || data.data.source === AnalogSource.Momentary || data.data.source === AnalogSource.Toggle}
                 <div class="action-setting-slot">
-                    <span>Velocity Range</span>
+                    <span>{$t('midi.body.velocity_range')}</span>
 
                     <NumericUpDown bind:value={data.data.begin} min={0} max={127}/>
                     <NumericUpDown bind:value={data.data.end} min={0} max={127}/>
                 </div>
             {:else if data.data.source === AnalogSource.Persistent}
                 <div class="action-setting-slot">
-                    <span>Velocity Value</span>
+                    <span>{$t('midi.body.velocity_value')}</span>
                     <NumericUpDown bind:value={data.data.end} min={0} max={127}/>
                 </div>
             {/if}
         {:else if data.type === MidiType.PitchBend}
             <div class="action-setting-slot">
-                <span>Channel</span>
+                <span>{$t('midi.body.channel')}</span>
                 <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Pitch Source</span>
+                <span>{$t('midi.body.pitch_source')}</span>
 
                 <DropDown options={AnalogSourceMap} bind:value={data.data.source}/>
             </div>
 
             {#if data.data.source === AnalogSource.KeyForce || data.data.source === AnalogSource.Momentary || data.data.source === AnalogSource.Toggle}
                 <div class="action-setting-slot">
-                    <span>Pitch Range</span>
+                    <span>{$t('midi.body.pitch_range')}</span>
 
                     <FloatUpDown bind:value={data.data.begin} min={-1.0} max={1.0}/>
                     <FloatUpDown bind:value={data.data.end} min={-1.0} max={1.0}/>
                 </div>
             {:else if data.data.source === AnalogSource.Persistent}
                 <div class="action-setting-slot">
-                    <span>Pitch</span>
+                    <span>{$t('midi.body.pitch')}</span>
                     <FloatUpDown bind:value={data.data.end} min={-1.0} max={1.0}/>
                 </div>
             {/if}
         {:else if data.type === MidiType.RPN || data.type === MidiType.NRPN}
             <div class="action-setting-slot">
-                <span>Channel</span>
+                <span>{$t('midi.body.channel')}</span>
                 <NumericUpDown bind:value={data.data.channel} min={1} max={16}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Control</span>
+                <span>{$t('midi.body.control')}</span>
 
                 <NumericUpDown bind:value={data.data.control} min={0} max={16383}/>
             </div>
 
             <div class="action-setting-slot">
-                <span>Value Source</span>
+                <span>{$t('midi.body.value_source')}</span>
 
                 <DropDown options={AnalogSourceMap} bind:value={data.data.source}/>
             </div>
 
             {#if data.data.source === AnalogSource.KeyForce || data.data.source === AnalogSource.Momentary || data.data.source === AnalogSource.Toggle}
                 <div class="action-setting-slot">
-                    <span>Value Range</span>
+                    <span>{$t('midi.body.value_range')}</span>
 
                     <NumericUpDown bind:value={data.data.begin} min={0} max={16383}/>
                     <NumericUpDown bind:value={data.data.end} min={0} max={16383}/>
                 </div>
             {:else if data.data.source === AnalogSource.Persistent}
                 <div class="action-setting-slot">
-                    <span>Value</span>
+                    <span>{$t('midi.body.value')}</span>
                     <NumericUpDown bind:value={data.data.end} min={0} max={16383}/>
                 </div>
             {/if}
         {:else if data.type === MidiType.Sysex}
             <div class="action-setting-slot">
-                <span>Data</span>
+                <span>{$t('midi.body.data')}</span>
 
                 <input type="text" bind:value={data.data.sysex}/>
             </div>
@@ -279,7 +268,7 @@
             <!-- No additional settings -->
         {:else}
             <div class="action-setting-slot">
-                <span>Unknown Type</span>
+                <span>{$t('midi.body.unknown_type')}</span>
             </div>
         {/if}
 

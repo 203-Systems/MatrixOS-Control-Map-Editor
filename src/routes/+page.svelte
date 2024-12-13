@@ -3,6 +3,7 @@
     import Matrix from "../components/Devices/Matrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import Popup from "../components/common/Popup.svelte";
+    import Dropdown from "../components/common/Dropdown.svelte";
 
     import LayerSelector from "../components/LayerSelector.svelte";
     import { KeymapEditor, EditorState} from "$lib/editors/KeymapEditor";
@@ -12,6 +13,10 @@
     import { Usb, DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
     import { onMount } from "svelte";
 
+    import {t, locale, locales} from "$lib/translations";
+
+    import {browser} from "$app/environment";
+
     let updateCount: number = 0; //Cause all components to update
     let selectedKey:KeyID = undefined;
     let editorBackend = new KeymapEditor(update)
@@ -20,6 +25,19 @@
     let editorStateViewer:boolean = false;
     let editorStateViewerCloseable:boolean = true;
     let deviceTransferProgress:number = 0;
+
+    let showSetting:boolean = false;
+
+    let settings = {
+        language: "en"
+    };
+
+    let settings_loaded = false;
+
+    $: if (browser && settings_loaded) {
+        console.log("Saving setting");
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }
 
     function update(): void {
         updateCount += 1;
@@ -48,66 +66,54 @@
         update();
     })
 
-//     export enum editorState {
-//     USER_SELECTING,
-//     CHECKING_IN_APP,
-//     FETCHING_DEVICE_DESCRIPTOR,
-//     FETCHING_UAD_STATUS,
-//     SENDING_NEW_UAD_META,
-//     IMPORTING_FROM_DEVICE,
-//     UPLOAD_TO_DEVICE,
-//     DEVICE_SAVING_UAD,
-//     DEVICE_LOADING_UAD,
-
-//     BROWSER_NOT_SUPPORTED,  
-//     NO_DEVICE_SELECTED,
-//     DEVICE_NOT_IN_APP,
-//     FETCHING_DEVICE_DESCRIPTOR_ERROR,
-//     FETCHING_UAD_STATUS_ERROR,
-//     SENDING_NEW_UAD_META_ERROR,
-//     IMPORT_ERROR,
-//     UPLOAD_ERROR,
-//     DEVICE_SAVING_UAD_ERROR,
-//     DEVICE_LOADING_UAD_ERROR,
-// }
-
     let editorStatePopupTitle = undefined;
 
     const editorStatePopupDesc = {
-        [EditorState.DISCONNECTED]: "Device Disconnected",
-        [EditorState.CONNECTED]: "Device Connected",
+        [EditorState.DISCONNECTED]: $t('editor_state.disconnected'),
+        [EditorState.CONNECTED]: $t('editor_state.connected'),
         
-        [EditorState.USER_SELECTING_DEVICE]: "Please Select a device",
-        [EditorState.CHECKING_IN_APP]: "Checking if the device is in the app",
-        [EditorState.FETCHING_DEVICE_DESCRIPTOR]: "Fetching device descriptor",
-        [EditorState.FETCHING_UAD_STATUS]: "Fetching control map status",
-        [EditorState.SENDING_NEW_UAD_META]: "Sending new control map info",
-        [EditorState.IMPORTING_FROM_DEVICE]: "Importing control map from device",
-        [EditorState.UPLOADING_TO_DEVICE]: "Uploading control map to device",
-        [EditorState.DEVICE_SAVING_UAD]: "Saving UAD to device",
-        [EditorState.DEVICE_LOADING_UAD]: "Loading UAD from device",
+        [EditorState.USER_SELECTING_DEVICE]: $t('editor_state.user_selecting_device'),
+        [EditorState.CHECKING_IN_APP]: $t('editor_state.checking_in_app'),
+        [EditorState.FETCHING_DEVICE_DESCRIPTOR]: $t('editor_state.fetching_device_descriptor'),
+        [EditorState.FETCHING_UAD_STATUS]: $t('editor_state.fetching_uad_status'),
+        [EditorState.SENDING_NEW_UAD_META]: $t('editor_state.sending_new_uad_meta'),
+        [EditorState.IMPORTING_FROM_DEVICE]: $t('editor_state.importing_from_device'),
+        [EditorState.UPLOADING_TO_DEVICE]: $t('editor_state.uploading_to_device'),
+        [EditorState.DEVICE_SAVING_UAD]: $t('editor_state.device_saving_uad'),
+        [EditorState.DEVICE_LOADING_UAD]: $t('editor_state.device_loading_uad'),
 
-        [EditorState.UPLOAD_TO_DEVICE_COMPLETED]: "Upload to device completed",
-        [EditorState.IMPORT_FROM_DEVICE_COMPLETED]: "Import from device completed",
+        [EditorState.UPLOAD_TO_DEVICE_COMPLETED]: $t('editor_state.upload_to_device_completed'),
+        [EditorState.IMPORT_FROM_DEVICE_COMPLETED]: $t('editor_state.import_from_device_completed'),
 
-        [EditorState.GENERATING_UAD]: "Generating Control Map",
-        [EditorState.PARSING_UAD]: "Error parsing control map",
+        [EditorState.GENERATING_UAD]: $t('editor_state.generating_uad'),
+        [EditorState.PARSING_UAD]: $t('editor_state.parsing_uad'),
         
-        [EditorState.BROWSER_NOT_SUPPORTED]: "Browser not supported",
-        [EditorState.NO_DEVICE_SELECTED]: "No device selected",
-        [EditorState.DEVICE_NOT_IN_APP]: "Device not in app",
-        [EditorState.FETCHING_DEVICE_DESCRIPTOR_ERROR]: "Failed fetching device descriptor",
-        [EditorState.FETCHING_UAD_STATUS_ERROR]: "Failed fetching control map info",
-        [EditorState.DEVICE_UAD_NOT_LOADED]: "Device doesn't have a loaded control map",
-        [EditorState.SENDING_NEW_UAD_META_ERROR]: "Failed sending new control map info",
-        [EditorState.IMPORT_ERROR]: "Failed importing from device",
-        [EditorState.UPLOAD_ERROR]: "Failed uploading to device",
-        [EditorState.DEVICE_SAVING_UAD_ERROR]: "Device failed to save control map",
-        [EditorState.DEVICE_LOADING_UAD_ERROR]: "Device failed to load control map",
+        [EditorState.BROWSER_NOT_SUPPORTED]: $t('editor_state.browser_not_supported'),
+        [EditorState.NO_DEVICE_SELECTED]: $t('editor_state.no_device_selected'),
+        [EditorState.DEVICE_NOT_IN_APP]: $t('editor_state.device_not_in_app'),
+        [EditorState.FETCHING_DEVICE_DESCRIPTOR_ERROR]: $t('editor_state.fetching_device_descriptor_error'),
+        [EditorState.FETCHING_UAD_STATUS_ERROR]: $t('editor_state.fetching_uad_status_error'),
+        [EditorState.DEVICE_UAD_NOT_LOADED]: $t('editor_state.device_uad_not_loaded'),
+        [EditorState.SENDING_NEW_UAD_META_ERROR]: $t('editor_state.sending_new_uad_meta_error'),
+        [EditorState.IMPORT_ERROR]: $t('editor_state.import_error'),
+        [EditorState.UPLOAD_ERROR]: $t('editor_state.upload_error'),
+        [EditorState.DEVICE_SAVING_UAD_ERROR]: $t('editor_state.device_saving_uad_error'),
+        [EditorState.DEVICE_LOADING_UAD_ERROR]: $t('editor_state.device_loading_uad_error'),
 
-        [EditorState.GENERATING_UAD_ERROR]: "Failed generating control map",
-        [EditorState.PARSING_UAD_ERROR]: "Failed parsing control map",
+        [EditorState.GENERATING_UAD_ERROR]: $t('editor_state.generating_uad_error'),
+        [EditorState.PARSING_UAD_ERROR]: $t('editor_state.parsing_uad_error'),
+    };
+
+    if (browser) {
+        (async () => {
+            if (browser && localStorage.getItem("settings") != null) {
+                settings = JSON.parse(localStorage.getItem("settings"));
+                console.log(settings);
+            }
+            settings_loaded = true;
+        })();
     }
+
 </script>
 
 <svelte:head>
@@ -121,35 +127,35 @@
                 <img src="Matrix OS.svg" class="logo">
             </div>
 
-            <div class="title">
+            <div class="title" title= {__BUILD_STRING__}>
                 <span>CONTROL MAP EDITOR</span>
             </div>
 
             <div class="controls">
-                <!-- <div class="control" title="Connect to Device" on:click={() => {editorStatePopupTitle = "Connect to Device"; editorBackend.connectToDevice()} }>
-                    <Usb size={24}/>
-                    <span class="control-text">Connect to Device</span>
+                <!-- <div class="control" title={$t('editor.connect_device')} on:click={() => { this.editorStatePopupTitle = $t('editor.connect_device'); editorBackend.connectToDevice(); }}>
+                    <Usb size={24} />
+                    <span class="control-text">{$t('editor.connect_device')}</span>
                 </div> -->
-                <div class="control" title="Import from a file" on:click={() => {editorStatePopupTitle = "Import from File"; editorBackend.importUADA()} }>
-                    <DocumentImport size={24}/>
-                    <span class="control-text">Import from File</span>
+                <div class="control" title={$t('editor.import_from_file')} on:click={() => { editorStatePopupTitle = $t('editor.import_from_file'); editorBackend.importUADA(); }}>
+                    <DocumentImport size={24} />
+                    <span class="control-text">{$t('editor.import_from_file')}</span>
                 </div>
-                <div class="control" title="Export to a file" on:click={() => {editorStatePopupTitle = "Export to File"; editorBackend.exportUADA()} }>
-                    <DocumentExport size={24}/>
-                    <span class="control-text">Export to File</span>
+                <div class="control" title={$t('editor.export_to_file')} on:click={() => { editorStatePopupTitle = $t('editor.export_to_file'); editorBackend.exportUADA(); }}>
+                    <DocumentExport size={24} />
+                    <span class="control-text">{$t('editor.export_to_file')}</span>
                 </div>
-                <div class="control" title="Import from Device" on:click={() => {editorStatePopupTitle = "Import from Device"; editorBackend.importFromDevice()} }>
-                    <Download size={24}/>
-                    <span class="control-text">Import from Device</span>
+                <div class="control" title={$t('editor.import_from_device')} on:click={() => { editorStatePopupTitle = $t('editor.import_from_device'); editorBackend.importFromDevice(); }}>
+                    <Download size={24} />
+                    <span class="control-text">{$t('editor.import_from_device')}</span>
                 </div>
-                <div class="control" title="Upload to Device" on:click={() => {editorStatePopupTitle = "Upload to Device"; editorBackend.uploadToDevice()} }>
-                    <Upload size={24}/>
-                    <span class="control-text">Upload to Device</span>
+                <div class="control" title={$t('editor.upload_to_device')} on:click={() => { editorStatePopupTitle = $t('editor.upload_to_device'); editorBackend.uploadToDevice(); }}>
+                    <Upload size={24} />
+                    <span class="control-text">{$t('editor.upload_to_device')}</span>
                 </div>
-                <div class="control">
-                    <Settings size={24}/>
-                    <span class="control-text">Settings</span>
-                </div>
+                <div class="control" title={$t('editor.settings')} on:click={() => showSetting = true}>
+                    <Settings size={24} />
+                    <span class="control-text">{$t('editor.settings')}</span>
+                </div>                
             </div>
         </div>
 
@@ -187,9 +193,29 @@
                 <progress max="100" value={deviceTransferProgress * 100}></progress>
             {/if}
             {#if editorStateViewerCloseable}
-                <button on:click={() => editorStateViewer = false}>Close</button>
+                <button on:click={() => editorStateViewer = false}>{$t('editor.close')}</button>
             {/if}
         </div>
+    </Popup>
+
+    <Popup title="Settings" bind:show={showSetting}>
+        <div class="settings-popup">
+            <div class="setting">
+                <div class="setting-name">
+                    <span>{$t("setting.language") + ":"}</span>
+                </div>
+                <div class="setting-option">
+                    <Dropdown
+                        options={new Map($locales.map(key => [key, `lang.${key}`]))}
+                        bind:value={settings.language}
+                        on:changed={(e) => {
+                            console.log("Language changed to: " + e.detail.option);
+                            $locale = e.detail.option;
+                            settings.language = e.detail.option;
+                        }}
+                    />
+                </div>
+            </div>
     </Popup>
 </main>
 
@@ -329,6 +355,58 @@
     .popup-error {
         filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.25));
         border: 1px solid red;
+    }
+
+    .editor-state-popup {
+        width: 100%;
+        min-width: 500px;
+        height: 100%;
+        min-height: 200px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Align items at the top initially */
+        align-items: center;
+
+        margin-top: 1rem;
+        .setting {
+                height: 35px;
+
+                display: flex;
+                align-items: center;
+
+                .setting-name {
+                    width: 250px;
+                    display: flex;
+                    align-items: center;
+
+                    color: whitesmoke;
+
+                    font-family: "Roboto Mono", sans-serif;
+                    font-weight: 400;
+                }
+
+                .setting-option {
+                    min-width: 300px;
+                    display: flex;
+                    flex-direction: row-reverse;
+                }
+
+            //     &.mobile {
+            //         flex-direction: column;
+            //         height: auto;
+            //         gap: 10px;
+
+            //         .setting-name {
+            //             width: 100%;
+            //         }
+
+            //         .setting-option {
+            //             width: 100%;
+            //             flex-direction: row;
+            //         }
+            //  }
+        }
     }
 
     .editor-state-popup {
