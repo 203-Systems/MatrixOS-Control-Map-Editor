@@ -236,6 +236,8 @@
                     />
                 </div>
             </div>
+            <button on:click={() => showSetting = false}>{$t('editor.close')}</button>
+        </div>
     </Popup>
 </main>
 
@@ -448,7 +450,9 @@
         justify-content: flex-start; /* Align items at the top initially */
         align-items: center;
 
-        margin-top: 1rem;
+        margin-top: 50px;
+        gap: 50px;
+        
         .setting {
             height: 35px;
             width: 100%;
@@ -470,20 +474,53 @@
             }
         }
 
-        .mobile .setting {
-                    flex-direction: column;
-                    height: auto;
-                    gap: 10px;
+        // .mobile .setting {
+        //             flex-direction: column;
+        //             height: auto;
+        //             gap: 10px;
 
-                    .setting-name {
-                        width: 100%;
-                    }
+        //             .setting-name {
+        //                 width: 100%;
+        //             }
 
-                    .setting-option {
-                        width: 100%;
-                        flex-direction: row;
-                    }
-             }
+        //             .setting-option {
+        //                 width: 100%;
+        //                 flex-direction: row;
+        //             }
+        //      }
+
+        button {
+            margin-top: auto; /* Push the button to the bottom */
+            border-radius: 6px;
+
+            width: 80px;
+            height: 40px;
+
+            background-color: #dadada;
+            border: 1px solid #cecece;
+
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-shrink: 0;
+
+            transition: background-color 0.2s ease, width 0.2s ease, opacity 0.2s ease;
+
+            filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
+
+            &:hover {
+                background-color: #cecece;
+            }
+
+            &:active  {
+                background-color: #cecece;
+                scale: 0.95;
+            }
+        }
     }
 
     .editor-state-popup {
