@@ -1,10 +1,10 @@
 <script lang="ts">
     import {ChevronLeft, ChevronRight, Add, Close} from "carbon-icons-svelte";
-    import type {KeymapEditor} from "$lib/editors/KeymapEditor";
+    import type {Editor} from "$lib/editor/Editor";
     import {onMount} from "svelte";
 
     export let updateCount: number
-    export let editorBackend: KeymapEditor
+    export let editorBackend: Editor
 
     let selectedLayer: number = 0;
     let layerCount: number = 1;

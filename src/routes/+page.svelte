@@ -6,7 +6,7 @@
     import DropDown from "../components/common/DropDown.svelte";
 
     import LayerSelector from "../components/LayerSelector.svelte";
-    import { KeymapEditor, EditorState} from "$lib/editors/KeymapEditor";
+    import { Editor, EditorState} from "$lib/editor/Editor";
     import type { ActionType } from "$lib/types/ActionType";
     import type { KeyID } from "$lib/types/KeyID";
 
@@ -20,7 +20,7 @@
 
     let updateCount: number = 0; //Cause all components to update
     let selectedKey:KeyID = undefined;
-    let editorBackend = new KeymapEditor(update)
+    let editorBackend = new Editor(update)
 
     let editorState:EditorState = EditorState.DISCONNECTED;
     let editorStateViewer:boolean = false;
@@ -134,7 +134,7 @@
 </script>
 
 <svelte:head>
-    <title>Matrix OS Keymap Editor</title>
+    <title>Matrix OS Controi Map Editor</title>
 </svelte:head>
 
 <main use:resize={onResize} class={mobileView ? "mobile" : ""}>
@@ -273,7 +273,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 110px;
+            height: 100px;
             padding: 34px;
             box-sizing: border-box;
         }

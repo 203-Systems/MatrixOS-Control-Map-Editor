@@ -51,7 +51,7 @@ export enum EditorState {
     PARSING_UAD_ERROR,
 }
 
-export class KeymapEditor {
+export class Editor {
     private data: KeyAction[][][] = []; //Layer, X, Y
     private selectedLayer: number = 0;
     private updateCallback: () => void;
@@ -816,7 +816,7 @@ export class KeymapEditor {
             }
 
             if(!deviceUADStatus.loaded) {
-                // alert("Device does not have a keymap loaded");
+                // alert("Device does not have a control map loaded");
                 this.updateEditorState(EditorState.DEVICE_UAD_NOT_LOADED);
                 console.log("Device UAD is not loaded");
                 return;

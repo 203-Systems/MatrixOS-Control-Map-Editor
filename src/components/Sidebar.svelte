@@ -4,7 +4,7 @@
     import {createEventDispatcher} from 'svelte';
     import type {KeyAction} from '$lib/types/Action';
     import type {KeyID} from "$lib/types/KeyID";
-    import type {KeymapEditor} from "$lib/editors/KeymapEditor";
+    import type {Editor} from "$lib/editor/Editor";
     import { effects } from "./actionbodies/ActionRegistry";
     import { resize } from 'svelte-resize-observer-action'
     
@@ -14,7 +14,7 @@
 
     export let updateCount: number
     export let selectedKey: KeyID;
-    export let editorBackend: KeymapEditor;
+    export let editorBackend: Editor;
     export let mobileView: boolean;
     let currentActions: KeyAction | undefined;
     let tabIndex: 0 | 1 = 0;

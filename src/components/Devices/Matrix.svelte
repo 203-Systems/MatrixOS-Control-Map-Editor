@@ -1,6 +1,6 @@
 <script lang="ts">
     import {createEventDispatcher, onDestroy, onMount} from 'svelte';
-    import {KeymapEditor} from "$lib/editors/KeymapEditor";
+    import {Editor} from "$lib/editor/Editor";
     import type { Action, ActionInfoType, Effect, KeyAction } from '$lib/types/Action';
     import type { KeyID } from '$lib/types/KeyID';
     import { fade } from 'svelte/transition';
@@ -9,7 +9,7 @@
 
     const dispatch = createEventDispatcher();
 
-    export let editorBackend: KeymapEditor
+    export let editorBackend: Editor
 
     export let selectedKey: KeyID = undefined;
     export let updateCount: number

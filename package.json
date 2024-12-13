@@ -1,6 +1,6 @@
 {
-	"name": "matrix-os-keymap-editor",
-	"version": "0.0.1",
+	"name": "matrix-os-control-map-editor",
+	"version": "1.0.0",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --port 5174",
