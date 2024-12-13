@@ -80,8 +80,6 @@
         {
             mobileView = newMobileView;
         }
-
-        console.log("Resized to: " + width + "x" + height + " MobileView: " + mobileView);
     }
 
     let editorStatePopupTitle = undefined;
@@ -229,7 +227,6 @@
                         options={new Map($locales.map(key => [key, `lang.${key}`]))}
                         bind:value={settings.language}
                         on:changed={(e) => {
-                            console.log("Language changed to: " + e.detail.option);
                             $locale = e.detail.option;
                             settings.language = e.detail.option;
                         }}
