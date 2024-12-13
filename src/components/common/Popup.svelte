@@ -79,6 +79,8 @@
         border-radius: 16px;
         background-color: white;
         filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.25));
+        max-width: 90vw;
+        max-height: 90vh;
 
         display: flex;
         justify-content: center;

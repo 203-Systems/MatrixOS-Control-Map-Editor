@@ -12,6 +12,7 @@
 
     import { Usb, DocumentImport, DocumentExport, Upload, Download, Settings} from "carbon-icons-svelte";
     import { onMount } from "svelte";
+    import { resize } from 'svelte-resize-observer-action'
 
     import {t, locale, locales} from "$lib/translations";
 
@@ -25,6 +26,10 @@
     let editorStateViewer:boolean = false;
     let editorStateViewerCloseable:boolean = true;
     let deviceTransferProgress:number = 0;
+
+    const mobileViewWidthThreshold = 1000;
+    const mobileViewAspectThreshold = 4/5;
+    let mobileView = false;
 
     let showSetting:boolean = false;
 
@@ -65,6 +70,19 @@
     onMount(() => {
         update();
     })
+
+    function onResize(entry: ResizeObserverEntry) {
+        let width = entry.contentRect.width
+        let height = entry.contentRect.height
+        let newMobileView = width/height <= mobileViewAspectThreshold || width < mobileViewWidthThreshold;
+
+        if(newMobileView != mobileView)
+        {
+            mobileView = newMobileView;
+        }
+
+        console.log("Resized to: " + width + "x" + height + " MobileView: " + mobileView);
+    }
 
     let editorStatePopupTitle = undefined;
 
@@ -120,8 +138,8 @@
     <title>Matrix OS Keymap Editor</title>
 </svelte:head>
 
-<main>
-    <div class="main-content">
+<main use:resize={onResize} class={mobileView ? "mobile" : ""}>
+    <div class="editor-container">
         <div class="header">
             <div class="logo">
                 <img src="Matrix OS.svg" class="logo">
@@ -181,6 +199,7 @@
                 bind:updateCount={updateCount}
                 bind:selectedKey={selectedKey}
                 bind:editorBackend={editorBackend}
+                bind:mobileView={mobileView}
                 on:addAction={e => addAction(e.detail.type, e.detail.actionIdentifier)}
                 on:removeAction={e => removeAction(e.detail.type, e.detail.index)}
         />
@@ -222,109 +241,155 @@
 
 <style lang="scss">
     main {
-        display: grid;
-        grid-template-columns: 1fr 335px;
+        display: flex;
 
         width: 100vw;
-        height: 100vh;
+        height: 100%;
 
         background-color: #eff0f3;
     }
 
-    .main-content {
+    .mobile {
+        flex-direction: column;
+        gap: 0;
+        overflow: hidden;
+    }
+
+    
+
+    .editor-container {
         display: grid;
         grid-template-rows: 75px 1fr;
+        flex-grow: 1;
 
         .header {
             display: grid;
-            grid-template-columns: 1fr max-content 1fr;
-            grid-template-rows: 100px;
+            grid-template-columns: 1fr max-content 1fr; /* Three columns: logo, title, controls */
+            grid-template-rows: 100px; /* Fixed height */
+            align-items: center; /* Center items vertically */
+        }
 
-            .logo {
-                img {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center; 
+        .logo img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 110px;
+            padding: 34px;
+            box-sizing: border-box;
+        }
 
-                    height: 100%;
-                    padding: 34px;
-                    box-sizing: border-box;
-                }
+        .title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.2rem;
+            font-size: 2.2rem;
+            padding-top: 3px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding-right: 18px;
+            gap: 12px;
+            justify-self: end;
+        }
+
+        .controls .control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            min-width: 50px;
+            padding: 0 12px;
+            border-radius: 25px;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease, max-width 0.3s ease;
+            filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
+            box-sizing: border-box;
+        }
+
+        .controls .control:hover {
+            background-color: #404040;
+        }
+
+        .controls .control:active {
+            background-color: #404040;
+            scale: 0.95;
+        }
+
+        .controls .control svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .controls .control span.control-text {
+            font-family: Inter, sans-serif;
+            font-size: 1rem;
+            white-space: nowrap;
+            opacity: 1;
+            max-width: 0;
+            overflow: hidden;
+            direction: rtl;
+            text-align: left;
+            text-overflow: ellipsis;
+            transition: max-width 0.3s ease, padding-left 0.3s ease;
+            padding-left: 0px;
+        }
+
+        .controls .control:hover span.control-text {
+            padding-left: 8px;
+            max-width: 200px;
+        }
+
+        @media (max-width: 1500px) {
+            .header {
+                grid-template-columns: 1fr 1fr; /* Two columns: logo and controls */
+            }
+
+            .title {
+                display: none; /* Hide title for smaller screens */
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .header {
+                min-height: 100px; /* Or any value that fits */
+                padding-top: 60px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap:16px;
+            }
+
+            .logo img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 28px;
+                padding: 0px;
             }
 
             .title {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
                 font-family: Inter, sans-serif;
                 font-weight: 400;
                 letter-spacing: 0.2rem;
-                font-size: 2.2rem;
                 padding-top: 3px;
+                font-size: 1.8rem;
+                text-align: center; /* Ensure the text is centered within the container */
+                white-space: nowrap; /* Prevent text wrapping (optional) */
             }
-            .controls {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    padding-right: 18px;
-    gap: 12px; /* Increased gap for better spacing */
-
-    .control {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0px;
-
-        height: 50px;
-        min-width: 50px; /* Ensure uniform circular shape */
-        padding: 0 12px; /* Add horizontal padding for text */
-        border-radius: 25px; /* Rounded edges for pill shape */
-        
-        background-color: black;
-        color: white;
-
-        cursor: pointer;
-        transition: background-color 0.2s ease, max-width 0.3s ease;
-        filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
-        box-sizing: border-box; /* Ensure padding doesn't affect size */
-
-        &:hover {
-            background-color: #404040;
         }
 
-        &:active {
-            background-color: #404040;
-            scale: 0.95;
-        }
-
-        svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        span.control-text {
-            font-family: Inter, sans-serif;
-            font-size: 1rem;
-            white-space: nowrap;
-            opacity: 1; /* Initially hidden */
-            max-width: 0; /* Collapse text */
-            overflow: hidden; /* Hide overflowing text */
-            direction: rtl; /* Set text direction to right-to-left */
-            text-align: left; /* Align the text back to the left */
-            text-overflow: ellipsis; /* Optionally add ellipsis for overflow */
-            transition: max-width 0.3s ease, padding-left 0.3s ease; /* Animate text expansion */
-            padding-left: 0px; /* Add left padding for text */
-        }
-
-        &:hover span.control-text {
-            padding-left: 8px; /* Expand the text container */
-            max-width: 200px; /* Expand the text container */
-        }
-    }
-}
-
-        }
 
         .device-container {
             display: flex;
@@ -334,14 +399,14 @@
             gap: 4rem;
 
             .device {
-                width: 600px;
+                width: 100%;
+                max-width: min(600px, 90vw);
 
-                aspect-ratio: 1 / 1;
+                box-sizing: border-box;
             }
 
             flex-direction: column;
 
-            width: calc(100vw - 335px);
         }
 
         .layer-selector {
@@ -349,9 +414,23 @@
         }
     }
 
+    .mobile .editor-container {
+        display: flex;
+        flex-direction: column;
+        gap: 100px;
+    }
+
     .sidebar-container {
+        width: 335px;
         height: 100vh;
     }
+
+    .mobile .sidebar-container {
+        height: auto;
+        width: 100vw;
+    }
+    
+
 
     .popup-error {
         filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.25));
@@ -359,10 +438,10 @@
     }
 
     .settings-popup {
-        width: 100%;
-        // min-width: 500px;
-        height: 100%;
-        // min-height: 200px;
+        width: 500px;
+
+        max-width: 80vw;
+
 
         display: flex;
         flex-direction: column;
@@ -371,50 +450,48 @@
 
         margin-top: 1rem;
         .setting {
-                height: 35px;
+            height: 35px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Spread items to each end */
 
+            .setting-name {
                 display: flex;
                 align-items: center;
+                color: black;
+                font-family: "Roboto Mono", sans-serif;
+                font-weight: 400;
+            }
 
-                .setting-name {
-                    width: 250px;
-                    display: flex;
-                    align-items: center;
-
-                    color: black;
-
-                    font-family: "Roboto Mono", sans-serif;
-                    font-weight: 400;
-                }
-
-                .setting-option {
-                    min-width: 300px;
-                    display: flex;
-                    flex-direction: row-reverse;
-                }
-
-            //     &.mobile {
-            //         flex-direction: column;
-            //         height: auto;
-            //         gap: 10px;
-
-            //         .setting-name {
-            //             width: 100%;
-            //         }
-
-            //         .setting-option {
-            //             width: 100%;
-            //             flex-direction: row;
-            //         }
-            //  }
+            .setting-option {
+                display: flex;
+                flex-direction: row-reverse;
+            }
         }
+
+        .mobile .setting {
+                    flex-direction: column;
+                    height: auto;
+                    gap: 10px;
+
+                    .setting-name {
+                        width: 100%;
+                    }
+
+                    .setting-option {
+                        width: 100%;
+                        flex-direction: row;
+                    }
+             }
     }
 
     .editor-state-popup {
-        width: 100%;
-        min-width: 500px;
-        height: 100%;
-        min-height: 200px;
+        width: 500px;
+        height: 200px;
+
+        max-width: 80vw;
+        max-height: 80vw;
 
         display: flex;
         flex-direction: column;

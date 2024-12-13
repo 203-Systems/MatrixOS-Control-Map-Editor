@@ -47,11 +47,11 @@
 </script>
 
 <div class="layer-selector-container">
+    <div class="layers-container">
     <div class="layer-control" on:click={() => selectOffsetLayer(-1)}>
         <ChevronLeft size={24}/>
     </div>
 
-    <div class="layers-container">
         {#each Array(layerCount) as _, layer}
             <div class="layer" on:click={() => selectedLayer === layer ? deleteLayer(layer) : selectLayer(layer)} on:mouseover={() => hoverOnLayer = layer} on:mouseleave={() => hoverOnLayer = -1} class:selected={selectedLayer === layer}>
                 {#if hoverOnLayer === layer}
@@ -68,10 +68,10 @@
             <Add size={24}/>
         </div>
         {/if}
-    </div>
 
-    <div class="layer-control" on:click={() => selectOffsetLayer(1)}>
-        <ChevronRight size={24}/>
+        <div class="layer-control" on:click={() => selectOffsetLayer(1)}>
+            <ChevronRight size={24}/>
+        </div>
     </div>
 </div>
 
@@ -85,43 +85,18 @@
         gap: 1em;
         filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.25));
 
-        .layer-control {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            cursor: pointer;
-            flex-shrink: 0;
-
-            border: 2px solid gray;
-
-            transition: background-color 0.2s ease;
-            background-color: #eff0f3;
-
-            &:hover {
-                background-color: lightgray;
-            }
-
-            &:active  {
-                background-color: #lightgray;
-                scale: 0.95;
-            }
-        }
-
         .layers-container {
-            min-width: fit-content;
-            max-width: calc(80px * 6 + 0.5em * 5);
             display: flex;
-            justify-content: center;
             grid-template-columns: repeat(auto-fit, 80px);
+            width: 100%; /* Ensure it spans the full width */
             gap: 0.5em;
-
+            justify-content: center;
+            justify-items: center;
             overflow: hidden;
 
             .layer {
-                width: 40px;
+                min-width: 20px;
+                max-width: 40px;
                 height: 40px;
                 border-radius: 6px;
 
@@ -132,9 +107,10 @@
                 justify-content: center;
                 align-items: center;
 
-                flex-shrink: 0;
+                flex-shrink: 1; /* Allow shrinking when the container runs out of width */
+                flex-grow: 1; /* Allow growing to fill available space */
                 
-                transition: background-color 0.2s ease, width 0.2s ease;
+                transition: background-color 0.2s ease, min-width 0.2s ease, max-width 0.2s ease;
 
                 span {
                     color: white;
@@ -144,12 +120,13 @@
 
                 &:hover {
                     background-color: #969696;
-                    width: 50px;
+                    min-width: 50px;
                 }
 
                 &.selected {
                     background-color: #2c2c2c;
-                    width: 80px;
+                    min-width: 60px;
+                    max-width: 80px;
 
                     &:hover {
                         background-color: #c00000;
@@ -160,8 +137,35 @@
                 }
             }
 
+            .layer-control {
+                width: 36px;
+                height: 36px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                cursor: pointer;
+                flex-shrink: 0;
+                margin: 0 0.2rem;
+
+                border: 2px solid gray;
+
+                transition: background-color 0.2s ease;
+                background-color: #eff0f3;
+
+                &:hover {
+                    background-color: lightgray;
+                }
+
+                &:active  {
+                    background-color: #lightgray;
+                    scale: 0.95;
+                }
+            }
+
             .layer-add-button {
-                width: 40px;
+                min-width: 20px;
+                max-width: 40px;
                 height: 40px;
                 border-radius: 6px;
                 box-sizing: border-box;
@@ -174,10 +178,11 @@
                 justify-content: center;
                 align-items: center;
                 
-                transition: background-color 0.2s ease, width 0.2s ease;
+                transition: background-color 0.2s ease, width 0.2s ease, min-width 0.2s ease, max-width 0.2s ease;
                 
                 &:hover {
                     background-color: #cecece;
+                    min-width: 50px;
                 }
                 
             }

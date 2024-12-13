@@ -25,6 +25,7 @@
 		"cbor-web": "^8.1.0",
 		"reinvented-color-wheel": "^0.4.0",
 		"sass": "^1.57.0",
+		"svelte-resize-observer-action": "^0.0.4",
 		"sveltekit-i18n": "^2.4.2"
 	}
 }
