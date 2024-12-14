@@ -14,14 +14,16 @@ export class ActionColorEffect implements Effect {
 
     data: ActionColorEffectData;
 
+    static defaultData: ActionEffectData = {
+        enabled: [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+        color: [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
+                [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
+                [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
+                [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    }
+
     constructor() {
-        this.data = {
-            enabled: [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-            color: [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
-                    [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
-                    [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
-                    [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        }
+        this.data = structuredClone(ActionColorEffect.defaultData);
     }
 
     import(data: any[]): boolean {
