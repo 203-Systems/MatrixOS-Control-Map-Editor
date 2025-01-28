@@ -5,7 +5,7 @@ import lang from './lang.json';
 export const config = {
     translations: {
         "en": { lang },
-        // "de": { lang },
+        "de": { lang },
         "zh-CN": { lang },
     },
     loaders: [
@@ -62,7 +62,7 @@ export const config = {
         },
 
         //DE
-        /*{
+        {
             locale: 'de',
             key: 'editor',
             loader: async () => (await import('./de/editor.json')).default,
@@ -111,7 +111,7 @@ export const config = {
             locale: 'de',
             key: 'gamepad',
             loader: async () => (await import('./de/gamepad.json')).default
-        },*/
+        },
 
         // ZH-CN
         {

@@ -19,8 +19,6 @@
     import type {KeyboardHandler} from "$lib/utils/keyboardHandler";
     import {copyActionsToClipboard, pasteActionsFromClipboard} from "$lib/utils/clipboard";
 
-    const isMacOS = navigator.platform.toUpperCase().includes('MAC');
-
     let updateCount: number = 0; //Cause all components to update
     let selectedKey:KeyID = undefined;
     let editorBackend = new Editor(update)
@@ -73,6 +71,8 @@
     }
 
     handleKeyDown = (event: KeyboardEvent) => {
+        const isMacOS = navigator.platform.toUpperCase().includes('MAC');
+
         const isCopy = (isMacOS && event.metaKey && event.key === 'c') || (!isMacOS && event.ctrlKey && event.key === 'c');
         const isPaste = (isMacOS && event.metaKey && event.key === 'v') || (!isMacOS && event.ctrlKey && event.key === 'v');
 
