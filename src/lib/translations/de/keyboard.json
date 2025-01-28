@@ -1,0 +1,23 @@
+{
+	"description": "Tastatursimulation",
+	"title": "Tastatursimulation",
+	"previewTitle": "Taste",
+	"none": "Keine",
+	"basic": "Einfach",
+	"alphabet": "Alphabet",
+	"numeric": "Numerisch",
+	"control": "Steuerung",
+	"navigation": "Navigation",
+	"function": "Funktion",
+	"character": "Zeichen",
+	"keypad": "Num-Pad",
+	"system": "System",
+	"modifier": "Modifier",
+	"custom": "Benutzerdefiniert",
+	"close": "Schließen",
+	"no_key_selected": "Keine Taste ausgewählt",
+	"select_a_key": "Wähle eine Taste",
+	"user_keycode": "Eigener Keycode",
+	"code.user": "Benutzerdefiniert",
+	"shortcode.user": "USER"
+}

@@ -16,6 +16,7 @@ export class LayerAction implements Action {
 
     constructor() {
         this.data = {
+            actionIdentifier: LayerAction.identifier,
             mode: Object.keys(LayerActionMode)[0],
             type: Object.keys(LayerActionType)[0],
             option: Object.keys(LayerActionOption)[0],

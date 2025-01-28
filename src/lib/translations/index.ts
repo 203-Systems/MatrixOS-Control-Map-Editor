@@ -5,6 +5,7 @@ import lang from './lang.json';
 export const config = {
     translations: {
         "en": { lang },
+        "de": { lang },
         "zh-CN": { lang },
     },
     loaders: [
@@ -58,6 +59,58 @@ export const config = {
             locale: 'en',
             key: 'gamepad',
             loader: async () => (await import('./en/gamepad.json')).default
+        },
+
+        //DE
+        {
+            locale: 'de',
+            key: 'editor',
+            loader: async () => (await import('./de/editor.json')).default,
+        },
+        {
+            locale: 'de',
+            key: 'editor_state',
+            loader: async () => (await import('./de/editor_state.json')).default,
+        },
+        {
+            locale: 'de',
+            key: 'setting',
+            loader: async () => (await import('./de/setting.json')).default,
+        },
+        {
+            locale: 'de',
+            key: 'color',
+            loader: async () => (await import('./de/color.json')).default,
+        },
+        {
+            locale: 'de',
+            key: 'actioncolor',
+            loader: async () => (await import('./de/actioncolor.json')).default,
+        },
+        {
+            locale: 'de',
+            key: 'midi',
+            loader: async () => (await import('./de/midi.json')).default
+        },
+        {
+            locale: 'de',
+            key: 'layer',
+            loader: async () => (await import('./de/layer.json')).default
+        },
+        {
+            locale: 'de',
+            key: 'warp',
+            loader: async () => (await import('./de/warp.json')).default
+        },
+        {
+            locale: 'de',
+            key: 'keyboard',
+            loader: async () => (await import('./de/keyboard.json')).default
+        },
+        {
+            locale: 'de',
+            key: 'gamepad',
+            loader: async () => (await import('./de/gamepad.json')).default
         },
 
         // ZH-CN

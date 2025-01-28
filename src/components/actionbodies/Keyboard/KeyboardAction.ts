@@ -18,6 +18,7 @@ export class KeyboardAction implements Action {
 
     constructor() {
         this.data = {
+            actionIdentifier: KeyboardAction.identifier,
             key: undefined,
             user_keycode: 0
         }

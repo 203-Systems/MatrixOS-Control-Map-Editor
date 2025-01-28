@@ -1,0 +1,14 @@
+{
+	"connect_device": "Gerät verbinden",
+	"import_from_file": "Aus Datei importieren",
+	"export_to_file": "In Datei exportieren",
+	"import_from_device": "Vom Gerät importieren",
+	"upload_to_device": "Auf Gerät hochladen",
+	"settings": "Einstellungen",
+	"close": "Schließen",
+	"actions": "Aktionen",
+	"effects": "Effekte",
+	"addAction": "Aktion hinzufügen",
+	"addEffect": "Effekt hinzufügen",
+	"selectKeyToBegin": "Wähle eine Taste, um anzufangen"
+}

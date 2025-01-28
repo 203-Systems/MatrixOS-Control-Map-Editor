@@ -13,7 +13,13 @@ export class ColorEffect implements Effect {
 
     data: ColorEffectData;
 
-    static defaultData: ColorEffectData = { hasDefault: true, hasActivated: true, default: [1, 0, 0], activated: [1, 1, 1] };
+    static defaultData: ColorEffectData = {
+        actionIdentifier: ColorEffect.identifier,
+        hasDefault: true,
+        hasActivated: true,
+        default: [1, 0, 0],
+        activated: [1, 1, 1]
+    };
 
     constructor() {
         this.data = structuredClone(ColorEffect.defaultData);

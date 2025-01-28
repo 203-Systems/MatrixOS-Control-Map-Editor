@@ -1,5 +1,4 @@
 <script lang="ts">
-    import OverflowMenuHorizontal from "carbon-icons-svelte/lib/OverflowMenuHorizontal.svelte";
     import Mystrix from "../components/Devices/Mystrix.svelte";
     import Sidebar from "../components/Sidebar.svelte";
     import Popup from "../components/common/Popup.svelte";
@@ -17,6 +16,10 @@
     import {t, locale, locales} from "$lib/translations";
 
     import {browser} from "$app/environment";
+    import type {KeyboardHandler} from "$lib/utils/keyboardHandler";
+    import {copyActionsToClipboard, pasteActionsFromClipboard} from "$lib/utils/clipboard";
+
+    const isMacOS = navigator.platform.toUpperCase().includes('MAC');
 
     let updateCount: number = 0; //Cause all components to update
     let selectedKey:KeyID = undefined;
@@ -29,6 +32,7 @@
 
     const mobileViewWidthThreshold = 1000;
     const mobileViewAspectThreshold = 4/5;
+    let handleKeyDown: KeyboardHandler;
     let mobileView = false;
 
     let showSetting:boolean = false;
@@ -56,16 +60,36 @@
 
     $: {
         selectedKey; // Mentioning selectedKey in here makes this reactive function run on every change of it
+
         update();
     }
 
-    function addAction(actionType:ActionType, actionIdentifier: string): void {
+    function addAction(actionType: ActionType, actionIdentifier: string): void {
         editorBackend.addAction(selectedKey, actionType, actionIdentifier);
     }
 
     function removeAction(actionType:ActionType, actionIndex: number): void {
         editorBackend.removeAction(selectedKey, actionType, actionIndex)
     }
+
+    handleKeyDown = (event: KeyboardEvent) => {
+        const isCopy = (isMacOS && event.metaKey && event.key === 'c') || (!isMacOS && event.ctrlKey && event.key === 'c');
+        const isPaste = (isMacOS && event.metaKey && event.key === 'v') || (!isMacOS && event.ctrlKey && event.key === 'v');
+
+        if (isCopy) {
+            copyActionsToClipboard(editorBackend.getActions(selectedKey))
+
+            event.preventDefault();
+        } else if (isPaste) {
+            const copiedActions = pasteActionsFromClipboard()
+
+            if (copiedActions) {
+                editorBackend.setActions(selectedKey, copiedActions)
+            }
+
+            event.preventDefault();
+        }
+    };
 
     onMount(() => {
         update();
@@ -121,21 +145,25 @@
         [EditorState.PARSING_UAD_ERROR]: $t('editor_state.parsing_uad_error'),
     };
 
-    if (browser) {
-        (async () => {
-            if (browser && localStorage.getItem("settings") != null) {
-                settings = JSON.parse(localStorage.getItem("settings"));
-                console.log(settings);
-            }
-            settings_loaded = true;
-        })();
-    }
+    onMount(async () => {
+        if (browser && localStorage.getItem("settings") != null) {
+            settings = JSON.parse(localStorage.getItem("settings"));
+            console.log(settings);
+        }
 
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        }, false);
+
+        settings_loaded = true;
+    })
 </script>
 
 <svelte:head>
     <title>Matrix OS Controi Map Editor</title>
 </svelte:head>
+
+<svelte:window on:keydown={handleKeyDown}></svelte:window>
 
 <main use:resize={onResize} class={mobileView ? "mobile" : ""}>
     <div class="editor-container">

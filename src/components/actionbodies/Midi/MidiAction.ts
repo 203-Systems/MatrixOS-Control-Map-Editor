@@ -47,6 +47,7 @@ export class MidiAction implements Action {
 
     constructor() {
         this.data = {
+            actionIdentifier: MidiAction.identifier,
             type: MidiType.Note,
             data: {
                 channel: 1,
