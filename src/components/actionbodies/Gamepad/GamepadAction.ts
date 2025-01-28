@@ -18,6 +18,7 @@ export class GamepadAction implements Action {
 
     constructor() {
         this.data = {
+            actionIdentifier: GamepadAction.identifier,
             key: undefined,
             analog: AnalogSource.KeyForce,
             begin: 0,

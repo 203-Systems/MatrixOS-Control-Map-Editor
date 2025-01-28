@@ -15,6 +15,7 @@ export const LayerActionOption: { [option: string]: number } = { // Up to 16 Opt
 };
 
 export type LayerActionData = {
+    actionIdentifier: string,
     mode: string,
     type: string,
     option: string,

@@ -1,0 +1,18 @@
+{
+	"description": "Layer-Steuerung",
+	"title": "Layer-Steuerung",
+	"previewTitle": "Layer",
+	"mode.persistence": "Beständig",
+	"mode.momentary": "Momentan",
+	"type.active": "Aktiv",
+	"type.pass_through": "Durchreichen",
+	"option.toggle": "Umschalten",
+	"option.enable": "Aktivieren",
+	"option.disable": "Deaktivieren",
+	"mode": "Layer-Aktionsmodus",
+	"type": "Layer-Aktionstyp",
+	"option": "Layer-Aktionsoption",
+	"relative": "Relatives Indexing",
+	"number": "Layer-Nummer",
+	"offset": "Layer-Offset"
+}

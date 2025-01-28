@@ -94,6 +94,26 @@ export class Editor {
         }
     }
 
+    setActions(key: KeyID, actionData: KeyAction): void {
+        if (Array.isArray(key)) {
+            for (let action of actionData.actions) {
+                const newAction = new actions[action.data.actionIdentifier]
+                newAction.data = action.data
+
+                this.data[this.selectedLayer]?.[key[0]]?.[key[1]].actions.push(newAction);
+            }
+
+            for (let effect of actionData.effects) {
+                const newEffect = new effects[effect.data.actionIdentifier]
+                newEffect.data = effect.data
+
+                this.data[this.selectedLayer]?.[key[0]]?.[key[1]].effects.push(newEffect);
+            }
+
+            this.updateCallback()
+        }
+    }
+
     removeAction(key: KeyID, type: ActionType, actionIndex: number): void {
         if (Array.isArray(key)) {
             if (type === "action") {

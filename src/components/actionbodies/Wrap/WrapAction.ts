@@ -15,6 +15,7 @@ export class WrapAction implements Action {
 
     constructor() {
         this.data = {
+            actionIdentifier: WrapAction.identifier,
             relativeLayer: false,
             layer: 1,
             relativePos: true,

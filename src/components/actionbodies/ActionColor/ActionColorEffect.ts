@@ -15,6 +15,7 @@ export class ActionColorEffect implements Effect {
     data: ActionColorEffectData;
 
     static defaultData: ActionEffectData = {
+        actionIdentifier: ActionColorEffect.identifier,
         enabled: [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
         color: [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
                 [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],

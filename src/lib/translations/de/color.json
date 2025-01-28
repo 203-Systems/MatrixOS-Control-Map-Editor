@@ -1,0 +1,6 @@
+{
+	"description": "Tastengesteuerter Farbeffekt",
+	"title": "Tastengesteuerter Farbeffekt",
+	"idleColor": "Inaktive Farbe",
+	"activatedColor": "Aktive Farbe"
+}

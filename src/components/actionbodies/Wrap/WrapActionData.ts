@@ -1,4 +1,5 @@
 export type WrapActionData = {
+    actionIdentifier: string,
     relativeLayer: boolean,
     layer: number,
     relativePos: boolean,

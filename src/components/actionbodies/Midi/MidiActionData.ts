@@ -59,6 +59,7 @@ export const AnalogSourceMap = new Map([
 ]);
 
 export type MidiActionData = {
+    actionIdentifier: string,
     type: MidiType,
     data: {} | null,
 }

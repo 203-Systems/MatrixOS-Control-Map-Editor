@@ -1,0 +1,13 @@
+{
+	"description": "In Aktionsgruppe einbetten",
+	"title": "In Aktionsgruppe einbetten",
+	"previewTitle": "Warp",
+	"relative_layer": "Relativer Layer",
+	"layer": "Layer",
+	"layer_offset": "Layer-Offset",
+	"relative_position": "Relative Position",
+	"x": "X",
+	"y": "Y",
+	"x_offset": "X Offset",
+	"y_offset": "Y Offset"
+}
