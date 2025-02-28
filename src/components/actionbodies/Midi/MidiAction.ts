@@ -7,35 +7,90 @@ import type { MidiActionData } from "./MidiActionData";
 import {MidiType, MidiTypeMapShort, AnalogSource} from "./MidiActionData";
 
 export function SysexToByteArray(sysex: string): Uint8Array | Error {
-    try{
-        // Split the input string by spaces
-        const parts = sysex.trim().split(/\s+/);
+    try {
+      // Split the input string by whitespace.
+      const parts = sysex.trim().split(/\s+/);
 
-        // Convert each part to a number
-        const byteArray = parts.map(part => {
-            let value;
-            // Check if the number is in hexadecimal format
-            if (part.startsWith("0x") || part.startsWith("0X")) {
-                value = parseInt(part, 16); // Parse as hexadecimal
-            } else {
-                value = parseInt(part, 10); // Parse as decimal
+      // Filter out all the empty strings.
+      const filteredParts = parts.filter((part) => part !== "");
+  
+      const byteArray = filteredParts.map((part) => {
+        let value: number;
+  
+        // Hexadecimal token: starts with "0x" (or "0X")
+        if (part.startsWith("0x") || part.startsWith("0X")) {
+          value = parseInt(part, 16);
+        }
+        // Macro token: must be in the format <val*> where * is an optional number.
+        else if (part.startsWith("<") && part.endsWith(">")) {
+          const macroMatch = part.match(/^<val(\d*)>$/);
+          if (macroMatch) {
+            // If no number is provided after "val", default to 0.
+            const numStr = macroMatch[1];
+            const macroNum = numStr === "" ? 0 : (parseInt(numStr, 10) - 1);
+            // Ensure the macro number is within the allowed range (0 to 16).
+            if (macroNum < 0 || macroNum > 15) {
+              return new Error(`Invalid macro number in sysex string: "${part}"`);
             }
+            value = 0x180 + macroNum;
+          } else {
+            return new Error(`Invalid macro format: "${part}"`);
+          }
+        }
+        // Decimal token: pure number.
+        else if (!isNaN(Number(part))) {
+          value = parseInt(part, 10);
+        } 
+        else {
+          return new Error(`Invalid token in sysex string: "${part}"`);
+        }
+  
+        return value;
+      });
+  
+      // Check if any token processing resulted in an Error.
+      for (const element of byteArray) {
+        if (element instanceof Error) {
+          return element;
+        }
+      }
 
-            // Ensure the value is within the valid byte range
-            if (value < 0 || value > 255 || isNaN(value)) {
-                return new Error(`Invalid value in sysex string: "${part}"`);
-            }
+      if(byteArray.length < 2)
+      {
+        return new Error("Sysex need to have at least 2 bytes (0xF0 and 0xF7)");
+      }
 
-            return value;
-        });
+      if(byteArray[0] != 0xF0)
+      {
+        return new Error("Sysex need to start with 0xF0");
+      }
 
-        // Convert the array of numbers to a Uint8Array
-        return new Uint8Array(byteArray);
+      if(byteArray[byteArray.length - 1] != 0xF7)
+      {
+        return new Error("Sysex need to end with 0xF7");
+      }
+
+      for (let i = 1; i < byteArray.length - 1; i++) {
+          // Ensure the value is within the valid byte range.
+          if (byteArray[i] >= 0x180 && byteArray[i] <= 0x18F)
+          {
+            // Macro value, scale back
+            byteArray[i] = byteArray[i] - 0x180;
+          }
+          else if (isNaN(byteArray[i]) || byteArray[i] < 0x00 || byteArray[i] > 0x7f) 
+          {
+            return new Error(`Out of range value in sysex string: "${filteredParts[i]}" `);
+          }
+      }
+
+  
+      return new Uint8Array(byteArray as number[]);
     } catch (error) {
-        return error;
+      console.error(error);
+      // return error;
     }
-}
-
+  }
+  
 
 export class MidiAction implements Action {
     static readonly identifier: string = "midi";
@@ -94,15 +149,22 @@ export class MidiAction implements Action {
             else if(this.data.type == MidiType.Sysex)
             {   
 
-                this.data.data.data = "";
+                this.data.data.sysex = "";
 
                 var byteArray: Uint8Array = data[1];
 
                 for (let i = 0; i < byteArray.length; i++) {
-                    this.data.data.data +=  "0x"+byteArray[i].toString(16).padStart(2, "0") + " ";
+                    if(byteArray[i] >= 0x80 && byteArray[i] <= 0x8F)
+                    {
+                      this.data.data.sysex += "<val"+(byteArray[i]-0x80+1)+"> ";
+                    }
+                    else
+                    {
+                      this.data.data.sysex +=  "0x"+byteArray[i].toString(16).padStart(2, "0") + " ";
+                    }
                 }
 
-                this.data.data.data = this.data.data.data.trim();
+                this.data.data.sysex = this.data.data.sysex.trim();
             }
             else if(this.data.type == MidiType.Start || this.data.type == MidiType.Continue || this.data.type == MidiType.Stop || this.data.type == MidiType.Reset)
             {
@@ -110,14 +172,14 @@ export class MidiAction implements Action {
             }
             else
             {
-                console.error("MidiAction: Unknown Midi Type");
+                throw new Error("MidiAction: Unknown Midi Type");
                 return false;
             }
             return true;
         }
         catch (error)
         {
-            console.error("MidiAction: Import Failed");
+            throw new Error("MidiAction: Import Failed");
             return false;
         }
 
@@ -156,8 +218,16 @@ export class MidiAction implements Action {
         }
         else if(this.data.type == MidiType.Sysex)
         {
-
-            data.push(SysexToByteArray(this.data.data.data));
+            var sysexParseResult = SysexToByteArray(this.data.data.sysex);
+            if(sysexParseResult instanceof Error)
+            {
+                throw new Error("MidiAction: Export Failed - Sysex Error: " + sysexParseResult.message);
+                return undefined;
+            }
+            else if(sysexParseResult instanceof Uint8Array)
+            {
+                data.push(sysexParseResult);
+            }
         }
         else if(this.data.type == MidiType.Start || this.data.type == MidiType.Continue || this.data.type == MidiType.Stop || this.data.type == MidiType.Reset)
         {
@@ -165,7 +235,7 @@ export class MidiAction implements Action {
         }
         else
         {
-            console.error("MidiAction: Unknown Midi Type");
+            throw new Error("MidiAction: Unknown Midi Type");
             return undefined;
         }
 

@@ -7,7 +7,7 @@
     import NumericUpDown from "../../common/NumericUpDown.svelte";
     import FloatUpDown from "../../common/FloatUpDown.svelte";
     import CheckBox from "../../common/CheckBox.svelte";
-    import {MidiAction} from "./MidiAction";
+    import {MidiAction, SysexToByteArray} from "./MidiAction";
     import '../Action.css';
 
     import {t} from "$lib/translations";
@@ -15,6 +15,15 @@
     const dispatch = createEventDispatcher();
     
     export let data: MidiActionData;
+
+    let sysexParseResult: Uint8Array | Error;
+
+    // Function to update and log the parsed result
+    function sysexUpdated() {
+        sysexParseResult = SysexToByteArray(data.data.sysex);
+        // console.log('Sysex parse result:', sysexParseResult);
+    }
+
 
     function changeMidiActionType(type: MidiType): void {
         console.log("Changing type to " + type);
@@ -91,6 +100,8 @@
                 console.log("unknown type");
         }
     }
+
+  $: data.data.sysex, sysexUpdated();
 </script>
 
 <ActionTemplate actionTitle={$t('midi.title')} on:removeAction={() => dispatch('removeAction')}>
@@ -262,8 +273,13 @@
             <div class="action-setting-slot">
                 <span>{$t('midi.body.data')}</span>
 
-                <input type="text" bind:value={data.data.sysex}/>
+                <textarea class="sysex-input {sysexParseResult instanceof Error ? 'sysex-input-error' : ''}" bind:value={data.data.sysex}/>
             </div>
+            {#if sysexParseResult instanceof Error}
+            <div class="action-error-box">
+                <span>{sysexParseResult.message}</span>
+            </div>
+            {/if}
         {:else if data.type === MidiType.Start || data.type === MidiType.Continue || data.type === MidiType.Stop || data.type === MidiType.Reset}
             <!-- No additional settings -->
         {:else}
@@ -274,3 +290,63 @@
 
     </div>
 </ActionTemplate>
+
+<style lang="scss"> 
+    .sysex-input {
+        box-sizing: border-box;  /* includes padding and border in the overall height */
+        min-height: 32px;
+        height: 32px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        max-width: 240px;
+        border-radius: 6px;
+        background: white;
+        border: 1px solid gray;
+        padding: 8px;
+        resize: vertical; /* disables the manual resize handle */
+        overflow: hidden; /* hides the scrollbar */
+        white-space: pre-wrap; /* preserves and wraps whitespace */
+
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+
+        transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+
+        
+        &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: inherit; /* or set it to your desired color */
+        }
+    }
+
+    
+    .sysex-input-error
+    {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #721c24;
+    }
+
+    .action-error-box {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 12px 12px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 6px;
+        border-radius: 6px;
+
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+
+        span {    
+            text-align: center;
+        }
+    }
+</style>

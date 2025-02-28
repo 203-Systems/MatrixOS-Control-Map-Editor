@@ -17,8 +17,6 @@
     grid-template-columns: 35px 1fr 35px;
 
     background-color: #eaeaea;
-
-   
 }
 
 .action-icon {
@@ -61,6 +59,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    
+    transition: height 0.3s ease;
 }
 
 .action-settings {
@@ -73,7 +74,7 @@
 }
 
 .action-setting-slot {
-    height: 40px;
+    min-height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
