@@ -41,7 +41,7 @@ export class WrapAction implements Action {
         }
         catch (error)
         {
-            console.error("WrapAction: Import Failed");
+            throw new Error("WrapAction: Import Failed");
             return false;
         }
 

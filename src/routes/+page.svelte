@@ -26,7 +26,9 @@
     let editorState:EditorState = EditorState.DISCONNECTED;
     let editorStateViewer:boolean = false;
     let editorStateViewerCloseable:boolean = true;
+    let editorStateViewerShowError:boolean = false;
     let deviceTransferProgress:number = 0;
+    let errorMessage:string = "Unknown Error";
 
     const mobileViewWidthThreshold = 1000;
     const mobileViewAspectThreshold = 4/5;
@@ -51,7 +53,9 @@
         editorState = editorBackend.editorState;
         editorStateViewer = editorBackend.editorStateViewer;
         editorStateViewerCloseable = editorBackend.editorStateViewerCloseable;
+        editorStateViewerShowError = editorBackend.editorStateViewerShowError;
         deviceTransferProgress = editorBackend.deviceTransferProgress;
+        errorMessage = editorBackend.errorMessage;
     }
 
     $: editorBackend.editorStateViewer = editorStateViewer;
@@ -241,7 +245,10 @@
             <!-- {#if editorStateViewerCloseable}
                 <button on:click={() => editorStateViewer = false}>{$t('editor.close')}</button>
             {/if} -->
-                <button on:click={() => {editorStateViewerCloseable && (editorStateViewer = false)}} style = "opacity: {editorStateViewerCloseable ?  '1'  : '0'}">{$t('editor.close')}</button>
+            {#if editorStateViewerShowError}
+                <span class="popup-error">{errorMessage}</span>
+            {/if}
+            <button on:click={() => {editorStateViewerCloseable && (editorStateViewer = false)}} style = "opacity: {editorStateViewerCloseable ?  '1'  : '0'}">{$t('editor.close')}</button>
         </div>
     </Popup>
 

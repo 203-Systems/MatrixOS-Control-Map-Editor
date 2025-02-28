@@ -47,7 +47,7 @@ export class GamepadAction implements Action {
         }
         catch (error)
         {
-            console.error("GamepadAction: Import Failed");
+            throw new Error("GamepadAction: Import Failed");
             return false;
         }
     }

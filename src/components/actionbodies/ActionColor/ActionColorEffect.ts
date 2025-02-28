@@ -45,7 +45,7 @@ export class ActionColorEffect implements Effect {
         }
         catch (error)
         {
-            console.error("ActionColorEffect: Import Failed");
+            throw new Error("ActionColorEffect: Import Failed");
             return false;
         }
     }

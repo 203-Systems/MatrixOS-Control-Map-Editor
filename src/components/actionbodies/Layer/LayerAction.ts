@@ -43,7 +43,7 @@ export class LayerAction implements Action {
         }
         catch (error)
         {
-            console.error("LayerAction: Import Failed");
+            throw new Error("LayerAction: Import Failed");
             return false;
         }
 

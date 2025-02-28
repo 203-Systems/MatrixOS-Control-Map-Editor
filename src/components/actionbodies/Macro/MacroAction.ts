@@ -27,7 +27,7 @@ export class MacroAction implements Action {
         }
         catch (error)
         {
-            console.error("MacroAction: Import Failed");
+            throw new Error("MacroAction: Import Failed");
             return false;
         }
 

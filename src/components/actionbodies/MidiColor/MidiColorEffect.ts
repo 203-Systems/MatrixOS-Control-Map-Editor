@@ -33,7 +33,7 @@ export class MidiColorEffect implements Effect {
         }
         catch (error)
         {
-            console.error("ColorEffect: Import Failed");
+            throw new Error("ColorEffect: Import Failed");
             return false;
         }
     }
