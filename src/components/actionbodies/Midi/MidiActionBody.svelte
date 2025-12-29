@@ -16,18 +16,22 @@
     
     export let data: MidiActionData;
 
-    let sysexParseResult: Uint8Array | Error;
+    let sysexParseResult: Uint8Array | Error | null = null;
 
-    // Function to update and log the parsed result
-    function sysexUpdated() {
-        sysexParseResult = SysexToByteArray(data.data.sysex);
-        // console.log('Sysex parse result:', sysexParseResult);
+    function sysexUpdated(type: MidiType, sysex?: string | null) {
+        if (type !== MidiType.Sysex) {
+            sysexParseResult = null;
+            return;
+        }
+
+        sysexParseResult = SysexToByteArray(sysex);
     }
 
 
     function changeMidiActionType(type: MidiType): void {
         console.log("Changing type to " + type);
-        switch (data.type) {
+        data.type = type;
+        switch (type) {
             case MidiType.Note:
                 data.data = {
                     channel: 1,
@@ -95,13 +99,14 @@
             case MidiType.Stop:
             case MidiType.Reset:
                 data.data = null;
-            
+                break;
+
             default:
                 console.log("unknown type");
         }
     }
 
-  $: data.data.sysex, sysexUpdated();
+  $: sysexUpdated(data?.type, (data?.data as { sysex?: string } | null)?.sysex);
 </script>
 
 <ActionTemplate actionTitle={$t('midi.title')} on:removeAction={() => dispatch('removeAction')}>

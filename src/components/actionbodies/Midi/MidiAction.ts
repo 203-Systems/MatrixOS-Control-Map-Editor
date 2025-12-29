@@ -6,10 +6,19 @@ import { Music } from "carbon-icons-svelte";
 import type { MidiActionData } from "./MidiActionData";
 import {MidiType, MidiTypeMapShort, AnalogSource} from "./MidiActionData";
 
-export function SysexToByteArray(sysex: string): Uint8Array | Error {
+export function SysexToByteArray(sysex?: string | null): Uint8Array | Error {
     try {
+      if (sysex === undefined || sysex === null) {
+        return new Error("Sysex data is empty");
+      }
+
+      const trimmedSysex = sysex.trim();
+      if (trimmedSysex.length === 0) {
+        return new Error("Sysex data is empty");
+      }
+
       // Split the input string by whitespace.
-      const parts = sysex.trim().split(/\s+/);
+      const parts = trimmedSysex.split(/\s+/);
 
       // Filter out all the empty strings.
       const filteredParts = parts.filter((part) => part !== "");
@@ -87,7 +96,7 @@ export function SysexToByteArray(sysex: string): Uint8Array | Error {
       return new Uint8Array(byteArray as number[]);
     } catch (error) {
       console.error(error);
-      // return error;
+      return error instanceof Error ? error : new Error("Failed to parse sysex data");
     }
   }
   
