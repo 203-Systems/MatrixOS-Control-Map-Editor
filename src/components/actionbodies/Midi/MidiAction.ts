@@ -160,7 +160,7 @@ export class MidiAction implements Action {
 
                 this.data.data.sysex = "";
 
-                var byteArray: Uint8Array = data[1];
+                var byteArray: Uint8Array = data[2];
 
                 for (let i = 0; i < byteArray.length; i++) {
                     if(byteArray[i] >= 0x80 && byteArray[i] <= 0x8F)
@@ -235,6 +235,9 @@ export class MidiAction implements Action {
             }
             else if(sysexParseResult instanceof Uint8Array)
             {
+                // Reserved input mapping array for future SysEx parameter binding.
+                // TODO: Define and serialize actual input mapping entries instead of an empty placeholder.
+                data.push([]);
                 data.push(sysexParseResult);
             }
         }
